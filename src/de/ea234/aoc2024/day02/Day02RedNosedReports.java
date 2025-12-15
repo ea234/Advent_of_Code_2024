@@ -8,7 +8,19 @@ public class Day02RedNosedReports
    * 
    */
 
-  private static boolean KNZ_DEBUG = false;
+  private static boolean KNZ_DEBUG                                 = false;
+
+  private static long    FLAG_REPORT_NOT_VALID                     = 0;
+
+  private static long    FLAG_REPORT_VALID                         = 1;
+
+  private static long    FLAG_OK                                   = 1;
+
+  private static long    FLAG_DIFF_IS_NOT_IN_SPEC                  = 2;
+
+  private static long    FLAG_NEXT_NUMBER_GREATER_THAN_PREDECESSOR = 3;
+
+  private static long    FLAG_NEXT_NUMBER_LOWER_THAN_PREDECESSOR   = 4;
 
   public static void main( String[] args )
   {
@@ -37,11 +49,11 @@ public class Day02RedNosedReports
 
       String[] arr_inp = input_str.trim().replaceAll( " {2,}", " " ).split( " " );
 
-      long check_result = 0;
+      long check_result = FLAG_REPORT_NOT_VALID;
 
       int x_indes = -1;
 
-      while ( ( x_indes < arr_inp.length ) && ( check_result == 0 ) )
+      while ( ( x_indes < arr_inp.length ) && ( check_result == FLAG_REPORT_NOT_VALID ) )
       {
         check_result = checkReport( arr_inp, x_indes );
 
@@ -71,19 +83,11 @@ public class Day02RedNosedReports
     wl( "Unsafe " + ( report_nr - valid_rep ) );
   }
 
-  private static long FLAG_OK                                   = 1;
-
-  private static long FLAG_DIFF_IS_NOT_IN_SPEC                  = 2;
-
-  private static long FLAG_NEXT_NUMBER_GREATER_THAN_PREDECESSOR = 3;
-
-  private static long FLAG_NEXT_NUMBER_LOWER_THAN_PREDECESSOR   = 4;
-
   private static long checkReport( String[] pArrayInput, int pOmitIndex )
   {
     long current_input_value = 0;
 
-    long fkt_erg = FLAG_OK;
+    long report_status = FLAG_OK;
 
     wl( "---- Check Ascending -----" );
 
@@ -101,7 +105,7 @@ public class Day02RedNosedReports
 
     long last_input_value = getLong( pArrayInput[ list_index - 1 ], 0 );
 
-    while ( ( list_index < pArrayInput.length ) && ( fkt_erg == FLAG_OK ) )
+    while ( ( list_index < pArrayInput.length ) && ( report_status == FLAG_OK ) )
     {
       if ( list_index != pOmitIndex )
       {
@@ -116,12 +120,12 @@ public class Day02RedNosedReports
 
           if ( ( difference_value < 1 ) || ( difference_value > 3 ) )
           {
-            fkt_erg = FLAG_DIFF_IS_NOT_IN_SPEC; // Erlaubte Differenz strimmt nicht
+            report_status = FLAG_DIFF_IS_NOT_IN_SPEC; // Erlaubte Differenz strimmt nicht
           }
         }
         else
         {
-          fkt_erg = FLAG_NEXT_NUMBER_LOWER_THAN_PREDECESSOR; // Aktueller Wert ist kleiner als der letzte Wert 
+          report_status = FLAG_NEXT_NUMBER_LOWER_THAN_PREDECESSOR; // Aktueller Wert ist kleiner als der letzte Wert 
         }
 
         /*
@@ -134,11 +138,11 @@ public class Day02RedNosedReports
       list_index++;
     }
 
-    if ( fkt_erg != FLAG_OK )
+    if ( report_status != FLAG_OK )
     {
       wl( "---- Check Descending -----" );
 
-      fkt_erg = FLAG_OK;
+      report_status = FLAG_OK;
 
       /*
        * Absteigend
@@ -154,7 +158,7 @@ public class Day02RedNosedReports
 
       last_input_value = getLong( pArrayInput[ list_index - 1 ], 0 );
 
-      while ( ( list_index < pArrayInput.length ) && ( fkt_erg == FLAG_OK ) )
+      while ( ( list_index < pArrayInput.length ) && ( report_status == FLAG_OK ) )
       {
         if ( list_index != pOmitIndex )
         {
@@ -170,12 +174,12 @@ public class Day02RedNosedReports
 
             if ( ( difference_value < 1 ) || ( difference_value > 3 ) )
             {
-              fkt_erg = FLAG_DIFF_IS_NOT_IN_SPEC; // Erlaubte Differenz strimmt nicht
+              report_status = FLAG_DIFF_IS_NOT_IN_SPEC; // Erlaubte Differenz strimmt nicht
             }
           }
           else
           {
-            fkt_erg = FLAG_NEXT_NUMBER_GREATER_THAN_PREDECESSOR; // Aktuelle Zahl ist groesser  
+            report_status = FLAG_NEXT_NUMBER_GREATER_THAN_PREDECESSOR; // Aktuelle Zahl ist groesser  
           }
 
           /*
@@ -189,12 +193,12 @@ public class Day02RedNosedReports
       }
     }
 
-    if ( fkt_erg == FLAG_OK )
+    if ( report_status == FLAG_OK )
     {
-      return 1;
+      return FLAG_REPORT_VALID;
     }
 
-    return 0;
+    return FLAG_REPORT_NOT_VALID;
   }
 
   private static List< String > getListProd()
@@ -307,5 +311,7 @@ public class Day02RedNosedReports
 
     return false;
   }
+
+
 
 }
