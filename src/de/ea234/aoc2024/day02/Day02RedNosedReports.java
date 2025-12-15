@@ -8,6 +8,7 @@ public class Day02RedNosedReports
    * 
    */
 
+
   private static boolean KNZ_DEBUG                                 = false;
 
   private static long    FLAG_REPORT_NOT_VALID                     = 0;
@@ -39,7 +40,7 @@ public class Day02RedNosedReports
   {
     String datei_debug_str = "";
 
-    long valid_rep = 0;
+    long sum_valid_reports = 0;
 
     int report_nr = 0;
 
@@ -51,26 +52,33 @@ public class Day02RedNosedReports
 
       long check_result = FLAG_REPORT_NOT_VALID;
 
-      int x_indes = -1;
+      int index_omit_position = -1;
 
-      while ( ( x_indes < arr_inp.length ) && ( check_result == FLAG_REPORT_NOT_VALID ) )
+      while ( ( index_omit_position < arr_inp.length ) && ( check_result == FLAG_REPORT_NOT_VALID ) )
       {
-        check_result = checkReport( arr_inp, x_indes );
+        check_result = checkReport( arr_inp, index_omit_position );
 
-        x_indes++;
+        if ( pKnzCalcPart2 )
+        {
+          index_omit_position++;
+        }
+        else
+        {
+          index_omit_position = Integer.MAX_VALUE;
+        }
       }
 
       wl( "" );
       wl( "Report Index " + report_nr + "  " + ( check_result == 0 ? "####  Unsafe  ####" : "OK" ) + " - " + input_str );
 
-      datei_debug_str += "\nReport Index " + report_nr + "  " + ( check_result == 0 ? "####" : " OK " ) + " - " + input_str;
+      datei_debug_str += "\nReport Index " + report_nr + " " + ( check_result == 0 ? "####" : " OK " ) + " - " + input_str;
 
-      valid_rep += check_result;
+      sum_valid_reports += check_result;
     }
 
     datei_debug_str += "\n\nReport Count " + report_nr;
-    datei_debug_str += "\nSafe   " + valid_rep;
-    datei_debug_str += "\nUnsafe " + ( report_nr - valid_rep );
+    datei_debug_str += "\nSafe   " + sum_valid_reports;
+    datei_debug_str += "\nUnsafe " + ( report_nr - sum_valid_reports );
 
     String datei_input = "/mnt/hd4tbb/daten/test_result_part_" + ( pKnzCalcPart2 ? "2" : "1" ) + ".txt";
 
@@ -79,8 +87,8 @@ public class Day02RedNosedReports
     wl( "" );
     wl( "" );
     wl( "Report Count " + report_nr );
-    wl( "Safe   " + valid_rep );
-    wl( "Unsafe " + ( report_nr - valid_rep ) );
+    wl( "Safe   " + sum_valid_reports );
+    wl( "Unsafe " + ( report_nr - sum_valid_reports ) );
   }
 
   private static long checkReport( String[] pArrayInput, int pOmitIndex )
@@ -311,7 +319,4 @@ public class Day02RedNosedReports
 
     return false;
   }
-
-
-
 }
