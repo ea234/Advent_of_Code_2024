@@ -40,6 +40,7 @@ public class Day01HistorianHysteria
   public static void calcPart1( List< String > pList )
   {
     List< Long > int_list_left = new ArrayList< Long >();
+
     List< Long > int_list_right = new ArrayList< Long >();
 
     int list_index = 0;
@@ -51,32 +52,35 @@ public class Day01HistorianHysteria
       String[] arr_inp = input_str.trim().replaceAll( " {2,}", " " ).split( " " );
 
       int_list_left.add( Long.valueOf( "" + getLong( arr_inp[ 0 ], 0 ) ) );
+
       int_list_right.add( Long.valueOf( "" + getLong( arr_inp[ 1 ], 0 ) ) );
     }
 
     Collections.sort( int_list_left, Collections.reverseOrder() );
+
     Collections.sort( int_list_right, Collections.reverseOrder() );
 
     list_index = 0;
 
-    long sum_v = 0;
+    long total_value = 0;
     long count_values = int_list_left.size();
 
     while ( list_index < count_values )
     {
-      long left_v = int_list_left.get( list_index ).longValue();
-      long right_v = int_list_right.get( list_index ).longValue();
+      long left_value = int_list_left.get( list_index ).longValue();
 
-      long diff = left_v - right_v;
+      long right_value = int_list_right.get( list_index ).longValue();
 
-      if ( diff < 0 )
+      long difference_value = left_value - right_value;
+
+      if ( difference_value < 0 )
       {
-        diff = right_v - left_v;
+        difference_value = right_value - left_value;
       }
 
-      sum_v += diff;
+      total_value += difference_value;
 
-      wl( "list_index " + list_index + " left = " + left_v + " right = " + right_v + " diff " + diff + " sum " + sum_v + "" );
+      wl( "list_index " + list_index + " left = " + left_value + " right = " + right_value + " difference_value " + difference_value + " sum " + total_value + "" );
 
       list_index++;
     }
@@ -85,6 +89,7 @@ public class Day01HistorianHysteria
   public static void calcPart2( List< String > pList )
   {
     List< Long > int_list_left = new ArrayList< Long >();
+
     List< Long > int_list_right = new ArrayList< Long >();
 
     int list_index = 0;
@@ -96,6 +101,7 @@ public class Day01HistorianHysteria
       String[] arr_inp = input_str.trim().replaceAll( " {2,}", " " ).split( " " );
 
       int_list_left.add( Long.valueOf( "" + getLong( arr_inp[ 0 ], 0 ) ) );
+
       int_list_right.add( Long.valueOf( "" + getLong( arr_inp[ 1 ], 0 ) ) );
     }
 
@@ -129,11 +135,11 @@ public class Day01HistorianHysteria
 
     list_index = 0;
 
-    long sum_v = 0;
+    long total_value = 0;
 
     while ( list_index < count_values )
     {
-      long left_v = int_list_left.get( list_index ).longValue();
+      long left_value = int_list_left.get( list_index ).longValue();
 
       Long cache_keykey = int_list_left.get( list_index );
 
@@ -146,11 +152,11 @@ public class Day01HistorianHysteria
         multiplikator_right_value = cache_keyvalue.longValue();
       }
 
-      long result_multiplication = left_v * multiplikator_right_value;
+      long result_multiplication = left_value * multiplikator_right_value;
 
-      sum_v += result_multiplication;
+      total_value += result_multiplication;
 
-      wl( "list_index " + list_index + " left = " + left_v + " right freq = " + multiplikator_right_value + " result " + result_multiplication + " sum " + sum_v + "" );
+      wl( "list_index " + list_index + " left = " + left_value + " right freq = " + multiplikator_right_value + " result " + result_multiplication + " sum " + total_value + "" );
 
       list_index++;
     }
