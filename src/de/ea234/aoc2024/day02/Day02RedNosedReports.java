@@ -49,7 +49,7 @@ public class Day02RedNosedReports
       }
 
       wl( "" );
-      wld( "Report Index " + report_nr + "  " + ( check_result == 0 ? "####  Unsafe  ####" : "OK" ) + " - " + input_str );
+      wl( "Report Index " + report_nr + "  " + ( check_result == 0 ? "####  Unsafe  ####" : "OK" ) + " - " + input_str );
 
       datei_debug_str += "\nReport Index " + report_nr + "  " + ( check_result == 0 ? "####" : " OK " ) + " - " + input_str;
 
@@ -64,22 +64,26 @@ public class Day02RedNosedReports
 
     schreibeDatei( datei_input, datei_debug_str );
 
-    wld( "" );
-    wld( "" );
-    wld( "Report Count " + report_nr );
-    wld( "Safe   " + valid_rep );
-    wld( "Unsafe " + ( report_nr - valid_rep ) );
+    wl( "" );
+    wl( "" );
+    wl( "Report Count " + report_nr );
+    wl( "Safe   " + valid_rep );
+    wl( "Unsafe " + ( report_nr - valid_rep ) );
   }
+
+  private static long FLAG_OK                                   = 1;
+
+  private static long FLAG_DIFF_IS_NOT_IN_SPEC                  = 2;
+
+  private static long FLAG_NEXT_NUMBER_GREATER_THAN_PREDECESSOR = 3;
+
+  private static long FLAG_NEXT_NUMBER_LOWER_THAN_PREDECESSOR   = 4;
 
   private static long checkReport( String[] pArrayInput, int pOmitIndex )
   {
-    long akt_value_input = 0;
+    long current_input_value = 0;
 
-    long last_value_input = getLong( pArrayInput[ 0 ], 0 );
-
-    long diff = 0;
-
-    boolean fkt_erg = true;
+    long fkt_erg = FLAG_OK;
 
     wl( "---- Check Ascending -----" );
 
@@ -93,103 +97,99 @@ public class Day02RedNosedReports
     if ( pOmitIndex == 0 )
     {
       list_index = 2;
-      last_value_input = getLong( pArrayInput[ 1 ], 0 );
     }
 
-    while ( ( list_index < pArrayInput.length ) && ( fkt_erg ) )
+    long last_input_value = getLong( pArrayInput[ list_index - 1 ], 0 );
+
+    while ( ( list_index < pArrayInput.length ) && ( fkt_erg == FLAG_OK ) )
     {
       if ( list_index != pOmitIndex )
       {
-        akt_value_input = getLong( pArrayInput[ list_index ], 0 );
+        current_input_value = getLong( pArrayInput[ list_index ], 0 );
 
-        if ( akt_value_input > last_value_input )
+        if ( current_input_value > last_input_value )
         {
           /*
            * Von der groesseren Zahl wird die kleinere abgezogen. 
            */
-          diff = akt_value_input - last_value_input;
+          long difference_value = current_input_value - last_input_value;
 
-          if ( ( diff < 1 ) || ( diff > 3 ) )
+          if ( ( difference_value < 1 ) || ( difference_value > 3 ) )
           {
-            fkt_erg = false; // Erlaubte Differenz strimmt nicht
+            fkt_erg = FLAG_DIFF_IS_NOT_IN_SPEC; // Erlaubte Differenz strimmt nicht
           }
         }
         else
         {
-          fkt_erg = false; // Aktueller Wert ist kleiner als der letzte Wert 
+          fkt_erg = FLAG_NEXT_NUMBER_LOWER_THAN_PREDECESSOR; // Aktueller Wert ist kleiner als der letzte Wert 
         }
 
         /*
          * Ist die Zahl gültig, ist die Stelle gültig. 
          * Die aktuelle Zahl kann zur letzten Zahl gemacht werden
          */
-        last_value_input = akt_value_input;
+        last_input_value = current_input_value;
       }
 
       list_index++;
-
-      //last_value_input = akt_value_input;
     }
 
-    if ( fkt_erg )
+    if ( fkt_erg != FLAG_OK )
     {
-      return 1;
-    }
+      wl( "---- Check Descending -----" );
 
-    wl( "---- Check Descending -----" );
+      fkt_erg = FLAG_OK;
 
-    fkt_erg = true;
+      /*
+       * Absteigend
+       * Die aktuelle Zahl muss kleiner als die letzte Zahl sein.
+       * Die letzte Zahl muss groesser als die aktuelle Zahl sein.
+       */
+      list_index = 1;
 
-    /*
-     * Absteigend
-     * [51, 52, 55, 58, 60, 61, 62, 61]
-     * Die aktuelle Zahl muss kleiner als die letzte Zahl sein.
-     * Die letzte Zahl muss groesser als die aktuelle Zahl sein.
-     */
-    list_index = 1;
-    last_value_input = getLong( pArrayInput[ 0 ], 0 );
-
-    if ( pOmitIndex == 0 )
-    {
-      list_index = 2;
-      last_value_input = getLong( pArrayInput[ 1 ], 0 );
-    }
-
-    while ( ( list_index < pArrayInput.length ) && ( fkt_erg ) )
-    {
-      if ( list_index != pOmitIndex )
+      if ( pOmitIndex == 0 )
       {
-        akt_value_input = getLong( pArrayInput[ list_index ], 0 );
-
-        if ( akt_value_input < last_value_input )
-        {
-          /*
-           * Von der groesseren Zahl wird die kleinere abgezogen.
-           * Last-Value ist hierbei die groessere Zahl 
-           */
-          diff = last_value_input - akt_value_input;
-
-          if ( ( diff < 1 ) || ( diff > 3 ) )
-          {
-            fkt_erg = false; // Erlaubte Differenz strimmt nicht
-          }
-        }
-        else
-        {
-          fkt_erg = false; // Aktuelle Zahl ist groesser  
-        }
-
-        /*
-         * Ist die Zahl gültig, ist die Stelle gültig. 
-         * Die aktuelle Zahl kann zur letzten Zahl gemacht werden
-         */
-        last_value_input = akt_value_input;
+        list_index = 2;
       }
 
-      list_index++;
+      last_input_value = getLong( pArrayInput[ list_index - 1 ], 0 );
+
+      while ( ( list_index < pArrayInput.length ) && ( fkt_erg == FLAG_OK ) )
+      {
+        if ( list_index != pOmitIndex )
+        {
+          current_input_value = getLong( pArrayInput[ list_index ], 0 );
+
+          if ( current_input_value < last_input_value )
+          {
+            /*
+             * Von der groesseren Zahl wird die kleinere abgezogen.
+             * Last-Value ist hierbei die groessere Zahl 
+             */
+            long difference_value = last_input_value - current_input_value;
+
+            if ( ( difference_value < 1 ) || ( difference_value > 3 ) )
+            {
+              fkt_erg = FLAG_DIFF_IS_NOT_IN_SPEC; // Erlaubte Differenz strimmt nicht
+            }
+          }
+          else
+          {
+            fkt_erg = FLAG_NEXT_NUMBER_GREATER_THAN_PREDECESSOR; // Aktuelle Zahl ist groesser  
+          }
+
+          /*
+           * Ist die Zahl gültig, ist die Stelle gültig. 
+           * Die aktuelle Zahl kann zur letzten Zahl gemacht werden
+           */
+          last_input_value = current_input_value;
+        }
+
+        list_index++;
+      }
     }
 
-    if ( fkt_erg )
+    if ( fkt_erg == FLAG_OK )
     {
       return 1;
     }
@@ -229,14 +229,6 @@ public class Day02RedNosedReports
   }
 
   private static void wl( String pString )
-  {
-    if ( KNZ_DEBUG )
-    {
-      System.out.println( pString );
-    }
-  }
-
-  private static void wld( String pString )
   {
     if ( KNZ_DEBUG )
     {
@@ -310,9 +302,10 @@ public class Day02RedNosedReports
     }
     catch ( Exception err_inst )
     {
-      wld( "Fehler: errSchreibeDatei" + err_inst.getLocalizedMessage() );
+      wl( "Fehler: errSchreibeDatei" + err_inst.getLocalizedMessage() );
     }
 
     return false;
   }
+
 }
