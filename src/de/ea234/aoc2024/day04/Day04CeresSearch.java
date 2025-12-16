@@ -15,6 +15,7 @@ public class Day04CeresSearch
    * --- Day 4: Ceres Search ---
    * https://adventofcode.com/2024/day/4
    * 
+   * -------------------------------------------------------------------------------------------- 
    * 
    * MMMSXXMASM    ....XX....    ....11....
    * MSAMXMSMSA    ....X.....    ....1.....
@@ -39,7 +40,35 @@ public class Day04CeresSearch
    * ..........    .........M    ..M.M.M.M.    ..M.M.M.MM
    * .....XMAS.    .........X    .X.X.X...X    .X.X.XMASX
    * 
-   * Found xmas 18  
+   * Found xmas 18
+   * 
+   * -------------------------------------------------------------------------------------------- 
+   * 
+   * MMMSXXMASM    ..........    .......0..
+   * MSAMXMSMSA    ..A.......    ..1......0
+   * AMXSXMAAMM    ......AA..    0.....11..
+   * MSAMASMSMX    ..A.A.....    ..1.1.....
+   * XMASAMXAMM    ..........    ..0.0..0..
+   * XXAMMXXAMA    ..........    ..0....0.0
+   * SMSMSASXSS    ..........    .....0....
+   * SAXAMASAAA    .A.A.A.A..    .1.1.1.100
+   * MAMMMXMMMM    ..........    .0........
+   * MXMXAXMASX    ..........    ....0..0..
+   * 
+   * 
+   * .M.S......    ..........    ..........    .M.S......
+   * ..A.......    .....MSMS.    ..........    ..A..MSMS.
+   * .M.S......    ......AA..    ...S.M....    .M.S.MAA..
+   * ..A.......    .....SMSM.    ....A.....    ..A.ASMSM.
+   * .M.S......    ..........    ...S.M....    .M.S.M....
+   * ..........    ..........    ..........    ..........
+   * ..........    S.S.S.S.S.    ..........    S.S.S.S.S.
+   * ..........    .A.A.A.A..    ..........    .A.A.A.A..
+   * ..........    M.M.M.M.M.    ..........    M.M.M.M.M.
+   * ..........    ..........    ..........    ..........
+   * 
+   * Found mas 9 
+   *   
    */
 
   private static final char   CHAR_X               = 'X';
@@ -72,30 +101,18 @@ public class Day04CeresSearch
 
     List< String > test_content_list = Arrays.stream( test_content.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
-    calcGridPart1( getListProd(), false, false );
+    wl( calcGridPart2( getListProd(), false ) );
 
-    calcGridPart1( test_content_list, true, true );
+    wl( calcGridPart2( test_content_list, true ) );
   }
 
-  private static void calcGridPart1( List< String > pList, boolean pKnzCalculatePart2, boolean pKnzDebug )
+  private static String calcGridPart1( List< String > pList, boolean pKnzDebug )
   {
     wl( "" );
     wl( "calcGridPart1" );
     wl( "" );
 
     properties_positions = null;
-
-    wl( getDebugGrid( pList, pKnzDebug ) );
-  }
-
-  private static String getDebugGrid( List< String > pList, boolean pKnzDebug )
-  {
-    if ( pList == null )
-    {
-      wl( "pList == null" );
-
-      return "";
-    }
 
     String str_spacer_debug = "    ";
 
@@ -193,6 +210,240 @@ public class Day04CeresSearch
     result_str += "\n\nFound xmas " + count_xmas_sum + " \n";
 
     return result_str;
+  }
+
+  private static String calcGridPart2( List< String > pList, boolean pKnzDebug )
+  {
+    wl( "" );
+    wl( "calcGridPart2" );
+    wl( "" );
+
+    properties_positions = null;
+
+    String str_spacer_debug = "    ";
+
+    int count_xmas_sum = 0;
+
+    String result_str = "";
+
+    String str_cr_lf = "";
+
+    for ( int list_index = 0; list_index < pList.size(); list_index++ )
+    {
+      String str_current_line = pList.get( list_index );
+
+      String str_floor_plan = "";
+
+      String str_current_position_count = "";
+
+      for ( int col_index = 0; col_index < str_current_line.length(); col_index++ )
+      {
+        if ( ( str_current_line.charAt( col_index ) == CHAR_A ) )
+        {
+          int current_xmas_count = 0;
+
+          current_xmas_count += checkMas( pList, list_index, col_index );
+
+          count_xmas_sum += current_xmas_count;
+
+          if ( pKnzDebug )
+          {
+            if ( current_xmas_count > 0 )
+            {
+              str_floor_plan += CHAR_A;
+            }
+            else
+            {
+              str_floor_plan += CHAR_EMPTY_SPACE;
+            }
+
+            str_current_position_count += "" + current_xmas_count;
+          }
+        }
+        else
+        {
+          str_current_position_count += CHAR_EMPTY_SPACE;
+
+          str_floor_plan += CHAR_EMPTY_SPACE;
+        }
+      }
+
+      if ( pKnzDebug )
+      {
+        result_str += str_cr_lf + str_current_line + str_spacer_debug + str_floor_plan + str_spacer_debug + str_current_position_count;
+      }
+
+      str_cr_lf = "\n";
+    }
+
+    if ( pKnzDebug )
+    {
+      result_str += str_cr_lf;
+      result_str += str_cr_lf;
+
+      String str_current_line = pList.get( 0 );
+
+      for ( int list_index = 0; list_index < pList.size(); list_index++ )
+      {
+        String str_floor_plan_h = "";
+        String str_floor_plan_v = "";
+        String str_floor_plan_d = "";
+        String str_floor_plan_t = "";
+
+        for ( int col_index = 0; col_index < str_current_line.length(); col_index++ )
+        {
+          str_floor_plan_h += getDebugChar( KEY_HORIZONTAL, list_index, col_index );
+          str_floor_plan_v += getDebugChar( KEY_VERTICAL, list_index, col_index );
+          str_floor_plan_d += getDebugChar( KEY_DIAGONAL, list_index, col_index );
+          str_floor_plan_t += getDebugChar( KEY_TOTAL, list_index, col_index );
+        }
+
+        result_str += str_cr_lf + str_floor_plan_h + str_spacer_debug + str_floor_plan_v + str_spacer_debug + str_floor_plan_d + str_spacer_debug + str_floor_plan_t;
+      }
+    }
+    else
+    {
+      result_str = "";
+    }
+
+    result_str += "\n\nFound xmas " + count_xmas_sum + " \n";
+
+    return result_str;
+  }
+
+  private static long checkMas( List< String > pList, int pCurrentRow, int pCurrentCol )
+  {
+    boolean knz_check_result = true;
+
+    /*
+     * Both M on the left, Both S on the right
+     * 
+     * M.S
+     * .A.
+     * M.S
+     */
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+
+    if ( knz_check_result )
+    {
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_S );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_S );
+    }
+
+    if ( knz_check_result )
+    {
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
+
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_S );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_S );
+    }
+
+    long temp_value = knz_check_result ? 1 : 0;
+
+    /*
+     * Both S on the left, Both M on the right
+     * 
+     * S.M
+     * .A.
+     * S.M
+     */
+
+    knz_check_result = checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+
+    if ( knz_check_result )
+    {
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
+    }
+
+    if ( knz_check_result )
+    {
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
+
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
+    }
+
+    temp_value += knz_check_result ? 1 : 0;
+
+    /*
+     * Both M above, Both S below
+     * On each side, there is a M and an S
+     * 
+     * M.M
+     * .A.
+     * S.S
+     */
+
+    knz_check_result = checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+
+    if ( knz_check_result )
+    {
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_M ); // above minus
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_S ); // below minus 
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_M ); // above plus
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_S ); // below plus
+    }
+
+    if ( knz_check_result )
+    {
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
+
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_S );
+    }
+
+    temp_value += knz_check_result ? 1 : 0;
+
+    /*
+     * Both S above, Both M below
+     * 
+     * S.S
+     * .A.
+     * M.M
+     */
+
+    knz_check_result = checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+
+    if ( knz_check_result )
+    {
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_S ); // above minus
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_S ); // above plus
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_M ); // below minus
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_M ); // below plus
+    }
+
+    if ( knz_check_result )
+    {
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_S );
+
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
+    }
+
+    temp_value += knz_check_result ? 1 : 0;
+
+    return temp_value;
   }
 
   private static long checkHorizontalPlus( List< String > pList, int pCurrentRow, int pCurrentCol )
@@ -431,7 +682,4 @@ public class Day04CeresSearch
   {
     System.out.println( pString );
   }
-
-
-
 }
