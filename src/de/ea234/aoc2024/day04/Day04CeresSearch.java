@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class Day04CeresSearch
 {
-
   /*
    * --- Day 4: Ceres Search ---
    * https://adventofcode.com/2024/day/4
@@ -43,15 +42,29 @@ public class Day04CeresSearch
    * Found xmas 18  
    */
 
-  private static final char CHAR_X           = 'X';
+  private static final char   CHAR_X               = 'X';
 
-  private static final char CHAR_M           = 'M';
+  private static final char   CHAR_M               = 'M';
 
-  private static final char CHAR_A           = 'A';
+  private static final char   CHAR_A               = 'A';
 
-  private static final char CHAR_S           = 'S';
+  private static final char   CHAR_S               = 'S';
 
-  private static final char CHAR_EMPTY_SPACE = '.';
+  private static final char   CHAR_EMPTY_SPACE     = '.';
+
+  private static final String KEY_ROW              = "R";
+
+  private static final String KEY_COL              = "C";
+
+  private static final String KEY_DIAGONAL         = "D";
+
+  private static final String KEY_HORIZONTAL       = "H";
+
+  private static final String KEY_VERTICAL         = "V";
+
+  private static final String KEY_TOTAL            = "T";
+
+  private static Properties   properties_positions = new Properties();
 
   public static void main( String[] args )
   {
@@ -59,13 +72,19 @@ public class Day04CeresSearch
 
     List< String > test_content_list = Arrays.stream( test_content.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
-    calcGrid( getListProd(), false, false );
+    calcGridPart1( getListProd(), false, false );
 
-    calcGrid( test_content_list, true, true );
+    calcGridPart1( test_content_list, true, true );
   }
 
-  private static void calcGrid( List< String > pList, boolean pKnzCalculatePart2, boolean pKnzDebug )
+  private static void calcGridPart1( List< String > pList, boolean pKnzCalculatePart2, boolean pKnzDebug )
   {
+    wl( "" );
+    wl( "calcGridPart1" );
+    wl( "" );
+
+    properties_positions = null;
+
     wl( getDebugGrid( pList, pKnzDebug ) );
   }
 
@@ -80,7 +99,7 @@ public class Day04CeresSearch
 
     String str_spacer_debug = "    ";
 
-    int count_xmas = 0;
+    int count_xmas_sum = 0;
 
     String result_str = "";
 
@@ -98,24 +117,23 @@ public class Day04CeresSearch
       {
         if ( ( str_current_line.charAt( col_index ) == CHAR_X ) )
         {
-          int check_current_x = 0;
+          int current_xmas_count = 0;
 
-          check_current_x += checkHorizontalPlus( pList, list_index, col_index );
-          check_current_x += checkHorizontalMinus( pList, list_index, col_index );
+          current_xmas_count += checkHorizontalPlus( pList, list_index, col_index );
+          current_xmas_count += checkHorizontalMinus( pList, list_index, col_index );
 
-          check_current_x += checkVerticalPlus( pList, list_index, col_index );
-          check_current_x += checkVerticalMinus( pList, list_index, col_index );
+          current_xmas_count += checkVerticalPlus( pList, list_index, col_index );
+          current_xmas_count += checkVerticalMinus( pList, list_index, col_index );
 
-          check_current_x += checkDiagonalPlus( pList, list_index, col_index );
-          check_current_x += checkDiagonalMinus( pList, list_index, col_index );
+          current_xmas_count += checkDiagonalPlus( pList, list_index, col_index );
+          current_xmas_count += checkDiagonalMinus( pList, list_index, col_index );
 
-          count_xmas += check_current_x;
+          count_xmas_sum += current_xmas_count;
 
           if ( pKnzDebug )
           {
-            if ( check_current_x > 0 )
+            if ( current_xmas_count > 0 )
             {
-
               str_floor_plan += CHAR_X;
             }
             else
@@ -123,7 +141,7 @@ public class Day04CeresSearch
               str_floor_plan += CHAR_EMPTY_SPACE;
             }
 
-            str_current_position_count += "" + check_current_x;
+            str_current_position_count += "" + current_xmas_count;
           }
         }
         else
@@ -158,10 +176,10 @@ public class Day04CeresSearch
 
         for ( int col_index = 0; col_index < str_current_line.length(); col_index++ )
         {
-          str_floor_plan_h += getDebugChar( "H", list_index, col_index );
-          str_floor_plan_v += getDebugChar( "V", list_index, col_index );
-          str_floor_plan_d += getDebugChar( "D", list_index, col_index );
-          str_floor_plan_t += getDebugChar( "T", list_index, col_index );
+          str_floor_plan_h += getDebugChar( KEY_HORIZONTAL, list_index, col_index );
+          str_floor_plan_v += getDebugChar( KEY_VERTICAL, list_index, col_index );
+          str_floor_plan_d += getDebugChar( KEY_DIAGONAL, list_index, col_index );
+          str_floor_plan_t += getDebugChar( KEY_TOTAL, list_index, col_index );
         }
 
         result_str += str_cr_lf + str_floor_plan_h + str_spacer_debug + str_floor_plan_v + str_spacer_debug + str_floor_plan_d + str_spacer_debug + str_floor_plan_t;
@@ -172,7 +190,7 @@ public class Day04CeresSearch
       result_str = "";
     }
 
-    result_str += "\n\nFound xmas " + count_xmas + " \n";
+    result_str += "\n\nFound xmas " + count_xmas_sum + " \n";
 
     return result_str;
   }
@@ -188,10 +206,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( "H", pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( "H", pCurrentRow, pCurrentCol, 0, 1, CHAR_M );
-      setDebugList( "H", pCurrentRow, pCurrentCol, 0, 2, CHAR_A );
-      setDebugList( "H", pCurrentRow, pCurrentCol, 0, 3, CHAR_S );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 1, CHAR_M );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 2, CHAR_A );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 3, CHAR_S );
     }
 
     return knz_check_result ? 1 : 0;
@@ -208,10 +226,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( "H", pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( "H", pCurrentRow, pCurrentCol, 0, -1, CHAR_M );
-      setDebugList( "H", pCurrentRow, pCurrentCol, 0, -2, CHAR_A );
-      setDebugList( "H", pCurrentRow, pCurrentCol, 0, -3, CHAR_S );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, -1, CHAR_M );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, -2, CHAR_A );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, -3, CHAR_S );
     }
 
     return knz_check_result ? 1 : 0;
@@ -228,10 +246,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( "V", pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( "V", pCurrentRow, pCurrentCol, 1, 0, CHAR_M );
-      setDebugList( "V", pCurrentRow, pCurrentCol, 2, 0, CHAR_A );
-      setDebugList( "V", pCurrentRow, pCurrentCol, 3, 0, CHAR_S );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, 0, CHAR_M );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 2, 0, CHAR_A );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 3, 0, CHAR_S );
     }
 
     return knz_check_result ? 1 : 0;
@@ -248,10 +266,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( "V", pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( "V", pCurrentRow, pCurrentCol, -1, 0, CHAR_M );
-      setDebugList( "V", pCurrentRow, pCurrentCol, -2, 0, CHAR_A );
-      setDebugList( "V", pCurrentRow, pCurrentCol, -3, 0, CHAR_S );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, 0, CHAR_M );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -2, 0, CHAR_A );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -3, 0, CHAR_S );
     }
 
     return knz_check_result ? 1 : 0;
@@ -268,10 +286,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( "D", pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( "D", pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
-      setDebugList( "D", pCurrentRow, pCurrentCol, 2, 2, CHAR_A );
-      setDebugList( "D", pCurrentRow, pCurrentCol, 3, 3, CHAR_S );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 2, 2, CHAR_A );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 3, 3, CHAR_S );
     }
 
     long temp_value = knz_check_result ? 1 : 0;
@@ -285,10 +303,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( "D", pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( "D", pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
-      setDebugList( "D", pCurrentRow, pCurrentCol, 2, -2, CHAR_A );
-      setDebugList( "D", pCurrentRow, pCurrentCol, 3, -3, CHAR_S );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 2, -2, CHAR_A );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 3, -3, CHAR_S );
     }
 
     temp_value += knz_check_result ? 1 : 0;
@@ -307,10 +325,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( "D", pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( "D", pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
-      setDebugList( "D", pCurrentRow, pCurrentCol, -2, -2, CHAR_A );
-      setDebugList( "D", pCurrentRow, pCurrentCol, -3, -3, CHAR_S );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -2, -2, CHAR_A );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -3, -3, CHAR_S );
     }
 
     long temp_value = knz_check_result ? 1 : 0;
@@ -324,10 +342,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( "D", pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( "D", pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
-      setDebugList( "D", pCurrentRow, pCurrentCol, -2, 2, CHAR_A );
-      setDebugList( "D", pCurrentRow, pCurrentCol, -3, 3, CHAR_S );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -2, 2, CHAR_A );
+      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -3, 3, CHAR_S );
     }
 
     temp_value += knz_check_result ? 1 : 0;
@@ -353,48 +371,29 @@ public class Day04CeresSearch
     return false;
   }
 
-  public static char getChar( List< String > pList, int pCurrentRow, int pCurrentCol, int pDeltaRow, int pDeltaCol )
-  {
-    int target_row = pCurrentRow + pDeltaRow;
-    int target_col = pCurrentCol + pDeltaCol;
-
-    if ( ( target_row >= 0 ) && ( target_row < pList.size() ) )
-    {
-      String target_str = pList.get( target_row );
-
-      if ( ( target_col >= 0 ) && ( target_col < target_str.length() ) )
-      {
-        return target_str.charAt( target_col );
-      }
-    }
-
-    return CHAR_EMPTY_SPACE;
-  }
-
-  private static Properties x_save_pos = new Properties();
-
   private static Properties getSaveProp()
   {
-    if ( x_save_pos == null )
+    if ( properties_positions == null )
     {
-      x_save_pos = new Properties();
+      properties_positions = new Properties();
     }
 
-    return x_save_pos;
+    return properties_positions;
   }
 
-  public static String getDebugChar( String pSpec, int pCurrentRow, int pCurrentCol )
+  private static String getDebugChar( String pSpec, int pCurrentRow, int pCurrentCol )
   {
-    return getSaveProp().getProperty( pSpec + "R" + pCurrentRow + "C" + pCurrentCol, "." );
+    return getSaveProp().getProperty( pSpec + KEY_ROW + pCurrentRow + KEY_COL + pCurrentCol, "." );
   }
 
-  public static void setDebugList( String pSpec, int pCurrentRow, int pCurrentCol, int pDeltaRow, int pDeltaCol, char pChar )
+  private static void setDebugList( String pSpec, int pCurrentRow, int pCurrentCol, int pDeltaRow, int pDeltaCol, char pChar )
   {
     int target_row = pCurrentRow + pDeltaRow;
     int target_col = pCurrentCol + pDeltaCol;
 
-    getSaveProp().setProperty( pSpec + "R" + target_row + "C" + target_col, "" + pChar );
-    getSaveProp().setProperty( "TR" + target_row + "C" + target_col, "" + pChar );
+    getSaveProp().setProperty( pSpec + KEY_ROW + target_row + KEY_COL + target_col, "" + pChar );
+
+    getSaveProp().setProperty( "TR" + target_row + KEY_COL + target_col, "" + pChar );
   }
 
   private static List< String > getListProd()
@@ -428,13 +427,11 @@ public class Day04CeresSearch
     return string_array;
   }
 
-  /**
-   * Ausgabe auf System.out
-   * 
-   * @param pString der auszugebende String
-   */
   private static void wl( String pString )
   {
     System.out.println( pString );
   }
+
+
+
 }
