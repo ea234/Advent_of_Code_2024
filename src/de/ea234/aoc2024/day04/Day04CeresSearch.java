@@ -17,6 +17,8 @@ public class Day04CeresSearch
    * 
    * -------------------------------------------------------------------------------------------- 
    * 
+   * calcGridPart1
+   * 
    * MMMSXXMASM    ....XX....    ....11....
    * MSAMXMSMSA    ....X.....    ....1.....
    * AMXSXMAAMM    ..........    ..0.0.....
@@ -29,20 +31,22 @@ public class Day04CeresSearch
    * MXMXAXMASX    .X.X.X...X    .1.2.3...2
    * 
    * 
-   * .....XMAS.    ..........    ....X.....    ....XXMAS.
-   * .SAMX.....    ......S...    .....M....    .SAMXMS...
-   * ..........    ......A...    ...S..A...    ...S..A...
-   * ..........    ......M..X    ..A.A..S.X    ..A.A.MS.X
-   * XMASAMX...    ......X..M    .M...M..M.    XMASAMX.MM
-   * ..........    .........A    X.....XA..    X.....XA.A
-   * ..........    .........S    S.S.S.S.S.    S.S.S.S.SS
-   * ..........    .........A    .A.A.A.A..    .A.A.A.A.A
-   * ..........    .........M    ..M.M.M.M.    ..M.M.M.MM
-   * .....XMAS.    .........X    .X.X.X...X    .X.X.XMASX
+   * .....XMAS.    ..........    ....X.....    ..........    ....XXMAS.
+   * .SAMX.....    ......S...    .....M....    ..........    .SAMXMS...
+   * ..........    ......A...    ...S..A...    ...S......    ...S..A...
+   * ..........    ......M..X    ....A..S..    ..A......X    ..A.A.MS.X
+   * XMASAMX...    ......X..M    .....M....    .M......M.    XMASAMX.MM
+   * ..........    .........A    ......X...    X......A..    X.....XA.A
+   * ..........    .........S    S.S...S...    ....S.S.S.    S.S.S.S.SS
+   * ..........    .........A    .A.A...A..    ...A.A.A..    .A.A.A.A.A
+   * ..........    .........M    ..M.M...M.    ..M.M.M...    ..M.M.M.MM
+   * .....XMAS.    .........X    ...X.X...X    .X.X.X....    .X.X.XMASX
    * 
-   * Found xmas 18
+   * Found xmas 18 
    * 
    * -------------------------------------------------------------------------------------------- 
+   * 
+   * calcGridPart2
    * 
    * MMMSXXMASM    ..........    .......0..
    * MSAMXMSMSA    ..A.......    ..1......0
@@ -56,16 +60,16 @@ public class Day04CeresSearch
    * MXMXAXMASX    ..........    ....0..0..
    * 
    * 
-   * .M.S......    ..........    ..........    .M.S......
-   * ..A.......    .....MSMS.    ..........    ..A..MSMS.
-   * .M.S......    ......AA..    ...S.M....    .M.S.MAA..
-   * ..A.......    .....SMSM.    ....A.....    ..A.ASMSM.
-   * .M.S......    ..........    ...S.M....    .M.S.M....
-   * ..........    ..........    ..........    ..........
-   * ..........    S.S.S.S.S.    ..........    S.S.S.S.S.
-   * ..........    .A.A.A.A..    ..........    .A.A.A.A..
-   * ..........    M.M.M.M.M.    ..........    M.M.M.M.M.
-   * ..........    ..........    ..........    ..........
+   * .M.S......    ..........    ..........    ..........    .M.S......
+   * ..A.......    ..........    .....M.M..    ......S.S.    ..A..MSMS.
+   * .M.S......    ...S.M....    ......A...    .......A..    .M.S.MAA..
+   * ..A.......    ....A.....    .....S.S..    ......M.M.    ..A.ASMSM.
+   * .M.S......    ...S.M....    ..........    ..........    .M.S.M....
+   * ..........    ..........    ..........    ..........    ..........
+   * ..........    ..........    ..........    S.S.S.S.S.    S.S.S.S.S.
+   * ..........    ..........    ..........    .A.A.A.A..    .A.A.A.A..
+   * ..........    ..........    ..........    M.M.M.M.M.    M.M.M.M.M.
+   * ..........    ..........    ..........    ..........    ..........
    * 
    * Found mas 9 
    *   
@@ -85,7 +89,9 @@ public class Day04CeresSearch
 
   private static final String KEY_COL              = "C";
 
-  private static final String KEY_DIAGONAL         = "D";
+  private static final String KEY_DIAGONAL_1       = "D1";
+
+  private static final String KEY_DIAGONAL_2       = "D2";
 
   private static final String KEY_HORIZONTAL       = "H";
 
@@ -103,6 +109,7 @@ public class Day04CeresSearch
 
     wl( calcGridPart2( getListProd(), false ) );
 
+    wl( calcGridPart1( test_content_list, true ) );
     wl( calcGridPart2( test_content_list, true ) );
   }
 
@@ -188,18 +195,21 @@ public class Day04CeresSearch
       {
         String str_floor_plan_h = "";
         String str_floor_plan_v = "";
-        String str_floor_plan_d = "";
         String str_floor_plan_t = "";
+
+        String str_floor_plan_d1 = "";
+        String str_floor_plan_d2 = "";
 
         for ( int col_index = 0; col_index < str_current_line.length(); col_index++ )
         {
           str_floor_plan_h += getDebugChar( KEY_HORIZONTAL, list_index, col_index );
           str_floor_plan_v += getDebugChar( KEY_VERTICAL, list_index, col_index );
-          str_floor_plan_d += getDebugChar( KEY_DIAGONAL, list_index, col_index );
+          str_floor_plan_d1 += getDebugChar( KEY_DIAGONAL_1, list_index, col_index );
+          str_floor_plan_d2 += getDebugChar( KEY_DIAGONAL_2, list_index, col_index );
           str_floor_plan_t += getDebugChar( KEY_TOTAL, list_index, col_index );
         }
 
-        result_str += str_cr_lf + str_floor_plan_h + str_spacer_debug + str_floor_plan_v + str_spacer_debug + str_floor_plan_d + str_spacer_debug + str_floor_plan_t;
+        result_str += str_cr_lf + str_floor_plan_h + str_spacer_debug + str_floor_plan_v + str_spacer_debug + str_floor_plan_d1 + str_spacer_debug + str_floor_plan_d2 + str_spacer_debug + str_floor_plan_t;
       }
     }
     else
@@ -287,18 +297,20 @@ public class Day04CeresSearch
       {
         String str_floor_plan_h = "";
         String str_floor_plan_v = "";
-        String str_floor_plan_d = "";
+        String str_floor_plan_d1 = "";
+        String str_floor_plan_d2 = "";
         String str_floor_plan_t = "";
 
         for ( int col_index = 0; col_index < str_current_line.length(); col_index++ )
         {
           str_floor_plan_h += getDebugChar( KEY_HORIZONTAL, list_index, col_index );
           str_floor_plan_v += getDebugChar( KEY_VERTICAL, list_index, col_index );
-          str_floor_plan_d += getDebugChar( KEY_DIAGONAL, list_index, col_index );
+          str_floor_plan_d1 += getDebugChar( KEY_DIAGONAL_1, list_index, col_index );
+          str_floor_plan_d2 += getDebugChar( KEY_DIAGONAL_2, list_index, col_index );
           str_floor_plan_t += getDebugChar( KEY_TOTAL, list_index, col_index );
         }
 
-        result_str += str_cr_lf + str_floor_plan_h + str_spacer_debug + str_floor_plan_v + str_spacer_debug + str_floor_plan_d + str_spacer_debug + str_floor_plan_t;
+        result_str += str_cr_lf + str_floor_plan_h + str_spacer_debug + str_floor_plan_v + str_spacer_debug + str_floor_plan_d1 + str_spacer_debug + str_floor_plan_d2 + str_spacer_debug + str_floor_plan_t;
       }
     }
     else
@@ -306,7 +318,7 @@ public class Day04CeresSearch
       result_str = "";
     }
 
-    result_str += "\n\nFound xmas " + count_xmas_sum + " \n";
+    result_str += "\n\nFound mas " + count_xmas_sum + " \n";
 
     return result_str;
   }
@@ -367,13 +379,13 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
 
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
 
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
     }
 
     temp_value += knz_check_result ? 1 : 0;
@@ -400,13 +412,13 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
 
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
 
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_S );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 1, 1, CHAR_S );
     }
 
     temp_value += knz_check_result ? 1 : 0;
@@ -432,13 +444,13 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
 
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_S );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -1, 1, CHAR_S );
 
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
     }
 
     temp_value += knz_check_result ? 1 : 0;
@@ -537,10 +549,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 2, 2, CHAR_A );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 3, 3, CHAR_S );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 2, 2, CHAR_A );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 3, 3, CHAR_S );
     }
 
     long temp_value = knz_check_result ? 1 : 0;
@@ -554,10 +566,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 2, -2, CHAR_A );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 3, -3, CHAR_S );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 2, -2, CHAR_A );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 3, -3, CHAR_S );
     }
 
     temp_value += knz_check_result ? 1 : 0;
@@ -576,10 +588,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -2, -2, CHAR_A );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -3, -3, CHAR_S );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -2, -2, CHAR_A );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -3, -3, CHAR_S );
     }
 
     long temp_value = knz_check_result ? 1 : 0;
@@ -593,10 +605,10 @@ public class Day04CeresSearch
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -2, 2, CHAR_A );
-      setDebugList( KEY_DIAGONAL, pCurrentRow, pCurrentCol, -3, 3, CHAR_S );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -2, 2, CHAR_A );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -3, 3, CHAR_S );
     }
 
     temp_value += knz_check_result ? 1 : 0;
