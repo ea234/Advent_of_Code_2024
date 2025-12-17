@@ -85,6 +85,38 @@ public class Day04CeresSearch
 
   private static final char   CHAR_EMPTY_SPACE     = '.';
 
+  private static final int    ROW_MINUS_0          = 0;
+
+  private static final int    ROW_MINUS_1          = -1;
+
+  private static final int    ROW_MINUS_2          = -2;
+
+  private static final int    ROW_MINUS_3          = -3;
+
+  private static final int    ROW_PLUS_0           = 0;
+
+  private static final int    ROW_PLUS_1           = 1;
+
+  private static final int    ROW_PLUS_2           = 2;
+
+  private static final int    ROW_PLUS_3           = 3;
+
+  private static final int    COL_MINUS_0          = 0;
+
+  private static final int    COL_MINUS_1          = -1;
+
+  private static final int    COL_MINUS_2          = -2;
+
+  private static final int    COL_MINUS_3          = -3;
+
+  private static final int    COL_PLUS_0           = 0;
+
+  private static final int    COL_PLUS_1           = 1;
+
+  private static final int    COL_PLUS_2           = 2;
+
+  private static final int    COL_PLUS_3           = 3;
+
   private static final String KEY_ROW              = "R";
 
   private static final String KEY_COL              = "C";
@@ -98,6 +130,8 @@ public class Day04CeresSearch
   private static final String KEY_VERTICAL         = "V";
 
   private static final String KEY_TOTAL            = "T";
+
+  private static final String STR_SPACER_DEBUG     = "    ";
 
   private static Properties   properties_positions = new Properties();
 
@@ -120,8 +154,6 @@ public class Day04CeresSearch
     wl( "" );
 
     properties_positions = null;
-
-    String str_spacer_debug = "    ";
 
     int count_xmas_sum = 0;
 
@@ -178,7 +210,7 @@ public class Day04CeresSearch
 
       if ( pKnzDebug )
       {
-        result_str += str_cr_lf + str_current_line + str_spacer_debug + str_floor_plan + str_spacer_debug + str_current_position_count;
+        result_str += str_cr_lf + str_current_line + STR_SPACER_DEBUG + str_floor_plan + STR_SPACER_DEBUG + str_current_position_count;
       }
 
       str_cr_lf = "\n";
@@ -186,31 +218,7 @@ public class Day04CeresSearch
 
     if ( pKnzDebug )
     {
-      result_str += str_cr_lf;
-      result_str += str_cr_lf;
-
-      String str_current_line = pList.get( 0 );
-
-      for ( int list_index = 0; list_index < pList.size(); list_index++ )
-      {
-        String str_floor_plan_h = "";
-        String str_floor_plan_v = "";
-        String str_floor_plan_t = "";
-
-        String str_floor_plan_d1 = "";
-        String str_floor_plan_d2 = "";
-
-        for ( int col_index = 0; col_index < str_current_line.length(); col_index++ )
-        {
-          str_floor_plan_h += getDebugChar( KEY_HORIZONTAL, list_index, col_index );
-          str_floor_plan_v += getDebugChar( KEY_VERTICAL, list_index, col_index );
-          str_floor_plan_d1 += getDebugChar( KEY_DIAGONAL_1, list_index, col_index );
-          str_floor_plan_d2 += getDebugChar( KEY_DIAGONAL_2, list_index, col_index );
-          str_floor_plan_t += getDebugChar( KEY_TOTAL, list_index, col_index );
-        }
-
-        result_str += str_cr_lf + str_floor_plan_h + str_spacer_debug + str_floor_plan_v + str_spacer_debug + str_floor_plan_d1 + str_spacer_debug + str_floor_plan_d2 + str_spacer_debug + str_floor_plan_t;
-      }
+      result_str += str_cr_lf += str_cr_lf + getDebugMaps( pList );
     }
     else
     {
@@ -229,8 +237,6 @@ public class Day04CeresSearch
     wl( "" );
 
     properties_positions = null;
-
-    String str_spacer_debug = "    ";
 
     int count_xmas_sum = 0;
 
@@ -280,7 +286,7 @@ public class Day04CeresSearch
 
       if ( pKnzDebug )
       {
-        result_str += str_cr_lf + str_current_line + str_spacer_debug + str_floor_plan + str_spacer_debug + str_current_position_count;
+        result_str += str_cr_lf + str_current_line + STR_SPACER_DEBUG + str_floor_plan + STR_SPACER_DEBUG + str_current_position_count;
       }
 
       str_cr_lf = "\n";
@@ -288,30 +294,7 @@ public class Day04CeresSearch
 
     if ( pKnzDebug )
     {
-      result_str += str_cr_lf;
-      result_str += str_cr_lf;
-
-      String str_current_line = pList.get( 0 );
-
-      for ( int list_index = 0; list_index < pList.size(); list_index++ )
-      {
-        String str_floor_plan_h = "";
-        String str_floor_plan_v = "";
-        String str_floor_plan_d1 = "";
-        String str_floor_plan_d2 = "";
-        String str_floor_plan_t = "";
-
-        for ( int col_index = 0; col_index < str_current_line.length(); col_index++ )
-        {
-          str_floor_plan_h += getDebugChar( KEY_HORIZONTAL, list_index, col_index );
-          str_floor_plan_v += getDebugChar( KEY_VERTICAL, list_index, col_index );
-          str_floor_plan_d1 += getDebugChar( KEY_DIAGONAL_1, list_index, col_index );
-          str_floor_plan_d2 += getDebugChar( KEY_DIAGONAL_2, list_index, col_index );
-          str_floor_plan_t += getDebugChar( KEY_TOTAL, list_index, col_index );
-        }
-
-        result_str += str_cr_lf + str_floor_plan_h + str_spacer_debug + str_floor_plan_v + str_spacer_debug + str_floor_plan_d1 + str_spacer_debug + str_floor_plan_d2 + str_spacer_debug + str_floor_plan_t;
-      }
+      result_str += str_cr_lf += str_cr_lf + getDebugMaps( pList );
     }
     else
     {
@@ -323,9 +306,44 @@ public class Day04CeresSearch
     return result_str;
   }
 
+  private static String getDebugMaps( List< String > pList )
+  {
+    String result_str = "";
+
+    String str_cr_lf = "";
+
+    String str_current_line = pList.get( 0 );
+
+    for ( int row_index = 0; row_index < pList.size(); row_index++ )
+    {
+      String str_map_plan_h = "";
+      String str_map_plan_v = "";
+      String str_map_plan_d1 = "";
+      String str_map_plan_d2 = "";
+      String str_map_plan_t = "";
+
+      for ( int col_index = 0; col_index < str_current_line.length(); col_index++ )
+      {
+        str_map_plan_h  += getDebugChar( KEY_HORIZONTAL, row_index, col_index );
+        str_map_plan_v  += getDebugChar( KEY_VERTICAL,   row_index, col_index );
+        str_map_plan_d1 += getDebugChar( KEY_DIAGONAL_1, row_index, col_index );
+        str_map_plan_d2 += getDebugChar( KEY_DIAGONAL_2, row_index, col_index );
+        str_map_plan_t  += getDebugChar( KEY_TOTAL,      row_index, col_index );
+      }
+
+      result_str += str_cr_lf + str_map_plan_h + STR_SPACER_DEBUG + str_map_plan_v + STR_SPACER_DEBUG + str_map_plan_d1 + STR_SPACER_DEBUG + str_map_plan_d2 + STR_SPACER_DEBUG + str_map_plan_t;
+
+      str_cr_lf = "\n";
+    }
+
+    return result_str;
+  }
+
   private static long checkMas( List< String > pList, int pCurrentRow, int pCurrentCol )
   {
     boolean knz_check_result = true;
+
+    long temp_value = 0;
 
     /*
      * Both M on the left, Both S on the right
@@ -334,126 +352,118 @@ public class Day04CeresSearch
      * .A.
      * M.S
      */
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
 
-    if ( knz_check_result )
+    if ( checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A ) )
     {
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
+      knz_check_result = true;
 
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_S );
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_S );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_MINUS_1, CHAR_M );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1,  COL_MINUS_1, CHAR_M );
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_1, CHAR_S );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1,  COL_PLUS_1, CHAR_S );
+
+      if ( knz_check_result )
+      {
+        setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, 0, CHAR_A );
+
+        setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_MINUS_1, -1, CHAR_M );
+        setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_1, -1, CHAR_M );
+
+        setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_MINUS_1, 1, CHAR_S );
+        setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_1, 1, CHAR_S );
+      }
+
+      temp_value = knz_check_result ? 1 : 0;
+
+      /*
+       * Both S on the left, Both M on the right
+       * 
+       * S.M
+       * .A.
+       * S.M
+       */
+
+      knz_check_result = true;
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, -1, CHAR_S );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, -1, CHAR_S );
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, 1, CHAR_M );
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, 1, CHAR_M );
+
+      if ( knz_check_result )
+      {
+        setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, 0, CHAR_A );
+
+        setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_MINUS_1, CHAR_S );
+        setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_MINUS_1, CHAR_S );
+
+        setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_1, CHAR_M );
+        setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_1, CHAR_M );
+      }
+
+      temp_value += knz_check_result ? 1 : 0;
+
+      /*
+       * Both M above, Both S below
+       * On each side, there is a M and an S
+       * 
+       * M.M
+       * .A.
+       * S.S
+       */
+
+      knz_check_result = true;
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_MINUS_1, CHAR_M ); // above minus
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_MINUS_1, CHAR_S ); // below minus 
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_1, CHAR_M ); // above plus
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_1, CHAR_S ); // below plus
+
+      if ( knz_check_result )
+      {
+        setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_A );
+
+        setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_MINUS_1, CHAR_M );
+        setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_1, CHAR_M );
+
+        setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_MINUS_1, CHAR_S );
+        setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_1, CHAR_S );
+      }
+
+      temp_value += knz_check_result ? 1 : 0;
+
+      /*
+       * Both S above, Both M below
+       * 
+       * S.S
+       * .A.
+       * M.M
+       */
+
+      knz_check_result = true;
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_MINUS_1, CHAR_S ); // above minus
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_1, CHAR_S ); // above plus
+
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_MINUS_1, CHAR_M ); // below minus
+      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_1, CHAR_M ); // below plus
+
+      if ( knz_check_result )
+      {
+        setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_A );
+
+        setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_MINUS_1, CHAR_S );
+        setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_1, CHAR_S );
+
+        setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_MINUS_1, CHAR_M );
+        setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_1, CHAR_M );
+      }
+
+      temp_value += knz_check_result ? 1 : 0;
     }
-
-    if ( knz_check_result )
-    {
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
-
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
-
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_S );
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_S );
-    }
-
-    long temp_value = knz_check_result ? 1 : 0;
-
-    /*
-     * Both S on the left, Both M on the right
-     * 
-     * S.M
-     * .A.
-     * S.M
-     */
-
-    knz_check_result = checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
-
-    if ( knz_check_result )
-    {
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
-
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
-    }
-
-    if ( knz_check_result )
-    {
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
-
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
-
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
-    }
-
-    temp_value += knz_check_result ? 1 : 0;
-
-    /*
-     * Both M above, Both S below
-     * On each side, there is a M and an S
-     * 
-     * M.M
-     * .A.
-     * S.S
-     */
-
-    knz_check_result = checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
-
-    if ( knz_check_result )
-    {
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_M ); // above minus
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_S ); // below minus 
-
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_M ); // above plus
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_S ); // below plus
-    }
-
-    if ( knz_check_result )
-    {
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
-
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
-
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 1, -1, CHAR_S );
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 1, 1, CHAR_S );
-    }
-
-    temp_value += knz_check_result ? 1 : 0;
-
-    /*
-     * Both S above, Both M below
-     * 
-     * S.S
-     * .A.
-     * M.M
-     */
-
-    knz_check_result = checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
-
-    if ( knz_check_result )
-    {
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_S ); // above minus
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_S ); // above plus
-
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_M ); // below minus
-      knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_M ); // below plus
-    }
-
-    if ( knz_check_result )
-    {
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 0, 0, CHAR_A );
-
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -1, -1, CHAR_S );
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -1, 1, CHAR_S );
-
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
-    }
-
-    temp_value += knz_check_result ? 1 : 0;
 
     return temp_value;
   }
@@ -462,17 +472,17 @@ public class Day04CeresSearch
   {
     boolean knz_check_result = true;
 
-    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 1, CHAR_M );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 2, CHAR_A );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 3, CHAR_S );
+    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_X );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_1, CHAR_M );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_2, CHAR_A );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_3, CHAR_S );
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 1, CHAR_M );
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 2, CHAR_A );
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 3, CHAR_S );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_X );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_1, CHAR_M );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_2, CHAR_A );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_3, CHAR_S );
     }
 
     return knz_check_result ? 1 : 0;
@@ -482,17 +492,17 @@ public class Day04CeresSearch
   {
     boolean knz_check_result = true;
 
-    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, -1, CHAR_M );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, -2, CHAR_A );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, -3, CHAR_S );
+    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_X );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_MINUS_1, CHAR_M );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_MINUS_2, CHAR_A );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_MINUS_3, CHAR_S );
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, -1, CHAR_M );
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, -2, CHAR_A );
-      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, 0, -3, CHAR_S );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_X );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_MINUS_1, CHAR_M );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_MINUS_2, CHAR_A );
+      setDebugList( KEY_HORIZONTAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_MINUS_3, CHAR_S );
     }
 
     return knz_check_result ? 1 : 0;
@@ -503,17 +513,18 @@ public class Day04CeresSearch
     boolean knz_check_result = true;
 
     //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 0, CHAR_M );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 2, 0, CHAR_A );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 3, 0, CHAR_S );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_0, CHAR_M );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_2, COL_PLUS_0, CHAR_A );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_3, COL_PLUS_0, CHAR_S );
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 1, 0, CHAR_M );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 2, 0, CHAR_A );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 3, 0, CHAR_S );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_X );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_0, CHAR_M );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_PLUS_2, COL_PLUS_0, CHAR_A );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_PLUS_3, COL_PLUS_0, CHAR_S );
     }
+    knz_check_result = checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_A );
 
     return knz_check_result ? 1 : 0;
   }
@@ -523,16 +534,16 @@ public class Day04CeresSearch
     boolean knz_check_result = true;
 
     //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 0, CHAR_M );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -2, 0, CHAR_A );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -3, 0, CHAR_S );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_0, CHAR_M );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_2, COL_PLUS_0, CHAR_A );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_3, COL_PLUS_0, CHAR_S );
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -1, 0, CHAR_M );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -2, 0, CHAR_A );
-      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, -3, 0, CHAR_S );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_MINUS_0, COL_PLUS_0, CHAR_X );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_0, CHAR_M );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_MINUS_2, COL_PLUS_0, CHAR_A );
+      setDebugList( KEY_VERTICAL, pCurrentRow, pCurrentCol, ROW_MINUS_3, COL_PLUS_0, CHAR_S );
     }
 
     return knz_check_result ? 1 : 0;
@@ -542,34 +553,34 @@ public class Day04CeresSearch
   {
     boolean knz_check_result = true;
 
-    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 2, 2, CHAR_A );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 3, 3, CHAR_S );
+    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_X );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_1, CHAR_M );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_2, COL_PLUS_2, CHAR_A );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_3, COL_PLUS_3, CHAR_S );
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 1, 1, CHAR_M );
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 2, 2, CHAR_A );
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 3, 3, CHAR_S );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_PLUS_0, CHAR_X );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_PLUS_1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_PLUS_2, COL_PLUS_2, CHAR_A );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_PLUS_3, COL_PLUS_3, CHAR_S );
     }
 
     long temp_value = knz_check_result ? 1 : 0;
 
     knz_check_result = true;
 
-    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 2, -2, CHAR_A );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 3, -3, CHAR_S );
+    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_0, 0, CHAR_X );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_MINUS_1, CHAR_M );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_2, COL_MINUS_2, CHAR_A );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_PLUS_3, COL_MINUS_3, CHAR_S );
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 1, -1, CHAR_M );
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 2, -2, CHAR_A );
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 3, -3, CHAR_S );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_PLUS_0, COL_MINUS_0, CHAR_X );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_PLUS_1, COL_MINUS_1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_PLUS_2, COL_MINUS_2, CHAR_A );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_PLUS_3, COL_MINUS_3, CHAR_S );
     }
 
     temp_value += knz_check_result ? 1 : 0;
@@ -581,17 +592,17 @@ public class Day04CeresSearch
   {
     boolean knz_check_result = true;
 
-    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -2, -2, CHAR_A );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -3, -3, CHAR_S );
+    //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_0, COL_MINUS_0, CHAR_X );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_MINUS_1, CHAR_M );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_2, COL_MINUS_2, CHAR_A );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_3, COL_MINUS_3, CHAR_S );
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -1, -1, CHAR_M );
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -2, -2, CHAR_A );
-      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, -3, -3, CHAR_S );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_MINUS_0, COL_PLUS_0, CHAR_X );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_MINUS_1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_MINUS_2, COL_MINUS_2, CHAR_A );
+      setDebugList( KEY_DIAGONAL_1, pCurrentRow, pCurrentCol, ROW_MINUS_3, COL_MINUS_3, CHAR_S );
     }
 
     long temp_value = knz_check_result ? 1 : 0;
@@ -599,16 +610,16 @@ public class Day04CeresSearch
     knz_check_result = true;
 
     //knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -2, 2, CHAR_A );
-    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, -3, 3, CHAR_S );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_1, CHAR_M );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_2, COL_PLUS_2, CHAR_A );
+    knz_check_result &= checkChar( pList, pCurrentRow, pCurrentCol, ROW_MINUS_3, COL_PLUS_3, CHAR_S );
 
     if ( knz_check_result )
     {
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, 0, 0, CHAR_X );
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -1, 1, CHAR_M );
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -2, 2, CHAR_A );
-      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, -3, 3, CHAR_S );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_MINUS_0, COL_PLUS_0, CHAR_X );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_MINUS_1, COL_PLUS_1, CHAR_M );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_MINUS_2, COL_PLUS_2, CHAR_A );
+      setDebugList( KEY_DIAGONAL_2, pCurrentRow, pCurrentCol, ROW_MINUS_3, COL_PLUS_3, CHAR_S );
     }
 
     temp_value += knz_check_result ? 1 : 0;
