@@ -131,6 +131,9 @@ public class Day03MullItOver
 
     /*
      * That was fun to realise. (4 hrs)
+     *
+     * Soundtrack by Stevie Wonder: "I just call to say I hate you"
+     *
      */
     String my_fking_input = "";
 
