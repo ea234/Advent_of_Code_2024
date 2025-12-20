@@ -3,6 +3,7 @@ package de.ea234.aoc2024.day03;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,57 +21,33 @@ public class Day03MullItOver
    * --- Day 3: Mull It Over ---
    * https://adventofcode.com/2024/day/3
    * 
-
-   *
-   * ------------------------------------------------------------------------------------------
    * 
-   * xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))
+   * -------------------------------------------------------
    * 
+   * Realy nice one, once you spottet, that the input lines are not seperated lines.
+   * ... no, they must be merged together.
    * 
-   * ----------------------------------------------------
-   * Found: don't() at pos 20
+   * DO   result_value_sum_do_instructions   76729637
+   * DONT result_value_sum_dont_instructions 102065073
+   * SUM                                     178794710
    * 
-   * DO  
-   * DO     From 0 To 20  20 Characters
-   * DO  
-   * DO     xmul(2,4)&mul[3,7]!^
-   *   0 2 4 = 8
-   * 
-   * ----------------------------------------------------
-   * Found: do() at pos 59
-   * 
-   * DONT
-   * DONT   From 20 To 59  39 Characters
-   * DONT
-   * DONT   don't()_mul(5,5)+mul(32,64](mul(11,8)un
-   * 
-   * ----------------------------------------------------
-   * DO  
-   * DO   From 59 To String End 73  14 Characters
-   * DO  
-   * DO     do()?mul(8,5))
-   *   0 8 5 = 40
-   * 
-   * result_value_sum 48
-   * 
-   * 
-   * result_value_input_line 48
-   * 
-   * 
-   * calc modi 1 result_value_sum 48
-
-   * 
-   * 
+   * Result Part 1 178794710
+   * Result Part 2 76729637
    * 
    * 
    */
-  private static final int CMD_DO                          = 1;
 
-  private static final int CMD_DONT                        = 0;
+  private static final Pattern PATTERN_DO_DONT                      = Pattern.compile( "mul\\((\\d{1,3}),(\\d{1,3})\\)|do\\(\\)|don\\'t\\(\\)" );
 
-  private static final int CALC_ALL_MUL_INSTRUCTIONS       = 1;
+  private static final Pattern PATTERN_MUL_REG_EX                   = Pattern.compile( "mul\\((\\d{1,3}),(\\d{1,3})\\)" );
 
-  private static final int CALC_ONLY_FIRST_MUL_INSTRUCTION = 0;
+  private static final String  PRAEFIX_DEBUG_STRING                 = "";
+
+  private static final int     CMD_DO                               = 1;
+
+  private static final int     CMD_DONT                             = 0;
+
+  private static long          result_value_sum_dont_instructions_g = 0;
 
   public static void main( String[] args )
   {
@@ -82,75 +59,63 @@ public class Day03MullItOver
 
     List< String > test_content_list_part_2 = Arrays.stream( test_content_part_2.split( "#split#" ) ).map( String::trim ).collect( Collectors.toList() );
 
-    calcInputPart2( test_content_list_part_2, CALC_ALL_MUL_INSTRUCTIONS, true );
-
-    calcInputPart2( getListProd(), CALC_ALL_MUL_INSTRUCTIONS, true );
-    calcInputPart2( getListProd(), CALC_ONLY_FIRST_MUL_INSTRUCTION, true );
-
-//    calcInputLinePart2a( test_content_part_2, true );
+//    calcInputPart2( test_content_list_part_2, true );
+//
+    calcInputPart2( getListProd(), true );
   }
 
-  /*
-   *  Muster, das entweder "do()" oder "don't()" findet
-   */
-  private static final Pattern PATTERN_DO_DONT      = Pattern.compile( "do\\(\\)|don\\'t\\(\\)" );
-
-  private static final Pattern PATTERN_MUL_REG_EX   = Pattern.compile( "mul\\((\\d{1,3}),(\\d{1,3})\\)" );
-
-  private static final String  PRAEFIX_DEBUG_STRING = "";
-
-  private static void calcInputPart1( List< String > list_mul, boolean pKnzDebug )
+  private static void calcInputPart1( List< String > pListInput, boolean pKnzDebug )
   {
-    BigDecimal result_value_sum = BigDecimal.valueOf( 0 );
+    long result_value_sum = 0;
 
-    for ( String input_str : list_mul )
+    for ( String input_str : pListInput )
     {
-      BigDecimal result_value_input_line = calcInputLinePart1( input_str, pKnzDebug );
+      long result_value_input_line = calcInputLinePart1( input_str, "", pKnzDebug );
 
-      result_value_sum = result_value_input_line.add( result_value_sum );
+      result_value_sum += result_value_input_line;
 
       wl( "" );
       wl( "------------------------------------------------------------------------------------------" );
       wl( "" );
       wl( PRAEFIX_DEBUG_STRING + FkStringText.getStringMaxCols( input_str, 1000, PRAEFIX_DEBUG_STRING, "\n" ) );
       wl( "" );
-      wl( "result_value_input_line " + result_value_input_line.toPlainString() );
+      wl( "result_value_input_line " + result_value_input_line );
       wl( "" );
     }
 
     wl( "" );
-    wl( "result_value_sum " + result_value_sum.toPlainString() );
+    wl( "result_value_sum " + result_value_sum );
     wl( "" );
     wl( "" );
   }
 
-  private static BigDecimal calcInputLinePart1( String pInput, boolean pKnzDebug )
+  private static long calcInputLinePart1( String pInput, String pDebugPraefix, boolean pKnzDebug )
   {
     Matcher matcher_reg_ex_pattern = PATTERN_MUL_REG_EX.matcher( pInput );
 
-    List< BigDecimal[] > list_array_long_values = new ArrayList< BigDecimal[] >();
+    List< long[] > list_array_long_values = new ArrayList< long[] >();
 
     while ( matcher_reg_ex_pattern.find() )
     {
-      BigDecimal value_part_1 = new BigDecimal( matcher_reg_ex_pattern.group( 1 ) );
+      long value_part_1 = Long.parseLong( matcher_reg_ex_pattern.group( 1 ) );
 
-      BigDecimal value_part_2 = new BigDecimal( matcher_reg_ex_pattern.group( 2 ) );
+      long value_part_2 = Long.parseLong( matcher_reg_ex_pattern.group( 2 ) );
 
-      list_array_long_values.add( new BigDecimal[] { value_part_1, value_part_2 } );
+      list_array_long_values.add( new long[] { value_part_1, value_part_2 } );
     }
 
-    BigDecimal result_value = BigDecimal.valueOf( 0 );
+    long result_value = 0;
 
     int mul_nr = 0;
 
-    for ( BigDecimal[] equation_input_str : list_array_long_values )
+    for ( long[] equation_input_str : list_array_long_values )
     {
       if ( pKnzDebug )
       {
-        wl( "  " + mul_nr + " " + equation_input_str[ 0 ] + " " + equation_input_str[ 1 ] + " = " + ( equation_input_str[ 0 ].multiply( equation_input_str[ 1 ] ).toPlainString() ) );
+        wl( pDebugPraefix + "  " + mul_nr + " " + equation_input_str[ 0 ] + " " + equation_input_str[ 1 ] + " = " + ( equation_input_str[ 0 ] * equation_input_str[ 1 ] ) );
       }
 
-      result_value = result_value.add( equation_input_str[ 0 ].multiply( equation_input_str[ 1 ] ) );
+      result_value += ( equation_input_str[ 0 ] * equation_input_str[ 1 ] );
 
       mul_nr++;
     }
@@ -158,43 +123,51 @@ public class Day03MullItOver
     return result_value;
   }
 
-  private static void calcInputPart2( List< String > list_mul, int pCalcModi, boolean pKnzDebug )
+  private static void calcInputPart2( List< String > pListInput, boolean pKnzDebug )
   {
-    BigDecimal result_value_sum = BigDecimal.valueOf( 0 );
+    result_value_sum_dont_instructions_g = 0;
 
-    for ( String input_str : list_mul )
+    long result_value_sum = 0;
+
+    /*
+     * That was fun to realise. (4 hrs)
+     */
+    String my_fking_input = "";
+
+    for ( String input_str : pListInput )
     {
-      wl( "" );
-      wl( "------------------------------------------------------------------------------------------" );
-      wl( "" );
-      wl( PRAEFIX_DEBUG_STRING + FkStringText.getStringMaxCols( input_str, 1000, PRAEFIX_DEBUG_STRING, "\n" ) );
-      wl( "" );
-
-      BigDecimal result_value_input_line = calcInputLinePart2a( input_str, pCalcModi, pKnzDebug );
-
-      result_value_sum = result_value_sum.add( result_value_input_line );
-
-      wl( "result_value_input_line " + result_value_input_line );
-      wl( "" );
+      my_fking_input += input_str;
     }
 
+    long result_value_input_line = calcInputLinePart2( my_fking_input, pKnzDebug );
+
+    result_value_sum += result_value_input_line;
+
     wl( "" );
-    wl( "calc modi " + pCalcModi + " result_value_sum " + result_value_sum.toPlainString() );
+    wl( "" );
+    wl( "DO   result_value_sum_do_instructions   " + result_value_sum );
+    wl( "DONT result_value_sum_dont_instructions " + result_value_sum_dont_instructions_g );
+    wl( "SUM                                     " + ( result_value_sum + result_value_sum_dont_instructions_g ) );
+    wl( "" );
+    wl( "Result Part 1 " + ( result_value_sum + result_value_sum_dont_instructions_g ) );
+    wl( "Result Part 2 " + result_value_sum );
     wl( "" );
     wl( "" );
   }
 
-  private static BigDecimal calcInputLinePart2a( String input, int pCalcModi, boolean pKnzDebug )
+  private static long calcInputLinePart2( String input, boolean pKnzDebug )
   {
     Matcher matcher_do_dont = PATTERN_DO_DONT.matcher( input );
 
-    BigDecimal result_value_sum_do_instructions = BigDecimal.valueOf( 0 );
+    long result_value_sum_do_instructions = 0;
+    long result_value_sum_dont_instructions = 0;
 
     /*
      * At the beginning mul are enabled
      */
-    int last_find_start_index = 0;
-    int last_find_cmd = CMD_DO;
+    int current_cmd = CMD_DO;
+
+    String debug_praefix = "DO   ";
 
     while ( matcher_do_dont.find() )
     {
@@ -206,65 +179,38 @@ public class Day03MullItOver
         wl( "" );
       }
 
-      if ( last_find_start_index != -1 )
+      if ( matcher_do_dont.group().equals( "don't()" ) )
       {
-        if ( last_find_cmd == CMD_DO )
-        {
-          if ( pKnzDebug )
-          {
-            wl( "DO  " );
-            wl( "DO     From " + last_find_start_index + " To " + matcher_do_dont.start() + "  " + ( matcher_do_dont.start() - last_find_start_index ) + " Characters" );
-            wl( "DO  " );
-            wl( "DO     " + input.substring( last_find_start_index, matcher_do_dont.start() ) );
-          }
-
-          BigDecimal result_value_input_line = calcInputLinePart2b( input.substring( last_find_start_index, matcher_do_dont.start() + 3 ), pCalcModi, true );
-
-          result_value_sum_do_instructions = result_value_sum_do_instructions.add( result_value_input_line );
-        }
-        else
-        {
-          if ( pKnzDebug )
-          {
-            wl( "DONT" );
-            wl( "DONT   From " + last_find_start_index + " To " + matcher_do_dont.start() + "  " + ( matcher_do_dont.start() - last_find_start_index ) + " Characters" );
-            wl( "DONT" );
-            wl( "DONT   " + input.substring( last_find_start_index, matcher_do_dont.start() ) );
-          }
-        }
-
+        current_cmd = CMD_DONT;
       }
-
-      last_find_start_index = matcher_do_dont.start();
-
-      last_find_cmd = ( matcher_do_dont.group().equalsIgnoreCase( "do()" ) ? CMD_DO : CMD_DONT );
-    }
-
-    if ( last_find_start_index != -1 )
-    {
-      wl( "" );
-      wl( "----------------------------------------------------" );
-
-      if ( last_find_cmd == CMD_DO )
+      else if ( matcher_do_dont.group().equals( "do()" ) )
       {
+        current_cmd = CMD_DO;
+      }
+      else // if ( matcher_do_dont.group().equals( "mul(x,y)" ) )
+      {
+        long value_part_1 = Long.parseLong( matcher_do_dont.group( 1 ) );
+
+        long value_part_2 = Long.parseLong( matcher_do_dont.group( 2 ) );
+
+        long value_current_result = value_part_1 * value_part_2;
+
+        if ( current_cmd == CMD_DO )
+        {
+          result_value_sum_do_instructions += value_current_result;
+
+          debug_praefix = "DO   ";
+        }
+        else if ( current_cmd == CMD_DONT )
+        {
+          result_value_sum_dont_instructions += value_current_result;
+
+          debug_praefix = "DONT   ";
+        }
+
         if ( pKnzDebug )
         {
-          wl( "DO  " );
-          wl( "DO   From " + last_find_start_index + " To String End " + input.length() + "  " + ( input.length() - last_find_start_index ) + " Characters" );
-          wl( "DO  " );
-          wl( "DO     " + input.substring( last_find_start_index ) );
-        }
-
-        BigDecimal result_value_input_line = calcInputLinePart2b( input.substring( last_find_start_index ), pCalcModi, true );
-
-        result_value_sum_do_instructions = result_value_sum_do_instructions.add( result_value_input_line );
-      }
-      else
-      {
-        if ( pKnzDebug )
-        {
-          wl( "DONT" );
-          wl( "DONT   " + input.substring( last_find_start_index ) );
+          wl( debug_praefix + " At " + matcher_do_dont.start() + " " + matcher_do_dont.group() + " " + value_part_1 + " " + value_part_1 + " = " + value_current_result );
         }
       }
     }
@@ -272,43 +218,17 @@ public class Day03MullItOver
     if ( pKnzDebug )
     {
       wl( "" );
-      wl( "result_value_sum " + result_value_sum_do_instructions.toPlainString() );
+      wl( "DO   result_value_sum_do_instructions   " + result_value_sum_do_instructions );
+      wl( "DONT result_value_sum_dont_instructions " + result_value_sum_dont_instructions );
+      wl( "" );
+      wl( "SUM  result_value_sum_do_instructions   " + ( result_value_sum_do_instructions + result_value_sum_dont_instructions ) );
       wl( "" );
       wl( "" );
     }
-    /*
-     * 7410217
-     */
+
+    result_value_sum_dont_instructions_g += result_value_sum_dont_instructions;
 
     return result_value_sum_do_instructions;
-  }
-
-  private static BigDecimal calcInputLinePart2b( String pInput, int pCalcModi, boolean pKnzDebug )
-  {
-    if ( pCalcModi == CALC_ALL_MUL_INSTRUCTIONS )
-    {
-      return calcInputLinePart1( pInput, pKnzDebug );
-    }
-
-    Matcher matcher_reg_ex_pattern = PATTERN_MUL_REG_EX.matcher( pInput );
-
-    if ( matcher_reg_ex_pattern.find() )
-    {
-      BigDecimal value_part_1 = new BigDecimal( matcher_reg_ex_pattern.group( 1 ) );
-
-      BigDecimal value_part_2 = new BigDecimal( matcher_reg_ex_pattern.group( 2 ) );
-
-      if ( pKnzDebug )
-      {
-        wl( "DO   First Match " + matcher_reg_ex_pattern.start() + " " + value_part_1 + " " + value_part_1 + " = " + value_part_1.multiply( value_part_2 ).toPlainString() );
-      }
-
-      return value_part_1.multiply( value_part_2 );
-    }
-
-    wl( "DO #########################" );
-
-    return BigDecimal.valueOf( 0 );
   }
 
   private static List< String > getListProd()
@@ -346,6 +266,4 @@ public class Day03MullItOver
   {
     System.out.println( pString );
   }
-
-
 }
