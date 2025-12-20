@@ -64,7 +64,6 @@ public class Day03MullItOver
    * 
    * 
    */
-
   private static final int CMD_DO                          = 1;
 
   private static final int CMD_DONT                        = 0;
@@ -86,6 +85,7 @@ public class Day03MullItOver
     calcInputPart2( test_content_list_part_2, CALC_ALL_MUL_INSTRUCTIONS, true );
 
     calcInputPart2( getListProd(), CALC_ALL_MUL_INSTRUCTIONS, true );
+    calcInputPart2( getListProd(), CALC_ONLY_FIRST_MUL_INSTRUCTION, true );
 
 //    calcInputLinePart2a( test_content_part_2, true );
   }
@@ -101,56 +101,56 @@ public class Day03MullItOver
 
   private static void calcInputPart1( List< String > list_mul, boolean pKnzDebug )
   {
-    long result_value_sum = 0;
+    BigDecimal result_value_sum = BigDecimal.valueOf( 0 );
 
     for ( String input_str : list_mul )
     {
-      long result_value_input_line = calcInputLinePart1( input_str, pKnzDebug );
+      BigDecimal result_value_input_line = calcInputLinePart1( input_str, pKnzDebug );
 
-      result_value_sum += result_value_input_line;
+      result_value_sum = result_value_input_line.add( result_value_sum );
 
       wl( "" );
       wl( "------------------------------------------------------------------------------------------" );
       wl( "" );
       wl( PRAEFIX_DEBUG_STRING + FkStringText.getStringMaxCols( input_str, 1000, PRAEFIX_DEBUG_STRING, "\n" ) );
       wl( "" );
-      wl( "result_value_input_line " + result_value_input_line );
+      wl( "result_value_input_line " + result_value_input_line.toPlainString() );
       wl( "" );
     }
 
     wl( "" );
-    wl( "result_value_sum " + result_value_sum );
+    wl( "result_value_sum " + result_value_sum.toPlainString() );
     wl( "" );
     wl( "" );
   }
 
-  private static long calcInputLinePart1( String pInput, boolean pKnzDebug )
+  private static BigDecimal calcInputLinePart1( String pInput, boolean pKnzDebug )
   {
     Matcher matcher_reg_ex_pattern = PATTERN_MUL_REG_EX.matcher( pInput );
 
-    List< long[] > list_array_long_values = new ArrayList< long[] >();
+    List< BigDecimal[] > list_array_long_values = new ArrayList< BigDecimal[] >();
 
     while ( matcher_reg_ex_pattern.find() )
     {
-      long value_part_1 = Integer.parseInt( matcher_reg_ex_pattern.group( 1 ) );
+      BigDecimal value_part_1 = new BigDecimal( matcher_reg_ex_pattern.group( 1 ) );
 
-      long value_part_2 = Integer.parseInt( matcher_reg_ex_pattern.group( 2 ) );
+      BigDecimal value_part_2 = new BigDecimal( matcher_reg_ex_pattern.group( 2 ) );
 
-      list_array_long_values.add( new long[] { value_part_1, value_part_2 } );
+      list_array_long_values.add( new BigDecimal[] { value_part_1, value_part_2 } );
     }
 
-    long result_value = 0;
+    BigDecimal result_value = BigDecimal.valueOf( 0 );
 
     int mul_nr = 0;
 
-    for ( long[] equation_input_str : list_array_long_values )
+    for ( BigDecimal[] equation_input_str : list_array_long_values )
     {
       if ( pKnzDebug )
       {
-        wl( "  " + mul_nr + " " + equation_input_str[ 0 ] + " " + equation_input_str[ 1 ] + " = " + ( equation_input_str[ 0 ] * equation_input_str[ 1 ] ) );
+        wl( "  " + mul_nr + " " + equation_input_str[ 0 ] + " " + equation_input_str[ 1 ] + " = " + ( equation_input_str[ 0 ].multiply( equation_input_str[ 1 ] ).toPlainString() ) );
       }
 
-      result_value += ( equation_input_str[ 0 ] * equation_input_str[ 1 ] );
+      result_value = result_value.add( equation_input_str[ 0 ].multiply( equation_input_str[ 1 ] ) );
 
       mul_nr++;
     }
@@ -160,7 +160,7 @@ public class Day03MullItOver
 
   private static void calcInputPart2( List< String > list_mul, int pCalcModi, boolean pKnzDebug )
   {
-    long result_value_sum = 0;
+    BigDecimal result_value_sum = BigDecimal.valueOf( 0 );
 
     for ( String input_str : list_mul )
     {
@@ -169,26 +169,26 @@ public class Day03MullItOver
       wl( "" );
       wl( PRAEFIX_DEBUG_STRING + FkStringText.getStringMaxCols( input_str, 1000, PRAEFIX_DEBUG_STRING, "\n" ) );
       wl( "" );
-      
-      long result_value_input_line = calcInputLinePart2a( input_str, pCalcModi, pKnzDebug );
 
-      result_value_sum += result_value_input_line;
+      BigDecimal result_value_input_line = calcInputLinePart2a( input_str, pCalcModi, pKnzDebug );
+
+      result_value_sum = result_value_sum.add( result_value_input_line );
 
       wl( "result_value_input_line " + result_value_input_line );
       wl( "" );
     }
 
     wl( "" );
-    wl( "calc modi " + pCalcModi + " result_value_sum " + result_value_sum );
+    wl( "calc modi " + pCalcModi + " result_value_sum " + result_value_sum.toPlainString() );
     wl( "" );
     wl( "" );
   }
 
-  private static long calcInputLinePart2a( String input, int pCalcModi, boolean pKnzDebug )
+  private static BigDecimal calcInputLinePart2a( String input, int pCalcModi, boolean pKnzDebug )
   {
     Matcher matcher_do_dont = PATTERN_DO_DONT.matcher( input );
 
-    long result_value_sum_do_instructions = 0;
+    BigDecimal result_value_sum_do_instructions = BigDecimal.valueOf( 0 );
 
     /*
      * At the beginning mul are enabled
@@ -218,9 +218,9 @@ public class Day03MullItOver
             wl( "DO     " + input.substring( last_find_start_index, matcher_do_dont.start() ) );
           }
 
-          long result_value_input_line = calcInputLinePart2b( input.substring( last_find_start_index, matcher_do_dont.start() + 3 ), pCalcModi, true );
+          BigDecimal result_value_input_line = calcInputLinePart2b( input.substring( last_find_start_index, matcher_do_dont.start() + 3 ), pCalcModi, true );
 
-          result_value_sum_do_instructions += result_value_input_line;
+          result_value_sum_do_instructions = result_value_sum_do_instructions.add( result_value_input_line );
         }
         else
         {
@@ -255,9 +255,9 @@ public class Day03MullItOver
           wl( "DO     " + input.substring( last_find_start_index ) );
         }
 
-        long result_value_input_line = calcInputLinePart2b( input.substring( last_find_start_index ), pCalcModi, true );
+        BigDecimal result_value_input_line = calcInputLinePart2b( input.substring( last_find_start_index ), pCalcModi, true );
 
-        result_value_sum_do_instructions += result_value_input_line;
+        result_value_sum_do_instructions = result_value_sum_do_instructions.add( result_value_input_line );
       }
       else
       {
@@ -272,7 +272,7 @@ public class Day03MullItOver
     if ( pKnzDebug )
     {
       wl( "" );
-      wl( "result_value_sum " + result_value_sum_do_instructions );
+      wl( "result_value_sum " + result_value_sum_do_instructions.toPlainString() );
       wl( "" );
       wl( "" );
     }
@@ -283,7 +283,7 @@ public class Day03MullItOver
     return result_value_sum_do_instructions;
   }
 
-  private static long calcInputLinePart2b( String pInput, int pCalcModi, boolean pKnzDebug )
+  private static BigDecimal calcInputLinePart2b( String pInput, int pCalcModi, boolean pKnzDebug )
   {
     if ( pCalcModi == CALC_ALL_MUL_INSTRUCTIONS )
     {
@@ -294,21 +294,21 @@ public class Day03MullItOver
 
     if ( matcher_reg_ex_pattern.find() )
     {
-      long value_part_1 = Integer.parseInt( matcher_reg_ex_pattern.group( 1 ) );
+      BigDecimal value_part_1 = new BigDecimal( matcher_reg_ex_pattern.group( 1 ) );
 
-      long value_part_2 = Integer.parseInt( matcher_reg_ex_pattern.group( 2 ) );
+      BigDecimal value_part_2 = new BigDecimal( matcher_reg_ex_pattern.group( 2 ) );
 
       if ( pKnzDebug )
       {
-        wl( "DO   First Match " + matcher_reg_ex_pattern.start() + " " + value_part_1 + " " + value_part_1 + " = " + ( value_part_1 * value_part_2 ) );
+        wl( "DO   First Match " + matcher_reg_ex_pattern.start() + " " + value_part_1 + " " + value_part_1 + " = " + value_part_1.multiply( value_part_2 ).toPlainString() );
       }
 
-      return value_part_1 * value_part_2;
+      return value_part_1.multiply( value_part_2 );
     }
-    
+
     wl( "DO #########################" );
 
-    return 0;
+    return BigDecimal.valueOf( 0 );
   }
 
   private static List< String > getListProd()
@@ -346,5 +346,6 @@ public class Day03MullItOver
   {
     System.out.println( pString );
   }
+
 
 }
