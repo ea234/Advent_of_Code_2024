@@ -12,6 +12,8 @@ import java.util.Properties;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+import de.ea234.util.FkStringFeld;
+
 public class Day07BridgeRepair
 {
 
@@ -19,80 +21,6 @@ public class Day07BridgeRepair
    * --- Day 7: Bridge Repair ---
    * https://adventofcode.com/2024/day/7
    * 
-   * 
-   * Answer:
-   * 
-   * 
-   * -------------------------------------------------------------------------------------
-   * 
-   * checkEquation( "13: 2 3 3 5" )
-   * 
-   * Size                  5
-   * Symbols needed        3
-   * Symbols combinations  8
-   * 
-   * Nr 0 2 * 3 * 3 * 5 = 90
-   * Nr 1 2 + 3 * 3 * 5 = 75
-   * Nr 2 2 * 3 + 3 * 5 = 45
-   * Nr 3 2 + 3 + 3 * 5 = 40
-   * Nr 4 2 * 3 * 3 + 5 = 23
-   * Nr 5 2 + 3 * 3 + 5 = 20
-   * Nr 6 2 * 3 + 3 + 5 = 14
-   * Nr 7 2 + 3 + 3 + 5 = 13
-   * 
-   * bit_mask_cur_value   7 00000011
-   * calc_result          13
-   * calc_equation        2 + 3 + 3 + 5
-   * 
-   * pEquation 13: 2 3 3 5
-   * 
-   * 
-   * -------------------------------------------------------------------------------------
-   * 
-   * checkEquation( "3267: 81 40 27" )
-   * 
-   * Size                  4
-   * Symbols needed        2
-   * Symbols combinations  4
-   * 
-   * Nr 0 81 * 40 * 27 = 87480
-   * Nr 1 81 + 40 * 27 = 3267
-   * 
-   * bit_mask_cur_value   1 00000000
-   * calc_result          3267
-   * calc_equation        81 + 40 * 27
-   * 
-   * pEquation 3267: 81 40 27
-   * 
-   * 
-   * Result  OK 
-   * 
-   * 
-   * -------------------------------------------------------------------------------------
-   * 
-   * checkEquation( "21037: 9 7 18 13" )
-   * 
-   * Size                  5
-   * Symbols needed        3
-   * Symbols combinations  8
-   * 
-   * Nr 0 9 * 7 * 18 * 13 = 14742
-   * Nr 1 9 + 7 * 18 * 13 = 3744
-   * Nr 2 9 * 7 + 18 * 13 = 1053
-   * Nr 3 9 + 7 + 18 * 13 = 442
-   * Nr 4 9 * 7 * 18 + 13 = 1147
-   * Nr 5 9 + 7 * 18 + 13 = 301
-   * Nr 6 9 * 7 + 18 + 13 = 94
-   * Nr 7 9 + 7 + 18 + 13 = 47
-   * 
-   * bit_mask_cur_value   7 00000011
-   * calc_result          47
-   * calc_equation        9 + 7 + 18 + 13
-   * 
-   * pEquation 21037: 9 7 18 13
-   * 
-   * 
-   * Result  ######### NOT OK #######
    * 
    * 
    * -------------------------------------------------------------------------------------
@@ -118,6 +46,22 @@ public class Day07BridgeRepair
    * Result  ######### NOT OK #######
    * 
    * 
+   * 
+   * 
+  g_result_value =>1985268524462<
+  g_result_ok    =>360<
+  g_result_err   =>490<
+  
+  g_result_value =>1985268524462<
+  g_result_ok    =>360<
+  g_result_err   =>490<
+  
+                   25935727435639 - to low
+  g_result_value =>25849723764686<
+  g_result_ok    =>369<
+  g_result_err   =>481<
+  
+   * 
    */
 
   public static void main( String[] args )
@@ -126,7 +70,7 @@ public class Day07BridgeRepair
 
     List< String > test_content_list = Arrays.stream( test_content.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
-    //calcGridPart1( test_content_list, true );
+    //calcInputList( test_content_list, true );
 
     // checkEquationPart1( "21037: 9 7 18 13" );
     //
@@ -139,18 +83,32 @@ public class Day07BridgeRepair
 //    checkEquationPart1( "13: 2 3 3 5", true );
     //
 
-    //calcGridPart1( getListProd(), true );
+    // calcInputList( getListProd(), true );
 
-    testNumberSystem();
+    //testCheckEquationP2( "21037: 9 7 18 13", true  ); // not ok
+    //testCheckEquationP2( "161011: 16 10 13", true  ); // not ok
+    //testCheckEquationP2(  "3267: 81 40 27", true  ); // not ok
+
+//    calcInputList2( test_content_list, true );
+//    
+    calcInputList2( getListProd(), false );
+
+//    testNumberSystemVersion1();
   }
 
-  private static long g_result_value = 0;
+  private static long g_result2_value = 0;
 
-  private static long g_result_ok    = 0;
+  private static long g_result2_ok    = 0;
 
-  private static long g_result_err   = 0;
+  private static long g_result2_err   = 0;
 
-  private static void calcGridPart1( List< String > pList, boolean pKnzDebug )
+  private static long g_result_value  = 0;
+
+  private static long g_result_ok     = 0;
+
+  private static long g_result_err    = 0;
+
+  private static void calcInputList( List< String > pList, boolean pKnzDebug )
   {
     g_result_value = 0;
     g_result_ok = 0;
@@ -166,116 +124,43 @@ public class Day07BridgeRepair
     wl( "g_result_err   =>" + g_result_err + "<" );
   }
 
-  private static boolean checkEquationPart1( String pEquation, boolean pKnzDebug )
+  private static void calcInputList2( List< String > pList, boolean pKnzDebug )
   {
-    if ( pEquation != null )
+    g_result_value = 0;
+    g_result_ok = 0;
+    g_result_err = 0;
+    g_result2_value = 0;
+    g_result2_ok = 0;
+    g_result2_err = 0;
+
+    for ( String equation_input_str : pList )
     {
-      String[] equation_parts_strings = pEquation.replace( ":", "" ).split( " " );
-
-      long[] equation_parts_values = Arrays.stream( equation_parts_strings ).mapToLong( Long::parseLong ).toArray();
-
-      long symbols_needed = ( equation_parts_values.length - 2 );
-
-      /*
-       * Bit-Shift to the right for the power of 2
-       */
-      long symbols_max = ( 1l << symbols_needed );
-
-      if ( pKnzDebug )
+      if ( checkEquationPart1( equation_input_str, pKnzDebug ) == false )
       {
-        wl( "" );
-        wl( "-------------------------------------------------------------------------------------" );
-        wl( "" );
-        wl( "checkEquation( \"" + pEquation + "\" )" );
-        wl( "" );
-        wl( "Size                  " + equation_parts_values.length );
-        wl( "Symbols needed        " + symbols_needed );
-        wl( "Symbols combinations  " + symbols_max );
-        wl( "" );
+        g_result_err--;
+
+        testCheckEquationP2( equation_input_str, pKnzDebug );
       }
-
-      String calc_equation = "";
-
-      long calc_result = 0;
-
-      long bit_mask_max_value = symbols_max;
-      long bit_mask_cur_value = 0;
-
-      while ( ( bit_mask_cur_value < bit_mask_max_value ) && ( calc_result != equation_parts_values[ 0 ] ) )
-      {
-        int calc_index = 2;
-        long calc_bit_mask = bit_mask_cur_value;
-
-        /*
-         * calc_result starts with the value at index-position 1
-         */
-        calc_result = equation_parts_values[ 1 ];
-        calc_equation = "" + equation_parts_values[ 1 ];
-
-        //while ( ( calc_index < longs.length ) && ( calc_result < longs[ 0 ] ) )
-        while ( ( calc_index < equation_parts_values.length ) )
-        {
-          if ( ( calc_bit_mask & 1 ) == 1 )
-          {
-            calc_result += equation_parts_values[ calc_index ];
-
-            calc_equation += " + " + equation_parts_values[ calc_index ];
-          }
-          else
-          {
-            calc_result *= equation_parts_values[ calc_index ];
-
-            calc_equation += " * " + equation_parts_values[ calc_index ];
-          }
-
-          calc_bit_mask = calc_bit_mask >> 1;
-
-          calc_index++;
-        }
-
-        if ( pKnzDebug )
-        {
-          wl( "Nr " + bit_mask_cur_value + " " + calc_equation + " = " + calc_result );
-        }
-
-        bit_mask_cur_value++;
-      }
-
-      bit_mask_cur_value--;
-
-      if ( pKnzDebug )
-      {
-        wl( "" );
-        wl( "bit_mask_cur_value   " + bit_mask_cur_value + " " + getBitPattern( bit_mask_cur_value ) );
-        wl( "calc_result          " + calc_result );
-        wl( "calc_equation        " + calc_equation );
-        wl( "" );
-        wl( "pEquation " + pEquation );
-        wl( "" );
-        wl( "" );
-        wl( "Result " + ( ( calc_result == equation_parts_values[ 0 ] ) ? " OK " : " ######### NOT OK #######" ) );
-        wl( "" );
-        wl( "" );
-      }
-
-      if ( calc_result == equation_parts_values[ 0 ] )
-      {
-        g_result_value += equation_parts_values[ 0 ];
-        g_result_ok++;
-
-      }
-      else
-      {
-        g_result_err++;
-      }
-
     }
 
-    return false;
+    wl( "g_result1_value =>" + g_result_value + "<" );
+    wl( "g_result1_ok    =>" + g_result_ok + "<" );
+    wl( "g_result1_err   =>" + g_result_err + "<" );
+    wl( "" );
+    wl( "g_result2_value =>" + g_result2_value + "<" );
+    wl( "g_result2_ok    =>" + g_result2_ok + "<" );
+    wl( "g_result2_err   =>" + g_result2_err + "<" );
+    wl( "" );
+    wl( "" );
+    wl( "g_result2_value =>" + ( g_result2_value + g_result_value ) + "<" );
+    wl( "g_result2_ok    =>" + ( g_result2_ok + g_result_ok ) + "<" );
+    wl( "g_result2_err   =>" + ( g_result2_err + g_result2_err ) + "<" );
   }
 
-  private static boolean checkEquationPart2( String pEquation, boolean pKnzDebug )
+  private static boolean checkEquationPart1( String pEquation, boolean pKnzDebug )
   {
+    boolean fkt_result = false;
+
     if ( pEquation != null )
     {
       String[] equation_parts_strings = pEquation.replace( ":", "" ).split( " " );
@@ -371,14 +256,16 @@ public class Day07BridgeRepair
         g_result_value += equation_parts_values[ 0 ];
         g_result_ok++;
 
+        fkt_result = true;
       }
       else
       {
         g_result_err++;
       }
+
     }
 
-    return false;
+    return fkt_result;
   }
 
   private static String getBitPattern( long pLong )
@@ -413,7 +300,8 @@ public class Day07BridgeRepair
 
   private static final char                SYMBOL_MULTIPLICATION       = '*';
 
-  private static final String              MY_NUMBER_SYSTEM_SYMBOLS    = "" + SYMBOL_CONCATENATION + SYMBOL_PLUS + SYMBOL_MULTIPLICATION;
+//  private static final String              MY_NUMBER_SYSTEM_SYMBOLS    = "" + SYMBOL_CONCATENATION + SYMBOL_PLUS + SYMBOL_MULTIPLICATION;
+  private static final String              MY_NUMBER_SYSTEM_SYMBOLS    = "" + SYMBOL_MULTIPLICATION + SYMBOL_PLUS + SYMBOL_CONCATENATION;
 
   private static final int                 MY_NUMBER_SYSTEM_BASE       = 3;
 
@@ -421,7 +309,139 @@ public class Day07BridgeRepair
 
   private static HashMap< String, String > hash_map_number_system      = new HashMap< String, String >();
 
-  private static void testNumberSystem()
+  /*
+   * 
+  
+  equation comb       829 | 720 + 61 | 9 * 21 = 174254199   OK   current_number 23  combine_pattern |+|**************    174254199: 829 720 61 9 21
+  equation comb       21 | 46 | 464 + 4 | 51 = 214646851   OK   current_number 71  combine_pattern ||+|*************    214646851: 21 46 464 4 51
+  
+equation fail      71144 current_number      71144  ##EQ   14938235506: 2 67 9 4 3 7 6 5 3 9 8 503
+equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 1 5 59 81 7 2 9
+   */
+
+  private static boolean testCheckEquationP2( String pEquation, boolean pKnzDebug )
+  {
+    //wl( "testCheckEquationP2 "  + pEquation );
+
+    String[] equation_parts_strings = pEquation.replace( ":", "" ).split( " " );
+
+    long[] equation_parts_values = Arrays.stream( equation_parts_strings ).mapToLong( Long::parseLong ).toArray();
+
+    long symbols_needed = ( equation_parts_values.length - 2 );
+
+    long symbols_max = ( 1l << symbols_needed ) * 3;
+
+    symbols_max += 65000; // Stuck here
+
+    String debug_eq = "";
+
+    long current_number = 0;
+
+    long equation_result = -1;
+
+    while ( ( current_number < symbols_max ) && ( equation_result != equation_parts_values[ 0 ] ) )
+    {
+      String combine_pattern_string = getNumberSystemValue( current_number );
+
+      int combine_pattern_idx = 0;
+
+      int equation_parts_idx = 2; // 0 = result , 1 = first val of eq
+
+      long eq_val_sum = equation_parts_values[ 1 ];
+
+      debug_eq = equation_parts_strings[ 1 ];
+
+      while ( ( combine_pattern_idx < combine_pattern_string.length() ) && ( equation_parts_idx < equation_parts_values.length ) )
+      {
+        /*
+         * place the value from the equation parts into the new equation
+         */
+        long eq_val_cur = equation_parts_values[ equation_parts_idx ];
+
+        /*
+         * Do we need another operator from the combining string?
+         * 
+         * This is the case, when the equation part index is lower then the 
+         * length of the equation part array.
+         */
+//        if ( equation_parts_idx <= equation_parts_values.length )
+        {
+          switch ( combine_pattern_string.charAt( combine_pattern_idx ) )
+          {
+            case SYMBOL_CONCATENATION :
+
+              debug_eq += " | " + eq_val_cur;
+
+              /*
+               * Leading Zeros!
+               */
+              eq_val_sum = Long.parseLong( ( "" + eq_val_sum ) + equation_parts_strings[ equation_parts_idx ] );
+
+              break;
+
+            case SYMBOL_PLUS :
+
+              debug_eq += " + " + eq_val_cur;
+
+              eq_val_sum += eq_val_cur;
+
+              break;
+
+            case SYMBOL_MULTIPLICATION :
+
+              debug_eq += " * " + eq_val_cur;
+
+              eq_val_sum *= eq_val_cur;
+
+              break;
+          }
+
+          combine_pattern_idx++;
+
+          /*
+           * increment the equation part index
+           */
+          equation_parts_idx++;
+        }
+      }
+
+      equation_result = eq_val_sum;
+
+      if ( pKnzDebug )
+      {
+        wl( "equation comb       " + debug_eq + " = " + FkStringFeld.getFeldRechtsMin( equation_result, 7 ) + "  " + ( equation_result != equation_parts_values[ 0 ] ? " -- " : " OK " ) + "  current_number " + current_number + "  combine_pattern " + combine_pattern_string );
+      }
+//      else if ( equation_result == equation_parts_values[ 0 ] )
+//      {
+//        wl( "equation comb       " + debug_eq + " = " + FkStringFeld.getFeldRechtsMin( equation_result, 7 ) + "  " + ( equation_result != equation_parts_values[ 0 ] ? " -- " : " OK " ) + "  current_number " + current_number + "  combine_pattern " + combine_pattern_string + "    " + pEquation );
+//      }
+
+      current_number++;
+    }
+
+    if ( equation_result == equation_parts_values[ 0 ] )
+    {
+      g_result2_value += equation_parts_values[ 0 ];
+      g_result2_ok++;
+
+    }
+    else
+    {
+
+      wl( "equation fail " + FkStringFeld.getFeldRechtsMin( symbols_max, 10 ) + " current_number " + FkStringFeld.getFeldRechtsMin( current_number, 10 ) + "  ##EQ   " + pEquation );
+
+      g_result2_err++;
+    }
+
+    if ( equation_result == equation_parts_values[ 0 ] )
+    {
+      return true;
+    }
+
+    return false;
+  }
+
+  private static void testNumberSystemVersion1()
   {
     for ( long nr = 0; nr < 255; nr++ )
     {
@@ -432,8 +452,8 @@ public class Day07BridgeRepair
 
     String pEquation = "7290: 6 8 6 15 "; // can be made true using 6 * 8 || 6 * 15.
 
-    pEquation = "192: 17 8 14 "; // can be made true using 6 * 8 || 6 * 15.
-    pEquation = "156: 15 6"; // can be made true through a single concatenation: 15 || 6 = 156.
+//    pEquation = "192: 17 8 14 "; // can be made true using 6 * 8 || 6 * 15.
+//    pEquation = "156: 15 6"; // can be made true through a single concatenation: 15 || 6 = 156.
 
     String[] equation_parts_strings = pEquation.replace( ":", "" ).split( " " );
 
@@ -455,9 +475,13 @@ public class Day07BridgeRepair
      * The number system consist out of 3 Symbols.
      * there are 9 possible combinations
      * 
+     * 8 <symbol> 8 <symbol> 8 <symbol> 8
      * 
      */
-    long symbols_max = ( 1l << symbols_needed );
+    long symbols_max = ( 1l << symbols_needed ) * 3;
+
+    //symbols_max = 50;
+    wl( "symbols_max " + symbols_max );
 
     /*
      * 10101010101010101 = 87381
@@ -467,74 +491,113 @@ public class Day07BridgeRepair
     current_number = 123;
     current_number = 3;
 
-    String combine_pattern_string = getNumberSystemValue( current_number );
+    current_number = 0;
 
-    wl( "current_number " + current_number + "  combine_pattern " + combine_pattern_string );
-
-    int flag_concatination = 0;
-
-    int equation_parts_idx = 1; // 0 = result , 1 = first val of eq
+    long equation_result = -1;
 
     String equation_new_combined = "";
+    String debug_eq = "";
 
-    int combine_pattern_idx = 0;
-
-    while ( ( combine_pattern_idx < combine_pattern_string.length() ) && ( equation_parts_idx < equation_parts_values.length ) )
+    while ( ( current_number < symbols_max ) && ( equation_result != equation_parts_values[ 0 ] ) )
     {
-      /*
-       * place the value from the equation parts into the new equation
-       */
-      equation_new_combined += equation_parts_strings[ equation_parts_idx ];
+      String combine_pattern_string = getNumberSystemValue( current_number );
 
-      /*
-       * increment the equation part index
-       */
-      equation_parts_idx++;
+      //wl( "current_number " + current_number + "  combine_pattern " + combine_pattern_string );
 
-      /*
-       * Do we need another operator from the combining string?
-       * 
-       * This is the case, when the equation part index is lower then the 
-       * length of the equation part array.
-       */
-      if ( equation_parts_idx < equation_parts_values.length )
+      int flag_concatination = 0;
+
+      int equation_parts_idx = 1; // 0 = result , 1 = first val of eq
+
+      equation_new_combined = "";
+      debug_eq = "";
+
+      long eq_val_x = 0;
+
+      int combine_pattern_idx = 0;
+
+      while ( ( combine_pattern_idx < combine_pattern_string.length() ) && ( equation_parts_idx < equation_parts_values.length ) )
       {
-        switch ( combine_pattern_string.charAt( combine_pattern_idx ) )
+        /*
+         * place the value from the equation parts into the new equation
+         */
+        equation_new_combined += equation_parts_strings[ equation_parts_idx ];
+
+        equation_new_combined += equation_parts_strings[ equation_parts_idx ];
+
+        debug_eq += equation_parts_strings[ equation_parts_idx ];
+
+        /*
+         * increment the equation part index
+         */
+        equation_parts_idx++;
+
+        /*
+         * Do we need another operator from the combining string?
+         * 
+         * This is the case, when the equation part index is lower then the 
+         * length of the equation part array.
+         */
+        if ( equation_parts_idx < equation_parts_values.length )
         {
-          case SYMBOL_CONCATENATION :
+          switch ( combine_pattern_string.charAt( combine_pattern_idx ) )
+          {
+            case SYMBOL_CONCATENATION :
 
-            wl( " " + combine_pattern_idx + " = " + "|" + " SYMBOL_CONCATENATION  = " + SYMBOL_CONCATENATION );
+              //wl( " " + combine_pattern_idx + " = " + "|" + " SYMBOL_CONCATENATION  = " + SYMBOL_CONCATENATION );
 
-            flag_concatination = 1;
+              flag_concatination = 1;
 
-            break;
+              debug_eq += " | ";
 
-          case SYMBOL_PLUS :
+              break;
 
-            wl( " " + combine_pattern_idx + " = " + "+" + " SYMBOL_PLUS           = " + SYMBOL_PLUS );
+            case SYMBOL_PLUS :
 
-            equation_new_combined += " + ";
+              //wl( " " + combine_pattern_idx + " = " + "+" + " SYMBOL_PLUS           = " + SYMBOL_PLUS );
 
-            break;
+              equation_new_combined += " + ";
 
-          case SYMBOL_MULTIPLICATION :
+              debug_eq += " + ";
 
-            wl( " " + combine_pattern_idx + " = " + "*" + " SYMBOL_MULTIPLICATION = " + SYMBOL_MULTIPLICATION );
+              break;
 
-            equation_new_combined += " * ";
+            case SYMBOL_MULTIPLICATION :
 
-            break;
+              //wl( " " + combine_pattern_idx + " = " + "*" + " SYMBOL_MULTIPLICATION = " + SYMBOL_MULTIPLICATION );
+
+              equation_new_combined += " * ";
+
+              debug_eq += " * ";
+
+              break;
+          }
+
+          combine_pattern_idx++;
         }
-
-        combine_pattern_idx++;
       }
+
+      equation_result = getEquationResult( debug_eq );
+
+      wl( "equation comb      " + FkStringFeld.getFeldLinksMin( debug_eq, 30 ) + " = " + FkStringFeld.getFeldLinksMin( equation_new_combined, 30 ) + " = " + FkStringFeld.getFeldRechtsMin( equation_result, 7 ) + "  current_number " + current_number + "  combine_pattern " + combine_pattern_string );
+
+      if ( equation_result == equation_parts_values[ 0 ] )
+      {
+        wl( "############### OK " );
+      }
+
+      current_number++;
     }
+
+    wl( "" );
+    wl( "" );
+    wl( "#################################################################################" );
+    wl( "" );
+    wl( "" );
 
     wl( "equation input     " + pEquation );
     wl( "equation comb      " + equation_new_combined );
-    wl( "flag_concatination " + flag_concatination );
 
-    long equation_result = getEquationResult( equation_new_combined );
+    equation_result = getEquationResult( equation_new_combined );
 
     wl( "Equation Result " + equation_result );
 
@@ -552,7 +615,15 @@ public class Day07BridgeRepair
     testFromNumberSystem( "" + SYMBOL_PLUS + SYMBOL_CONCATENATION );
     testFromNumberSystem( "" + SYMBOL_MULTIPLICATION + SYMBOL_PLUS + SYMBOL_MULTIPLICATION );
 
-    testGetEquationResult( "123" );
+//    testGetEquationResult( "123" );
+//    testGetEquationResult( "6 * 86 * 15" );
+    testGetEquationResult( "6 * 8 | 6 * 15" );
+
+    wl( "" );
+    wl( "7290: 6 8 6 15  can be made true using 6 * 8 || 6 * 15." );
+    wl( "192: 17 8 14    can be made true using 17 || 8 + 14." );
+    wl( "156: 15 6       can be made true through a single concatenation: 15 || 6 = 156." );
+
   }
 
   private static long testGetEquationResult( String pEquation )
@@ -586,6 +657,10 @@ public class Day07BridgeRepair
       {
         knz_math_op = 1;
       }
+      else if ( current_equation_part.equals( "|" ) )
+      {
+        knz_math_op = 3;
+      }
       else
       {
         if ( knz_math_op == 0 )
@@ -595,6 +670,10 @@ public class Day07BridgeRepair
         else if ( knz_math_op == 1 )
         {
           value_akt *= Long.parseLong( current_equation_part );
+        }
+        else if ( knz_math_op == 3 )
+        {
+          value_akt = Long.parseLong( ( "" + value_akt ) + current_equation_part );
         }
         else
         {
