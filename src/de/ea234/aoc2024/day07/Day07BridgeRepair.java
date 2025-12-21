@@ -2,6 +2,7 @@ package de.ea234.aoc2024.day07;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -16,11 +17,105 @@ import de.ea234.util.FkStringFeld;
 
 public class Day07BridgeRepair
 {
-
   /*
    * --- Day 7: Bridge Repair ---
    * https://adventofcode.com/2024/day/7
+   * https://www.youtube.com/watch?v=j5eL7F0yRn8
+   * https://www.reddit.com/r/adventofcode/comments/1h8l3z5/2024_day_7_solutions/
    * 
+   *
+   * #################################################################################### 
+   * 
+   * I hate my solution.
+   * It is unnessecary complicated.
+   * The runtime is bad.
+   *
+   * You be better off with this solution:
+   * https://github.com/mmersic/advent2024/blob/main/src/main/java/org/mersic/Day07.java
+   * 
+   * Its cleaner and better.
+   * 
+   * It helped me to identify clarify my errors.
+   *
+   * But anyways I was stuck.
+   * It was in the end the calculation of all possibilities.
+   * 
+   * In the future I will do more with recursive programming.
+   * 
+   * You may find some documentation in german.
+   * Dont worry, i am totaly fine with that.
+   *
+   * #################################################################################### 
+   * 
+   * 
+   * checkEquation( "13: 2 3 3 5" )
+   * 
+   * Size                  5
+   * Symbols needed        3
+   * Symbols combinations  8
+   * 
+   * Nr 0 2 * 3 * 3 * 5 = 90
+   * Nr 1 2 + 3 * 3 * 5 = 75
+   * Nr 2 2 * 3 + 3 * 5 = 45
+   * Nr 3 2 + 3 + 3 * 5 = 40
+   * Nr 4 2 * 3 * 3 + 5 = 23
+   * Nr 5 2 + 3 * 3 + 5 = 20
+   * Nr 6 2 * 3 + 3 + 5 = 14
+   * Nr 7 2 + 3 + 3 + 5 = 13
+   * 
+   * bit_mask_cur_value   7 00000011
+   * calc_result          13
+   * calc_equation        2 + 3 + 3 + 5
+   * 
+   * pEquation 13: 2 3 3 5
+   * 
+   * 
+   * -------------------------------------------------------------------------------------
+   * 
+   * checkEquation( "3267: 81 40 27" )
+   * 
+   * Size                  4
+   * Symbols needed        2
+   * Symbols combinations  4
+   * 
+   * Nr 0 81 * 40 * 27 = 87480
+   * Nr 1 81 + 40 * 27 = 3267
+   * 
+   * bit_mask_cur_value   1 00000000
+   * calc_result          3267
+   * calc_equation        81 + 40 * 27
+   * 
+   * pEquation 3267: 81 40 27
+   * 
+   * 
+   * Result  OK 
+   * 
+   * 
+   * -------------------------------------------------------------------------------------
+   * 
+   * checkEquation( "21037: 9 7 18 13" )
+   * 
+   * Size                  5
+   * Symbols needed        3
+   * Symbols combinations  8
+   * 
+   * Nr 0 9 * 7 * 18 * 13 = 14742
+   * Nr 1 9 + 7 * 18 * 13 = 3744
+   * Nr 2 9 * 7 + 18 * 13 = 1053
+   * Nr 3 9 + 7 + 18 * 13 = 442
+   * Nr 4 9 * 7 * 18 + 13 = 1147
+   * Nr 5 9 + 7 * 18 + 13 = 301
+   * Nr 6 9 * 7 + 18 + 13 = 94
+   * Nr 7 9 + 7 + 18 + 13 = 47
+   * 
+   * bit_mask_cur_value   7 00000011
+   * calc_result          47
+   * calc_equation        9 + 7 + 18 + 13
+   * 
+   * pEquation 21037: 9 7 18 13
+   * 
+   * 
+   * Result  ######### NOT OK #######
    * 
    * 
    * -------------------------------------------------------------------------------------
@@ -45,22 +140,36 @@ public class Day07BridgeRepair
    * 
    * Result  ######### NOT OK #######
    * 
+   * -----------------------------------------------------
+   * 
+    g_result_value =>1985268524462<
+    g_result_ok    =>360<
+    g_result_err   =>490<
+    
+    g_result_value =>1985268524462<
+    g_result_ok    =>360<
+    g_result_err   =>490<
+    
+                     25935727435639 - to low
+    g_result_value =>25849723764686<
+    g_result_ok    =>369<
+    g_result_err   =>481<
+    
+   *
+   * --------------------------------------------------
+   *     
+   * g_result1_value =>1985268524462<
+   * g_result1_ok    =>360<
+   * g_result1_err   =>0<
+   * 
+   * g_result2_value =>148092441670726<
+   * g_result2_ok    =>223<
+   * g_result2_err   =>267<
    * 
    * 
-   * 
-  g_result_value =>1985268524462<
-  g_result_ok    =>360<
-  g_result_err   =>490<
-  
-  g_result_value =>1985268524462<
-  g_result_ok    =>360<
-  g_result_err   =>490<
-  
-                   25935727435639 - to low
-  g_result_value =>25849723764686<
-  g_result_ok    =>369<
-  g_result_err   =>481<
-  
+   * g_result2_value =>150077710195188<
+   * g_result2_ok    =>583<
+   * g_result2_err   =>534<
    * 
    */
 
@@ -72,28 +181,23 @@ public class Day07BridgeRepair
 
     //calcInputList( test_content_list, true );
 
-    // checkEquationPart1( "21037: 9 7 18 13" );
+    //checkEquationPart1( "21037: 9 7 18 13" );
     //
-    // checkEquationPart1( "292: 11 6 16 20" );
+    //checkEquationPart1( "292: 11 6 16 20" );
     //
-    // checkEquationPart1( "3267: 81 40 27" );
+    //checkEquationPart1( "3267: 81 40 27" );
     //
-    // checkEquationPart1( "10: 1 2 3 4", true );
+    //checkEquationPart1( "10: 1 2 3 4", true );
     //
-//    checkEquationPart1( "13: 2 3 3 5", true );
+    //checkEquationPart1( "13: 2 3 3 5", true );
     //
+    //calcInputList( getListProd(), true );
 
-    // calcInputList( getListProd(), true );
+    //calcInputList2( test_content_list, true );
 
-    //testCheckEquationP2( "21037: 9 7 18 13", true  ); // not ok
-    //testCheckEquationP2( "161011: 16 10 13", true  ); // not ok
-    //testCheckEquationP2(  "3267: 81 40 27", true  ); // not ok
-
-//    calcInputList2( test_content_list, true );
-//    
     calcInputList2( getListProd(), false );
 
-//    testNumberSystemVersion1();
+    //testNumberSystemVersion1();
   }
 
   private static long g_result2_value = 0;
@@ -133,15 +237,33 @@ public class Day07BridgeRepair
     g_result2_ok = 0;
     g_result2_err = 0;
 
+    int nr = 0;
+    String debug_string = "";
+
     for ( String equation_input_str : pList )
     {
-      if ( checkEquationPart1( equation_input_str, pKnzDebug ) == false )
+      if ( checkEquationPart1( equation_input_str, pKnzDebug ) )
+      {
+        debug_string += "\nOK1 " + FkStringFeld.getFeldRechtsMin( nr, 6 ) + " " + equation_input_str;
+      }
+      else
       {
         g_result_err--;
 
-        testCheckEquationP2( equation_input_str, pKnzDebug );
+        if ( testCheckEquationP2( equation_input_str, pKnzDebug ) )
+        {
+          debug_string += "\nOK2 " + FkStringFeld.getFeldRechtsMin( nr, 6 ) + " " + equation_input_str;
+        }
+        else
+        {
+          debug_string += "\nNK  " + FkStringFeld.getFeldRechtsMin( nr, 6 ) + " " + equation_input_str;
+        }
       }
+
+      nr++;
     }
+
+    //Day07BridgeRepair.schreibeDatei( "/mnt/hd4tbb/daten/advent_of_code_2024__day07_check_fehler.txt", debug_string );
 
     wl( "g_result1_value =>" + g_result_value + "<" );
     wl( "g_result1_ok    =>" + g_result_ok + "<" );
@@ -197,6 +319,7 @@ public class Day07BridgeRepair
       while ( ( bit_mask_cur_value < bit_mask_max_value ) && ( calc_result != equation_parts_values[ 0 ] ) )
       {
         int calc_index = 2;
+
         long calc_bit_mask = bit_mask_cur_value;
 
         /*
@@ -205,8 +328,7 @@ public class Day07BridgeRepair
         calc_result = equation_parts_values[ 1 ];
         calc_equation = "" + equation_parts_values[ 1 ];
 
-        //while ( ( calc_index < longs.length ) && ( calc_result < longs[ 0 ] ) )
-        while ( ( calc_index < equation_parts_values.length ) )
+        while ( ( calc_index < equation_parts_values.length ) && ( calc_result < equation_parts_values[ 0 ] ) )
         {
           if ( ( calc_bit_mask & 1 ) == 1 )
           {
@@ -262,7 +384,6 @@ public class Day07BridgeRepair
       {
         g_result_err++;
       }
-
     }
 
     return fkt_result;
@@ -286,21 +407,12 @@ public class Day07BridgeRepair
 
   private static final String              MY_NUMBER_SYSTEM_HM_PRAEFIX = "SYS_VAL_";
 
-//
-//  private static final char                SYMBOL_CONCATENATION        = 'A';
-//
-//  private static final char                SYMBOL_PLUS                 = 'B';
-//
-//  private static final char                SYMBOL_MULTIPLICATION       = 'C';
-//
-
   private static final char                SYMBOL_CONCATENATION        = '|';
 
   private static final char                SYMBOL_PLUS                 = '+';
 
   private static final char                SYMBOL_MULTIPLICATION       = '*';
 
-//  private static final String              MY_NUMBER_SYSTEM_SYMBOLS    = "" + SYMBOL_CONCATENATION + SYMBOL_PLUS + SYMBOL_MULTIPLICATION;
   private static final String              MY_NUMBER_SYSTEM_SYMBOLS    = "" + SYMBOL_MULTIPLICATION + SYMBOL_PLUS + SYMBOL_CONCATENATION;
 
   private static final int                 MY_NUMBER_SYSTEM_BASE       = 3;
@@ -309,29 +421,15 @@ public class Day07BridgeRepair
 
   private static HashMap< String, String > hash_map_number_system      = new HashMap< String, String >();
 
-  /*
-   * 
-  
-  equation comb       829 | 720 + 61 | 9 * 21 = 174254199   OK   current_number 23  combine_pattern |+|**************    174254199: 829 720 61 9 21
-  equation comb       21 | 46 | 464 + 4 | 51 = 214646851   OK   current_number 71  combine_pattern ||+|*************    214646851: 21 46 464 4 51
-  
-equation fail      71144 current_number      71144  ##EQ   14938235506: 2 67 9 4 3 7 6 5 3 9 8 503
-equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 1 5 59 81 7 2 9
-   */
-
   private static boolean testCheckEquationP2( String pEquation, boolean pKnzDebug )
   {
-    //wl( "testCheckEquationP2 "  + pEquation );
-
     String[] equation_parts_strings = pEquation.replace( ":", "" ).split( " " );
 
     long[] equation_parts_values = Arrays.stream( equation_parts_strings ).mapToLong( Long::parseLong ).toArray();
 
     long symbols_needed = ( equation_parts_values.length - 2 );
 
-    long symbols_max = ( 1l << symbols_needed ) * 3;
-
-    symbols_max += 65000; // Stuck here
+    long symbols_max = powLong( 3l, symbols_needed );
 
     String debug_eq = "";
 
@@ -351,6 +449,7 @@ equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 
 
       debug_eq = equation_parts_strings[ 1 ];
 
+      //Sorry ... doesn't work:  while ( ( combine_pattern_idx < combine_pattern_string.length() ) && ( equation_parts_idx < equation_parts_values.length ) && ( equation_result < equation_parts_values[ 0 ] ) )
       while ( ( combine_pattern_idx < combine_pattern_string.length() ) && ( equation_parts_idx < equation_parts_values.length ) )
       {
         /*
@@ -364,45 +463,42 @@ equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 
          * This is the case, when the equation part index is lower then the 
          * length of the equation part array.
          */
-//        if ( equation_parts_idx <= equation_parts_values.length )
+        switch ( combine_pattern_string.charAt( combine_pattern_idx ) )
         {
-          switch ( combine_pattern_string.charAt( combine_pattern_idx ) )
-          {
-            case SYMBOL_CONCATENATION :
+          case SYMBOL_CONCATENATION :
 
-              debug_eq += " | " + eq_val_cur;
+            debug_eq += " | " + eq_val_cur;
 
-              /*
-               * Leading Zeros!
-               */
-              eq_val_sum = Long.parseLong( ( "" + eq_val_sum ) + equation_parts_strings[ equation_parts_idx ] );
+            /*
+             * Leading Zeros!
+             */
+            eq_val_sum = Long.parseLong( ( "" + eq_val_sum ) + equation_parts_strings[ equation_parts_idx ] );
 
-              break;
+            break;
 
-            case SYMBOL_PLUS :
+          case SYMBOL_PLUS :
 
-              debug_eq += " + " + eq_val_cur;
+            debug_eq += " + " + eq_val_cur;
 
-              eq_val_sum += eq_val_cur;
+            eq_val_sum += eq_val_cur;
 
-              break;
+            break;
 
-            case SYMBOL_MULTIPLICATION :
+          case SYMBOL_MULTIPLICATION :
 
-              debug_eq += " * " + eq_val_cur;
+            debug_eq += " * " + eq_val_cur;
 
-              eq_val_sum *= eq_val_cur;
+            eq_val_sum *= eq_val_cur;
 
-              break;
-          }
-
-          combine_pattern_idx++;
-
-          /*
-           * increment the equation part index
-           */
-          equation_parts_idx++;
+            break;
         }
+
+        combine_pattern_idx++;
+
+        /*
+         * increment the equation part index
+         */
+        equation_parts_idx++;
       }
 
       equation_result = eq_val_sum;
@@ -411,10 +507,6 @@ equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 
       {
         wl( "equation comb       " + debug_eq + " = " + FkStringFeld.getFeldRechtsMin( equation_result, 7 ) + "  " + ( equation_result != equation_parts_values[ 0 ] ? " -- " : " OK " ) + "  current_number " + current_number + "  combine_pattern " + combine_pattern_string );
       }
-//      else if ( equation_result == equation_parts_values[ 0 ] )
-//      {
-//        wl( "equation comb       " + debug_eq + " = " + FkStringFeld.getFeldRechtsMin( equation_result, 7 ) + "  " + ( equation_result != equation_parts_values[ 0 ] ? " -- " : " OK " ) + "  current_number " + current_number + "  combine_pattern " + combine_pattern_string + "    " + pEquation );
-//      }
 
       current_number++;
     }
@@ -427,9 +519,6 @@ equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 
     }
     else
     {
-
-      wl( "equation fail " + FkStringFeld.getFeldRechtsMin( symbols_max, 10 ) + " current_number " + FkStringFeld.getFeldRechtsMin( current_number, 10 ) + "  ##EQ   " + pEquation );
-
       g_result2_err++;
     }
 
@@ -439,6 +528,26 @@ equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 
     }
 
     return false;
+  }
+
+  private static long powLong( long pBase, long pExponent )
+  {
+    if ( pExponent < 0 ) throw new IllegalArgumentException( "negative Exponent" );
+
+    long result_value = 1;
+    long value_base = pBase;
+    long value_exponent = pExponent;
+
+    while ( value_exponent > 0 )
+    {
+      if ( ( value_exponent & 1 ) == 1 ) result_value *= value_base;
+
+      value_base *= value_base;
+
+      value_exponent >>= 1;
+    }
+
+    return result_value;
   }
 
   private static void testNumberSystemVersion1()
@@ -452,244 +561,31 @@ equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 
 
     String pEquation = "7290: 6 8 6 15 "; // can be made true using 6 * 8 || 6 * 15.
 
-//    pEquation = "192: 17 8 14 "; // can be made true using 6 * 8 || 6 * 15.
-//    pEquation = "156: 15 6"; // can be made true through a single concatenation: 15 || 6 = 156.
-
-    String[] equation_parts_strings = pEquation.replace( ":", "" ).split( " " );
-
-    long[] equation_parts_values = Arrays.stream( equation_parts_strings ).mapToLong( Long::parseLong ).toArray();
-
-    long symbols_needed = ( equation_parts_values.length - 2 );
-
     /*
-     * Bit-Shift to the right for the power of 2
-     * 
-     * 8 <symbol> 8
-     * 
-     * One Symbol is needed.
-     * The number system consist out of 3 Symbols.
-     * There are 3 possibilitis
-     * 
-     * 8 <symbol> 8 <symbol> 8
-     * Two symbols are needed
-     * The number system consist out of 3 Symbols.
-     * there are 9 possible combinations
-     * 
-     * 8 <symbol> 8 <symbol> 8 <symbol> 8
-     * 
+    OK2    634 25048829: 5 5 48 7 2 1 5 59 81 7 2 9
+    OK2    730 92466197: 9 1 1 9 2 2 6 5 9 44 2 251
      */
-    long symbols_max = ( 1l << symbols_needed ) * 3;
+    boolean pKnzDebug = false;
 
-    //symbols_max = 50;
-    wl( "symbols_max " + symbols_max );
+    String equation_input_str = "92466197: 9 1 1 9 2 2 6 5 9 44 2 251";
 
-    /*
-     * 10101010101010101 = 87381
-     */
-    long current_number = 87381;
-
-    current_number = 123;
-    current_number = 3;
-
-    current_number = 0;
-
-    long equation_result = -1;
-
-    String equation_new_combined = "";
-    String debug_eq = "";
-
-    while ( ( current_number < symbols_max ) && ( equation_result != equation_parts_values[ 0 ] ) )
+    //if ( checkEquationPart1( equation_input_str, pKnzDebug ) == false )
     {
-      String combine_pattern_string = getNumberSystemValue( current_number );
+      wl( "" );
+      wl( "----------- check2 ------------" );
 
-      //wl( "current_number " + current_number + "  combine_pattern " + combine_pattern_string );
-
-      int flag_concatination = 0;
-
-      int equation_parts_idx = 1; // 0 = result , 1 = first val of eq
-
-      equation_new_combined = "";
-      debug_eq = "";
-
-      long eq_val_x = 0;
-
-      int combine_pattern_idx = 0;
-
-      while ( ( combine_pattern_idx < combine_pattern_string.length() ) && ( equation_parts_idx < equation_parts_values.length ) )
+      if ( testCheckEquationP2( equation_input_str, pKnzDebug ) )
       {
-        /*
-         * place the value from the equation parts into the new equation
-         */
-        equation_new_combined += equation_parts_strings[ equation_parts_idx ];
-
-        equation_new_combined += equation_parts_strings[ equation_parts_idx ];
-
-        debug_eq += equation_parts_strings[ equation_parts_idx ];
-
-        /*
-         * increment the equation part index
-         */
-        equation_parts_idx++;
-
-        /*
-         * Do we need another operator from the combining string?
-         * 
-         * This is the case, when the equation part index is lower then the 
-         * length of the equation part array.
-         */
-        if ( equation_parts_idx < equation_parts_values.length )
-        {
-          switch ( combine_pattern_string.charAt( combine_pattern_idx ) )
-          {
-            case SYMBOL_CONCATENATION :
-
-              //wl( " " + combine_pattern_idx + " = " + "|" + " SYMBOL_CONCATENATION  = " + SYMBOL_CONCATENATION );
-
-              flag_concatination = 1;
-
-              debug_eq += " | ";
-
-              break;
-
-            case SYMBOL_PLUS :
-
-              //wl( " " + combine_pattern_idx + " = " + "+" + " SYMBOL_PLUS           = " + SYMBOL_PLUS );
-
-              equation_new_combined += " + ";
-
-              debug_eq += " + ";
-
-              break;
-
-            case SYMBOL_MULTIPLICATION :
-
-              //wl( " " + combine_pattern_idx + " = " + "*" + " SYMBOL_MULTIPLICATION = " + SYMBOL_MULTIPLICATION );
-
-              equation_new_combined += " * ";
-
-              debug_eq += " * ";
-
-              break;
-          }
-
-          combine_pattern_idx++;
-        }
-      }
-
-      equation_result = getEquationResult( debug_eq );
-
-      wl( "equation comb      " + FkStringFeld.getFeldLinksMin( debug_eq, 30 ) + " = " + FkStringFeld.getFeldLinksMin( equation_new_combined, 30 ) + " = " + FkStringFeld.getFeldRechtsMin( equation_result, 7 ) + "  current_number " + current_number + "  combine_pattern " + combine_pattern_string );
-
-      if ( equation_result == equation_parts_values[ 0 ] )
-      {
-        wl( "############### OK " );
-      }
-
-      current_number++;
-    }
-
-    wl( "" );
-    wl( "" );
-    wl( "#################################################################################" );
-    wl( "" );
-    wl( "" );
-
-    wl( "equation input     " + pEquation );
-    wl( "equation comb      " + equation_new_combined );
-
-    equation_result = getEquationResult( equation_new_combined );
-
-    wl( "Equation Result " + equation_result );
-
-    if ( equation_result == equation_parts_values[ 0 ] )
-    {
-      wl( "############### OK " );
-    }
-
-    /*
-     * Keep in mind, that for convinience reasons the result from the
-     * function "getNumberSystemValue" is reversed.
-     * 
-     */
-    testFromNumberSystem( "" + SYMBOL_CONCATENATION + SYMBOL_PLUS ); // not really: the result is reversed
-    testFromNumberSystem( "" + SYMBOL_PLUS + SYMBOL_CONCATENATION );
-    testFromNumberSystem( "" + SYMBOL_MULTIPLICATION + SYMBOL_PLUS + SYMBOL_MULTIPLICATION );
-
-//    testGetEquationResult( "123" );
-//    testGetEquationResult( "6 * 86 * 15" );
-    testGetEquationResult( "6 * 8 | 6 * 15" );
-
-    wl( "" );
-    wl( "7290: 6 8 6 15  can be made true using 6 * 8 || 6 * 15." );
-    wl( "192: 17 8 14    can be made true using 17 || 8 + 14." );
-    wl( "156: 15 6       can be made true through a single concatenation: 15 || 6 = 156." );
-
-  }
-
-  private static long testGetEquationResult( String pEquation )
-  {
-    long equation_result = getEquationResult( pEquation );
-
-    wl( "getEquationResult( \"" + pEquation + "\" ) = " + equation_result );
-
-    return equation_result;
-  }
-
-  private static long getEquationResult( String pEquation )
-  {
-    String[] equation_parts_strings = pEquation.split( " " );
-
-    long value_akt = Long.parseLong( equation_parts_strings[ 0 ] );
-
-    int knz_math_op = 0;
-
-    for ( int index_eq_part = 1; index_eq_part < equation_parts_strings.length; index_eq_part++ )
-    {
-      String current_equation_part = equation_parts_strings[ index_eq_part ];
-
-      //wl( "current_equation_part = " + current_equation_part );
-
-      if ( current_equation_part.equals( "+" ) )
-      {
-        knz_math_op = 0;
-      }
-      else if ( current_equation_part.equals( "*" ) )
-      {
-        knz_math_op = 1;
-      }
-      else if ( current_equation_part.equals( "|" ) )
-      {
-        knz_math_op = 3;
+        wl( "ok" );
       }
       else
       {
-        if ( knz_math_op == 0 )
-        {
-          value_akt += Long.parseLong( current_equation_part );
-        }
-        else if ( knz_math_op == 1 )
-        {
-          value_akt *= Long.parseLong( current_equation_part );
-        }
-        else if ( knz_math_op == 3 )
-        {
-          value_akt = Long.parseLong( ( "" + value_akt ) + current_equation_part );
-        }
-        else
-        {
-          wl( "#### should not have happened " + pEquation );
-        }
+        wl( "false " );
       }
+
+      wl( "" );
+      wl( "----------- check2 ------------" );
     }
-
-    return value_akt;
-  }
-
-  private static void testFromNumberSystem( String combine_pattern_string )
-  {
-    String f_zahlen_sys = fromZahlensystem( combine_pattern_string, MY_NUMBER_SYSTEM_SYMBOLS, MY_NUMBER_SYSTEM_BASE );
-
-    wl( " combine_pattern_string " + combine_pattern_string + " = " + f_zahlen_sys );
   }
 
   private static String getNumberSystemValue( long pNumber )
@@ -936,156 +832,6 @@ equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 
     return ergebnis;
   }
 
-  /**
-   * <pre>
-   * Berechnet aus der uebergebenen Zahl des uebergebenen Zahlensystems, die 
-   * Zahl im dezimalen Zahlensystem. 
-   * 
-   * Das Zielzahlensystem wird durch die Grundmenge und der Basiszahl definiert.
-   * Dabei muss die Laenge der Grundmenge muss groesser/gleich der Basiszahl sein.
-   * Die Basiszahl kann kleiner als die Grundmenge sein. Beim Binaersystem wird 
-   * die Grundmenge von Hexadezimal uebergeben, die Basiszahl ist nur 2.
-   * 
-   * Die uebergebene Zahl darf nur aus den Elementen der Grundmenge bestehen.
-   * Dabei muss die uebergebene Basiszahl beruecksichtigt werden. Es kann zu einem
-   * Fehler kommen wenn die binaere Zahl 010EA umgerechnet wird. Die Zeichen 
-   * EA gehoeren in diesem Fall nicht zur Grundmenge.
-   * 
-   *  hex 0    = "0"    # alpha A    = "0"    # bin 000000000  = "0"   
-   *  hex 1    = "1"    # alpha B    = "1"    # bin 000000001  = "1"   
-   *  hex 2    = "2"    # alpha C    = "2"    # bin 000000010  = "2"   
-   *  hex 3    = "3"    # alpha D    = "3"    # bin 000000011  = "3"   
-   *  hex 4    = "4"    # alpha E    = "4"    # bin 000000100  = "4"   
-   *  hex 5    = "5"    # alpha F    = "5"    # bin 000000101  = "5"   
-   *  hex 6    = "6"    # alpha G    = "6"    # bin 000000110  = "6"   
-   *  hex 7    = "7"    # alpha H    = "7"    # bin 000000111  = "7"   
-   *  hex 8    = "8"    # alpha I    = "8"    # bin 000001000  = "8"   
-   *  hex 9    = "9"    # alpha J    = "9"    # bin 000001001  = "9"   
-   *  hex A    = "10"   # alpha K    = "10"   # bin 000001010  = "10"  
-   *  hex B    = "11"   # alpha L    = "11"   # bin 000001011  = "11"  
-   *  hex C    = "12"   # alpha M    = "12"   # bin 000001100  = "12"  
-   *  hex D    = "13"   # alpha N    = "13"   # bin 000001101  = "13"  
-   *  hex E    = "14"   # alpha O    = "14"   # bin 000001110  = "14"  
-   *  hex F    = "15"   # alpha P    = "15"   # bin 000001111  = "15"  
-   *  hex 10   = "16"   # alpha Q    = "16"   # bin 000010000  = "16"  
-   *  hex 11   = "17"   # alpha R    = "17"   # bin 000010001  = "17"  
-   *  hex 12   = "18"   # alpha S    = "18"   # bin 000010010  = "18"  
-   *  hex 13   = "19"   # alpha T    = "19"   # bin 000010011  = "19"
-   *  hex C6   = "198"  # alpha HQ   = "198"  # bin 011000110  = "198" 
-   *  hex C7   = "199"  # alpha HR   = "199"  # bin 011000111  = "199" 
-   *  hex EA   = "234"  # alpha JA   = "234"  # bin 011101010  = "234"
-   *   
-   *  hex 13880 = "80000" # alpha EOIY = "80000" # bin 010011100010000000 = "80000"
-   *  
-   * </pre>
-   * 
-   * @param pEingabe die zu wandelnde Zahl im definierten Zahlensystem
-   * @param pGrundmenge die zu benutzende Grundmenge fuer die Konvertierung
-   * @param pBasisZahl die Basiszahl 
-   * @return die gewandelte Zahl im dezimalen Zahlensystem als String
-   */
-  private static String fromZahlensystem( String pEingabe, String pGrundmenge, int pBasisZahl )
-  {
-    int zaehler = 0; // Zeichenzaehler fuer die Postion in der Eingabe
-    BigInteger ergebnis = new BigInteger( "0" ); // Summe aus den einzelnen Stellenberechnungsergebnissen
-    BigInteger multiplikator = null; // der Multiplikator (=Zeichenposition der Grundmenge)
-    BigInteger akt_potenz = new BigInteger( "1" ); // die aktuelle Potenz, beim ersten Durchlauf ist diese 1
-    BigInteger basis_zahl = new BigInteger( "" + pBasisZahl ); // Basiszahl als BigInteger
-
-    /*
-     * Eine Basiszahl von kleiner 2 macht keinen Sinn.
-     * Der Aufrufer bekommt "0" zurueck.
-     */
-    if ( pBasisZahl < 2 )
-    {
-      return "0";
-    }
-
-    /*
-     * Die Anzahl der Zeichen in der Grundmenge bestimmt eigentlich die Basiszahl.
-     * 
-     * Es kann sein, dass nur ein Teil der Zeichen aus dem String "pGrundmenge" benutzt wird.
-     * 
-     * Es muss geprueft werden, ob fuer die Basiszahl auch genuegend Zeichen in der Grundmenge 
-     * vorhanden sind.
-     * 
-     * Sind zu wenig Zeichen in der Grundmenge vorhanden, kann die Basiszahl nie erreicht werden.
-     * 
-     * pGrundmenge = "1234567890", pBasisZahl = 16 => dann fehlen die Zeichen ab 10.
-     * 
-     * Die Laenge der Grundmenge darf nicht kleiner als die uebergebene Basiszahl sein.
-     * 
-     * Mit dem Parameter "pBasiszahl", wird dieser Funktion die Anzahl der zu verwendenden 
-     * Zeichen aus der Grundmenge mitgeteilt.
-     * 
-     * Sind zuwenig Zeichen in der Grundmenge vorhanden, bekommt der Aufrufer "0" zurueck. 
-     */
-    if ( pGrundmenge.length() < pBasisZahl )
-    {
-      return "0";
-    }
-
-    /*
-     * Es muss eine Eingabe vorhanden sein.
-     */
-    if ( ( pEingabe != null ) && ( pEingabe.length() > 0 ) )
-    {
-      /*
-       * Die Schleife beginnt beim letzten Zeichen. In Java starten Zeichenketten 
-       * mit der Position 0, daher wird der Zaehler um eins vermindert.
-       */
-      zaehler = pEingabe.length() - 1;
-
-      while ( zaehler >= 0 )
-      {
-        /*
-         * Die Position des Zeichens in der Grundmenge, ist gleich der 
-         * dezimalen Basiszahl der Grundmenge.
-         * 
-         * Grundmenge  = 0123456789ABCDEF
-         * akt_zeichen = A
-         * 
-         * A ist das 10te zeichen der Grundmenge, also ist der Multiplikator 10
-         */
-        multiplikator = new BigInteger( "" + pGrundmenge.indexOf( pEingabe.charAt( zaehler ) ) );
-
-        /*
-         * Die aktuelle Potenz wird mit dem Multiplikator multipliziert
-         * und ergibt somit den dezimalen Zielwert, welcher dem Ergebnis
-         * hinzuaddiert wird.
-         * 
-         * Der Multiplikator darf nicht negativ sein. Der Multiplikator 
-         * kann negativ werden, wenn ungueltige Zeichen in der Eingabe
-         * vorhanden sind (Zeichen die nicht in der Grundmenge vorhanden sind).
-         */
-        if ( multiplikator.intValue() >= 0 )
-        {
-          ergebnis = ergebnis.add( akt_potenz.multiply( multiplikator ) );
-        }
-
-        /*
-         * Ermittlung der Potenz fuer die naechste Zeichenposition des
-         * Eingabestrings. Beim ersten Durchlauf ist die Potenz 1, bei 
-         * jedem weiteren Durchlauf wird die bestehende Potenz mal der 
-         * Basiszahl multipliziert.  
-         */
-        akt_potenz = akt_potenz.multiply( basis_zahl );
-
-        /*
-         * Der Zaehler wird um eins vermindert, damit die naechsthoehere
-         * Potenz des Zahlensystems berechnet werden kann. 
-         */
-        zaehler--;
-      }
-    }
-
-    multiplikator = null;
-    akt_potenz = null;
-    basis_zahl = null;
-
-    return "" + ergebnis;
-  }
-
   private static List< String > getListProd()
   {
     int row_count = 0;
@@ -1120,5 +866,46 @@ equation fail      71144 current_number      71144  ##EQ   25048829: 5 5 48 7 2 
   private static void wl( String pString )
   {
     System.out.println( pString );
+  }
+
+  /**
+   * <pre>
+   * Erstellt die Datei und schreibt dort den "pInhalt" rein.
+   * 
+   * Ist kein "pInhalt" null wird eine leere Datei erstellt.
+   * </pre>
+   * 
+   * @param pDateiName der Dateiname 
+   * @param pInhalt der zu schreibende Inhalt
+   * @return TRUE wenn die Datei geschrieben werden konnte, sonst False
+   */
+  private static boolean schreibeDatei( String pDateiName, String pInhalt )
+  {
+    try
+    {
+      FileWriter output_stream = new FileWriter( pDateiName, false );
+
+      if ( pInhalt != null )
+      {
+        output_stream.write( pInhalt );
+      }
+
+      /*
+       * Aufruf von "stream.flush()"
+       */
+      output_stream.flush();
+
+      output_stream.close();
+
+      output_stream = null;
+
+      return true;
+    }
+    catch ( Exception err_inst )
+    {
+      wl( "Fehler: errSchreibeDatei " + err_inst.getLocalizedMessage() );
+    }
+
+    return false;
   }
 }
