@@ -20,12 +20,56 @@ public class Day03MullItOver
    * 
    * --- Day 3: Mull It Over ---
    * https://adventofcode.com/2024/day/3
+   *
+   * ------------------------------------------------------------------------------------------
+   * 
+   * xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))
+   * 
+   * Multiplication Nr 1 =  2 * 4 =  8
+   * Multiplication Nr 2 =  5 * 5 = 25
+   * Multiplication Nr 3 = 11 * 8 = 88
+   * Multiplication Nr 4 =  8 * 5 = 40
+   * 
+   * result_value_input_line 161
    * 
    * 
-   * -------------------------------------------------------
+   * Result Part 1: 161
+   * 
+   * 
+   * ------------------------------------------------------------------------------------------
+   * 
+   * Found: mul(2,4) at pos 1
+   * 
+   * DO    At 1 mul(2,4) 2 2 = 8
+   * 
+   * Found: don't() at pos 20
+   * 
+   * Found: mul(5,5) at pos 28
+   * 
+   * DONT    At 28 mul(5,5) 5 5 = 25
+   * 
+   * Found: mul(11,8) at pos 48
+   * 
+   * DONT    At 48 mul(11,8) 11 11 = 88
+   * 
+   * Found: do() at pos 59
+   * 
+   * Found: mul(8,5) at pos 64
+   * 
+   * DO    At 64 mul(8,5) 8 8 = 40
+   * 
+   * DO   result_value_sum_do_instructions   48
+   * DONT result_value_sum_dont_instructions 113
+   * SUM                                     161
+   * 
+   * Result Part 1: 161
+   * Result Part 2: 48
+
+   * 
+   * 
+   * ------------------------------------------------------------------------------------------
    * 
    * Realy nice one, once you spottet, that the input lines are not seperated lines.
-   * ... no, they must be merged together.
    * 
    * DO   result_value_sum_do_instructions   76729637
    * DONT result_value_sum_dont_instructions 102065073
@@ -59,8 +103,12 @@ public class Day03MullItOver
 
     List< String > test_content_list_part_2 = Arrays.stream( test_content_part_2.split( "#split#" ) ).map( String::trim ).collect( Collectors.toList() );
 
-//    calcInputPart2( test_content_list_part_2, true );
-//
+    //calcInputPart1( test_content_list_part_1, true );
+    //
+    //calcInputPart1( getListProd(), true );
+    //
+    //calcInputPart2( test_content_list_part_2, true );
+    //
     calcInputPart2( getListProd(), true );
   }
 
@@ -70,21 +118,29 @@ public class Day03MullItOver
 
     for ( String input_str : pListInput )
     {
+      if ( pKnzDebug )
+      {
+        wl( "" );
+        wl( "------------------------------------------------------------------------------------------" );
+        wl( "" );
+        wl( PRAEFIX_DEBUG_STRING + FkStringText.getStringMaxCols( input_str, 1000, PRAEFIX_DEBUG_STRING, "\n" ) );
+        wl( "" );
+      }
+
       long result_value_input_line = calcInputLinePart1( input_str, "", pKnzDebug );
 
       result_value_sum += result_value_input_line;
 
-      wl( "" );
-      wl( "------------------------------------------------------------------------------------------" );
-      wl( "" );
-      wl( PRAEFIX_DEBUG_STRING + FkStringText.getStringMaxCols( input_str, 1000, PRAEFIX_DEBUG_STRING, "\n" ) );
-      wl( "" );
-      wl( "result_value_input_line " + result_value_input_line );
-      wl( "" );
+      if ( pKnzDebug )
+      {
+        wl( "" );
+        wl( "result_value_input_line " + result_value_input_line );
+        wl( "" );
+      }
     }
 
     wl( "" );
-    wl( "result_value_sum " + result_value_sum );
+    wl( "Result Part 1: " + result_value_sum );
     wl( "" );
     wl( "" );
   }
@@ -93,7 +149,9 @@ public class Day03MullItOver
   {
     Matcher matcher_reg_ex_pattern = PATTERN_MUL_REG_EX.matcher( pInput );
 
-    List< long[] > list_array_long_values = new ArrayList< long[] >();
+    int mul_nr = 0;
+
+    long result_value = 0;
 
     while ( matcher_reg_ex_pattern.find() )
     {
@@ -101,23 +159,14 @@ public class Day03MullItOver
 
       long value_part_2 = Long.parseLong( matcher_reg_ex_pattern.group( 2 ) );
 
-      list_array_long_values.add( new long[] { value_part_1, value_part_2 } );
-    }
-
-    long result_value = 0;
-
-    int mul_nr = 0;
-
-    for ( long[] equation_input_str : list_array_long_values )
-    {
       if ( pKnzDebug )
       {
-        wl( pDebugPraefix + "  " + mul_nr + " " + equation_input_str[ 0 ] + " " + equation_input_str[ 1 ] + " = " + ( equation_input_str[ 0 ] * equation_input_str[ 1 ] ) );
+        mul_nr++;
+
+        wl( "Multiplication Nr " + mul_nr + " = " + value_part_1 + " * " + value_part_2 + " = " + ( value_part_1 * value_part_2 ) );
       }
 
-      result_value += ( equation_input_str[ 0 ] * equation_input_str[ 1 ] );
-
-      mul_nr++;
+      result_value += ( value_part_1 * value_part_2 );
     }
 
     return result_value;
@@ -127,13 +176,12 @@ public class Day03MullItOver
   {
     result_value_sum_dont_instructions_g = 0;
 
-    long result_value_sum = 0;
+    long result_value_sum_do_instructions = 0;
 
     /*
      * That was fun to realise. (4 hrs)
      *
      * Soundtrack by Stevie Wonder: "I just call to say I hate you"
-     *
      */
     String my_fking_input = "";
 
@@ -144,16 +192,16 @@ public class Day03MullItOver
 
     long result_value_input_line = calcInputLinePart2( my_fking_input, pKnzDebug );
 
-    result_value_sum += result_value_input_line;
+    result_value_sum_do_instructions += result_value_input_line;
 
     wl( "" );
     wl( "" );
-    wl( "DO   result_value_sum_do_instructions   " + result_value_sum );
+    wl( "DO   result_value_sum_do_instructions   " + result_value_sum_do_instructions );
     wl( "DONT result_value_sum_dont_instructions " + result_value_sum_dont_instructions_g );
-    wl( "SUM                                     " + ( result_value_sum + result_value_sum_dont_instructions_g ) );
+    wl( "SUM                                     " + ( result_value_sum_do_instructions + result_value_sum_dont_instructions_g ) );
     wl( "" );
-    wl( "Result Part 1 " + ( result_value_sum + result_value_sum_dont_instructions_g ) );
-    wl( "Result Part 2 " + result_value_sum );
+    wl( "Result Part 1: " + ( result_value_sum_do_instructions + result_value_sum_dont_instructions_g ) );
+    wl( "Result Part 2: " + result_value_sum_do_instructions );
     wl( "" );
     wl( "" );
   }
@@ -224,7 +272,7 @@ public class Day03MullItOver
       wl( "DO   result_value_sum_do_instructions   " + result_value_sum_do_instructions );
       wl( "DONT result_value_sum_dont_instructions " + result_value_sum_dont_instructions );
       wl( "" );
-      wl( "SUM  result_value_sum_do_instructions   " + ( result_value_sum_do_instructions + result_value_sum_dont_instructions ) );
+      wl( "SUM                                     " + ( result_value_sum_do_instructions + result_value_sum_dont_instructions ) );
       wl( "" );
       wl( "" );
     }
