@@ -918,7 +918,7 @@ public class Day12GardenGroups
         }
       }
 
-      current_row++;
+      // Nope ... current_row++;
 
       res_str += "\n";
     }
