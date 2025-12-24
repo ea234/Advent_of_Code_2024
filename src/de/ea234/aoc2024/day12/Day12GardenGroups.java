@@ -21,8 +21,13 @@ public class Day12GardenGroups
    * https://adventofcode.com/2024/day/12
    * https://www.youtube.com/watch?v=jx0Y07_LcfQ
    * 
-   * -------------------------------------------------------------------------------------
+   * ANMERKUNG: Diese Kommentare stimmen fuer die Berechnung der Grenzen.
    * 
+   *            Um tatsaechlich das Ergebnis zu bestimmen, muessen die Regionen per 
+   *            Rekursion gefunden werden.
+   *            
+   *            Ansonsten wuerde man einzelne Gruppen global zusammenfuegen.
+   *            
    * Part 1:
    * Jede Zelle des Grids ist als jeweils ein einzelner Bereich anzusehen.
    *  
@@ -44,28 +49,27 @@ public class Day12GardenGroups
    * Bei der angrenzenden Zelle reduziert sich ebenfalls der Wert um 1.
    *
    * 
-   * In einer Hashmap wird für jedes Feld der aktuelle Wert vermerkt. 
+   * In einer Hashmap wird fuer jedes Feld der aktuelle Wert vermerkt. 
    * Initial ist das der Wert 4.
    * 
-   * Es wird für jede Zeile geprüft, ob diese horizontal (nach rechts) oder vertikal (nach unten)
+   * Es wird fuer jede Zeile geprueft, ob diese horizontal (nach rechts) oder vertikal (nach unten)
    * mit einer gleichen Pflanzenart verbunden ist. 
    * 
    * Wird eine "Verbundenheit" festgestellt, wird reduziert sich der Zellenwert beider beteiligten 
    * Zellen jeweils um 1. 
    * 
-   * Das Ergebnis für den ersten Teil ergibt sich dann in der Aufsummierung aller Zellenwerte der Hashmap.
+   * Das Ergebnis fuer den ersten Teil ergibt sich dann in der Aufsummierung aller Zellenwerte der Hashmap.
    * 
    * Alternativ kann das Ergebnis auch dadurch errechnet werden, in dem alle Felder des Grids mal 4 genommen werden.
    * Davon werden dann alle Reduzierungen (... welche man sich gespeichert hat) abgezogen werden.
    * 
-   * -------------------------------------------------------------------------------------
-   * 
+   * -----------------------------------------------------------------------------
    * 
    * Grid als jeweils 1 Regions initialisieren, Jede Zelle hat den Wert von 4 (Ecken?)
    * 
-   * Der Zellenwert reduziert sich, wenn 2 Pflanzen sich berühren
+   * Der Zellenwert reduziert sich, wenn 2 Pflanzen sich beruehren
    * 
-   * Zum Beispiel die Pflanzenart "A" - zwei Felder berühren sich horizontal
+   * Zum Beispiel die Pflanzenart "A" - zwei Felder beruehren sich horizontal
    * 
    *  AA = Initial 4 + 4 reduziert bei beiden Pflanzenarten A den Feldwert von 4 auf 3
    *       Beim ersten A reduziert sich die rechte Verbindung. (= -1)
@@ -79,12 +83,12 @@ public class Day12GardenGroups
    *    
    *  Horizontal kann sich immer nur vom Ausgang die rechte Seite reduzieren,
    *  bei dem angrenzendem Feld kann sich nur die linke Seite reduzieren.
-   *  (reduzieren = Seiten verschmelzen = Verbindung wird aufgelöst = Auf beiden Seiten eine Kante weniger = -2 Punkte (je einer auf beiden Seiten))
+   *  (reduzieren = Seiten verschmelzen = Verbindung wird aufgeloest = Auf beiden Seiten eine Kante weniger = -2 Punkte (je einer auf beiden Seiten))
    *  
    *  Vertikal kann sich beim Ausgang immer nur die untere Seite reduzieren,
    *  bei dem Angrenzendem Feld kann sich nur die obere Seite Reduzieren.
    *   
-   *          - In einer Hashmap wird für jede Pflanzenart vermerk, wie viele Reduzierungen je Pflanzenart es gibt.
+   *          - In einer Hashmap wird fuer jede Pflanzenart vermerk, wie viele Reduzierungen je Pflanzenart es gibt.
    *  
    * Man bekommt die Eingabe als Grid
    * 
@@ -97,10 +101,10 @@ public class Day12GardenGroups
    *        Initial ist der Wert eben 4.  
    *        
    *        Horizontal: 
-   *        - Ist das nächste Feld gleich der Pflanzenart des aktuellen Feldes 
+   *        - Ist das naechste Feld gleich der Pflanzenart des aktuellen Feldes 
    *          -Beim aktuellem Feld den Wert um 1 Reduzieren 
-   *          -nächstes Feld mit Wert 4 eventuell anlegen
-   *          - beim nächsten Feld den Wert um 1 reduzieren.
+   *          -naechstes Feld mit Wert 4 eventuell anlegen
+   *          - beim naechsten Feld den Wert um 1 reduzieren.
    *          
    *          
    *          
@@ -110,501 +114,314 @@ public class Day12GardenGroups
    *          unteres Feld eventuell mit Wert 4 anlegen
    *          beim unterem Feld den Wert um 1 vermindern
    *          
-   *  Es wird nur einmal durchs grid gegangen
-   *  
    * Der Ergebniswert kann auf 2 Arten ermittelt werden:
    *  - Jede Grid-Zelle einzelnd abfragen und den Wert aufsummieren.
    *    Die Unterscheidung nach Pflanzenarten ist hierbei egal, da es 
-   *    nur um den Wert geht, mit wie vielen Ecken die Zelle eine andere Pflanzenart berührt.
+   *    nur um den Wert geht, mit wie vielen Ecken die Zelle eine andere Pflanzenart beruehrt.
    *  
    *  - Den Gridwert berechnen ( (grid.rows * grid.cols ) * 4 ) - grid.reduzierungen
-   *  
    * 
-   *  
-   *  
-   *  
-   *  
-   *          
-   *  Debug-Funktion schreiben um alle Pflanzenarten seperat darstellen zu können. 
-   *  Dazu werden die Keys aus der globalen Hashmap genommen, welche alle aufgetretenen Pflanzenarten als Key gespeichert hat.
-   *  Dazu wird unterhalb nochmal der Ergebniswert aufgelistet 
-   *  
-   *  In dieser Lösung sind die eigentlichen Ausdehnungen der Pflanzen egal. 
-   *  Es muss kein Ergebnisgrid (... für Part 1) erstellt werden.
-  
-   *  
-   *  
-   *  
-      AAAA
-      BBCD
-      BBCC
-      EEEC
-      grid_width  4
-      grid_height 4
-      grid_cells  ( width 4 * height 4 ) 16
-      grid_total  ( cells 16 * cost_val 4 ) 64
-      
-      Result Part 1: 40
-      
-      
-      
-      grid_total_start 64
-      grid_total_end   40
-      grid_total_diff  24
-      
-      
-      
-      3223
-      2234
-      2222
-      3233
-      
-        'A' Count     4 * Perimeter      10 =      40 region A has price 4 * 10 = 40,
-        'B' Count     4 * Perimeter       8 =      32 region B has price 4 *  8 = 32,
-        'C' Count     4 * Perimeter      10 =      40 region C has price 4 * 10 = 40
-        'D' Count     1 * Perimeter       4 =       4 region D has price 1 * 4 =   4
-        'E' Count     3 * Perimeter       8 =      24 region E has price 3 * 8 =  24
-                                           =     140
-      
-   * The above map:
-   * The type A, B, and C plants are each in a region of area 4. 
-   * The type E plants are in a region of area 3
-   * The type D plants are in a region of area 1.
+   * -----------------------------------------------------------------------------
    * 
-   * In the first example:
-   * 
-   *  
+   *   
+   * AAAA   4    3223  10               
+   * BBCD   4    2234  11               
+   * BBCC   4    2222   8               
+   * EEEC   4    3233  11               
+   *  Char Count 16    Sum Values 40    
    * 
    * 
-   * . 
+   * List of Regions 
    * 
-      
-      
-      AAAA
-      BBCD
-      BBCC
-      EEEC
-      grid_width  4
-      grid_height 4
-      grid_cells  ( width 4 * height 4 ) 16
-      grid_total  ( cells 16 * cost_val 4 ) 64
-      
-      Result Part 1: 40
-      
-      
-      
-      grid_total_start 64
-      grid_total_end   40
-      grid_total_diff  24
-      
-      
-      
-      3223
-      2234
-      2222
-      3233
-      
-        'A' Count     4 * Perimeter      10 =      40
-        'B' Count     4 * Perimeter       8 =      32
-        'C' Count     4 * Perimeter      10 =      40
-        'D' Count     1 * Perimeter       4 =       4
-        'E' Count     3 * Perimeter       8 =      24
-                                           =     140
-      
-      
-      AAAA   4    3223  10
-      ....   0    ....   0
-      ....   0    ....   0
-      ....   0    ....   0
-       4      10 
-      
-      ....   0    ....   0
-      BB..   2    22..   4
-      BB..   2    22..   4
-      ....   0    ....   0
-       4      8 
-      
-      ....   0    ....   0
-      ..C.   1    ..3.   3
-      ..CC   2    ..22   4
-      ...C   1    ...3   3
-       4      10 
-      
-      ....   0    ....   0
-      ...D   1    ...4   4
-      ....   0    ....   0
-      ....   0    ....   0
-       1      4 
-      
-      ....   0    ....   0
-      ....   0    ....   0
-      ....   0    ....   0
-      EEE.   3    323.   8
-       3      8 
-      
-      
-      Entry R2C2
-        -         1    R2C2  2         2        2
-        -         2    R2C3  2         4        8
-        -         3    R3C3  3         7       21
-        -         4    R1C2  3        10       40
-      
-      Entry R2C0
-        -         1    R2C0  2         2        2
-        -         2    R2C1  2         4        8
-        -         3    R1C1  2         6       18
-        -         4    R1C0  2         8       32
-      
-      Entry R0C0
-        -         1    R0C0  3         3        3
-        -         2    R0C1  2         5       10
-        -         3    R0C2  2         7       21
-        -         4    R0C3  3        10       40
-      sum_plantsg = 12
-      sum_valuesg = 112
-  
-  
-   *  
-   *  
-   *  
-   *  
-   *  
-   *  
-  OOOOO
-  OXOXO
-  OOOOO
-  OXOXO
-  OOOOO
-  grid_width  5
-  grid_height 5
-  grid_cells  ( width 5 * height 5 ) 25
-  grid_total  ( cells 25 * cost_val 4 ) 100
-  
-  Result Part 1: 45
-  
-  
-  
-  grid_total_start 100
-  grid_total_end   45
-  grid_total_diff  55
-  
-  
-  
-  22122
-  22122
-  22122
-  22122
-  22122
-  
-  'X' Count     4 * Perimeter      16 =      64
-  'O' Count    21 * Perimeter      36 =     756
-                                      =     820
-  Fishy: 
-  - Es gibt 4 mal ein X
-  - Jedes X hat 4 Seiten (nicht mit anderen verbunden)
-  
-  - 4 + 4 + 4 + 4 = 16 Seiten gesamt
-  
-  - ich multipliziere 4 mal die summe der peremiter 16 was falsch ist.
-  
-  .....    .....
-  .X.X.    .4.4.
-  .....    .....
-  .X.X.    .4.4.
-  .....    .....
-  4      16 
-  
-  12345 
-  OOOOO 1   22122
-  O.O.O 2   2.2.2
-  OOOOO 3   12021
-  O.O.O 4   2.2.2
-  OOOOO 5   22122
-  21      36 
-  
-  
-  
-   *  
-   * In the second example, 
-   * region O plants has price 21 * 36 = 756, 
-   * region X plants has price  1 *  4 =   4
+   * Entry R1C2
+   *   -       1    R1C2  3         3        3
+   *   -       2    R2C2  2         5       10
+   *   -       3    R2C3  2         7       21
+   *   -       4    R3C3  3        10       40
    * 
-   * for a total price of 772 (756 + 4 + 4 + 4 + 4).
+   * Entry R3C0
+   *   -       1    R3C0  3         3        3
+   *   -       2    R3C1  2         5       10
+   *   -       3    R3C2  3         8       24
    * 
-   * 4 X = 4X mal 4 Ecken = 16 Punkte
+   * Entry R1C3
+   *   -       1    R1C3  4         4        4
+   * 
+   * Entry R1C0
+   *   -       1    R1C0  2         2        2
+   *   -       2    R1C1  2         4        8
+   *   -       3    R2C1  2         6       18
+   *   -       4    R2C0  2         8       32
+   * 
+   * Entry R0C0
+   *   -       1    R0C0  3         3        3
+   *   -       2    R0C1  2         5       10
+   *   -       3    R0C2  2         7       21
+   *   -       4    R0C3  3        10       40
+   * sum_plants_count = 16
+   * sum_plants_count = 140 <- Result Part 1
+   * 
+   * AAAA   4    3223  10               
+   * BBCD   4    2234  11               
+   * BBCC   4    2222   8               
+   * EEEC   4    3233  11               
+   *  Char Count 16    Sum Values 40    
+   * 
+   * AAAA   4    3223  10                   ....   0    ....   0                   ....   0    ....   0               
+   * ....   0    ....   0                   BB..   2    22..   4                   ..C.   1    ..3.   3               
+   * ....   0    ....   0                   BB..   2    22..   4                   ..CC   2    ..22   4               
+   * ....   0    ....   0                   ....   0    ....   0                   ...C   1    ...3   3               
+   *  Char Count 4    Sum Values 10          Char Count 4    Sum Values 8           Char Count 4    Sum Values 10     
    * 
    * 
-   * The above map contains five regions.
-   * One containing all of the O garden plots,
-   * and the other four each containing a single X plot.
+   * ....   0    ....   0                   ....   0    ....   0               
+   * ...D   1    ...4   4                   ....   0    ....   0               
+   * ....   0    ....   0                   ....   0    ....   0               
+   * ....   0    ....   0                   EEE.   3    323.   8               
+   *  Char Count 1    Sum Values 4           Char Count 3    Sum Values 8      
    * 
-   * The four X regions each have area 1 and perimeter 4. 
-   * The region containing 21 type O plants is more complicated.
-   * In addition to its outer edge contributing a perimeter of 20, 
-   * its boundary with each X region contributes an additional 4 to its perimeter,
-   * for a total perimeter of 36.
+   * -----------------------------------------------------------------------------
    * 
-  
-  
-  
-  
-  
-  RRRRIICCFF
-  RRRRIICCCF
-  VVRRRCCFFF
-  VVRCCCJFFF
-  VVVVCJJCFE
-  VVIVCCJJEE
-  VVIIICJJEE
-  MIIIIIJJEE
-  MIIISIJEEE
-  MMMISSJEEE
-  grid_width  10
-  grid_height 10
-  grid_cells  ( width 10 * height 10 ) 100
-  grid_total  ( cells 100 * cost_val 4 ) 400
-  
-  Result Part 1: 190
-  
-  
-  
-  grid_total_start 400
-  grid_total_end   190
-  grid_total_diff  210
-  
-  
-  
-  2112222232
-  2112222232
-  2112222232
-  2112222232
-  2112222232
-  2112222232
-  2112222232
-  2112222232
-  2112222232
-  2112222232
-  
-  'R' Count    12 * Perimeter      18 =     216  A region of R plants with price 12 * 18 = 216. 
-  'F' Count    10 * Perimeter      18 =     180  A region of F plants with price 10 * 18 = 180.
-  'V' Count    13 * Perimeter      20 =     260  A region of V plants with price 13 * 20 = 260.
-  'J' Count    11 * Perimeter      20 =     220  A region of J plants with price 11 * 20 = 220.
-  'E' Count    13 * Perimeter      18 =     234  A region of E plants with price 13 * 18 = 234.
-  'S' Count     3 * Perimeter       8 =      24  A region of S plants with price  3 *  8 = 24.
-  'M' Count     5 * Perimeter      12 =      60  A region of M plants with price  5 * 12 = 60.
-  ---------------------------------------------------------------------------------------------
-  'C' Count    15 * Perimeter      32 =     480  A region of C plants with price 14 * 28 = 392.
-  'I' Count    18 * Perimeter      30 =     540  A region of I plants with price  4 *  8 = 32.
-                                     
-                                        * So, it has a total price of 1930.
-                                        * 
-                                        * 
-                                        * 
-  'R' Count    12 * Perimeter      18 =     216
-  'C' Count    15 * Perimeter      32 =     480
-  'S' Count     3 * Perimeter       8 =      24
-  'E' Count    13 * Perimeter      18 =     234
-  'F' Count    10 * Perimeter      18 =     180
-  'V' Count    13 * Perimeter      20 =     260
-  'I' Count    18 * Perimeter      30 =     540
-  'J' Count    11 * Perimeter      20 =     220
-  'M' Count     5 * Perimeter      12 =      60
-       
-                                     =    2214
-  
-  R0C6 C verbindungen 5
-  R2C5 C verbindungen 1
-  R4C4 C verbindungen 3
-  R4C7 C verbindungen 0
-  
-  R4C9 E verbindungen 5
-  R6C8 E verbindungen 3
-  R8C7 E verbindungen 1
-  R0C8 F verbindungen 4
-  R2C7 F verbindungen 4
-  R0C4 I verbindungen 3
-  R6C2 I verbindungen 10
-  R8C1 I verbindungen 0
-  R4C5 J verbindungen 9
-  R8C0 M verbindungen 3
-  R0C0 R verbindungen 11
-  R8C4 S verbindungen 2
-  R2C0 V verbindungen 12
-  
-  
-  ......CC..   2    ......22..   4
-  ......CCC.   3    ......113.   5
-  .....CC...   2    .....22...   4
-  ...CCC....   3    ...312....   6
-  ....C..C..   1 1  ....2..4..   6  ---  es wird die 4 mit in die Summe eingerechnet
-  ....CC....   2    ....22....   4       Die 4 steht für sich alleine
-  .....C....   1    .....3....   3
-  ..........   0    ..........   0
-  ..........   0    ..........   0
-  ..........   0    ..........   0
-  15      32 
-  15      32 
-  14 zusammenhängende
-   1 alleine
-  
-  ....II....    ....22.... 
-  ....II....    ....22....   = 8
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..I.......    ..3....... 3
-  ..III.....    ..112..... 4
-  .IIIII....    .20012.... 5
-  .III.I....    .211.3.... 7
-  ...I......    ...3...... 3 = 22
-  18      30                   30  
-  
-  
-  
-  
-  
-  ....II....   2    ....22....   4
-  ....II....   2    ....22....   4 8
-  ..........   0    ..........   0
-  ..........   0    ..........   0
-  ..........   0    ..........   0
-  ..I.......   1    ..3.......   3
-  ..III.....   3    ..112.....   4
-  .IIIII....   5    .20012....   5
-  .III.I....   4    .211.3....   7
-  ...I......   1    ...3......   3 22
-   18      30 
-  
-  
-  . . . .II....   2    ....22....   4
-  . . . .II....   2    ....22....   4 8
-  . . . .......   0    ..........   0
-  . . . .......   0    ..........   0
-  . . . .......   0    ..........   0
-  . . I .......    1    ..3.......   3
-  . . I I I.....   3    ..112.....   4
-  . I I I I I....   5    .20012....   5
-  . I I I . I....   4    .211.3....   7
-  . . . I . .....   1    ...3......   3 22
-   18      30 
-  
-  
-  
-  --------------------------
-     - R0C4 I
-     - R0C5 I
-     - R1C5 I
-     - R1C4 I
-  R0C4 I verbindungen 4
-  --------------------------
-     - R6C2 I
-     - R6C3 I
-     - R6C4 I
-     - R7C4 I
-     - R7C5 I
-     - R8C5 I
-     - R7C3 I
-     - R8C3 I
-     - R9C3 I
-     - R8C2 I
-     - R8C1 I
-     - R7C1 I
-     - R7C2 I
-     - R5C2 I
-  R6C2 I verbindungen 14
-  
-  A region of I plants with price  4 *  8 = 32.
-  
-  
-  
-  
-  
-  RRRR......    2112......
-  RRRR......    2101......
-  ..RRR.....    ..113.....
-  ..R.......    ..3.......
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  12      18 
-  
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ....S.....    ....3.....
-  ....SS....    ....23....
-  3      8 
-  
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  .........E    .........3
-  ........EE    ........21
-  ........EE    ........11
-  ........EE    ........11
-  .......EEE    .......201
-  .......EEE    .......212
-  13      18 
-  
-  ........FF    ........32
-  .........F    .........2
-  .......FFF    .......211
-  .......FFF    .......202
-  ........F.    ........3.
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  10      18 
-  
-  ..........    ..........
-  ..........    ..........
-  VV........    22........
-  VV........    11........
-  VVVV......    1022......
-  VV.V......    11.3......
-  VV........    22........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  13      20 
-  
-  
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ......J...    ......3...
-  .....JJ...    .....31...
-  ......JJ..    ......12..
-  ......JJ..    ......11..
-  ......JJ..    ......12..
-  ......J...    ......2...
-  ......J...    ......3...
-  11      20 
-  
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  ..........    ..........
-  M.........    3.........
-  M.........    2.........
-  MMM.......    223.......
-  5      12 
-  
-   *  
+   * OOOOO   5    22122   9             
+   * OXOXO   5    24242  14             
+   * OOOOO   5    12021   6             
+   * OXOXO   5    24242  14             
+   * OOOOO   5    22122   9             
+   *  Char Count 25    Sum Values 52    
+   * 
+   * 
+   * List of Regions 
+   * 
+   * Entry R3C3
+   *   -       1    R3C3  4         4        4
+   * 
+   * Entry R1C3
+   *   -       1    R1C3  4         4        4
+   * 
+   * Entry R3C1
+   *   -       1    R3C1  4         4        4
+   * 
+   * Entry R1C1
+   *   -       1    R1C1  4         4        4
+   * 
+   * Entry R0C0
+   *   -       1    R0C0  2         2        2
+   *   -       2    R0C1  2         4        8
+   *   -       3    R0C2  1         5       15
+   *   -       4    R0C3  2         7       28
+   *   -       5    R0C4  2         9       45
+   *   -       6    R1C4  2        11       66
+   *   -       7    R2C4  1        12       84
+   *   -       8    R3C4  2        14      112
+   *   -       9    R4C4  2        16      144
+   *   -      10    R4C3  2        18      180
+   *   -      11    R4C2  1        19      209
+   *   -      12    R4C1  2        21      252
+   *   -      13    R4C0  2        23      299
+   *   -      14    R3C0  2        25      350
+   *   -      15    R2C0  1        26      390
+   *   -      16    R2C1  2        28      448
+   *   -      17    R2C2  0        28      476
+   *   -      18    R2C3  2        30      540
+   *   -      19    R3C2  2        32      608
+   *   -      20    R1C2  2        34      680
+   *   -      21    R1C0  2        36      756
+   * sum_plants_count = 25
+   * sum_plants_count = 772 <- Result Part 1
+   * 
+   * OOOOO   5    22122   9             
+   * OXOXO   5    24242  14             
+   * OOOOO   5    12021   6             
+   * OXOXO   5    24242  14             
+   * OOOOO   5    22122   9             
+   *  Char Count 25    Sum Values 52    
+   * 
+   * OOOOO   5    22122   9                 .....   0    .....   0             
+   * O.O.O   3    2.2.2   6                 .X.X.   2    .4.4.   8             
+   * OOOOO   5    12021   6                 .....   0    .....   0             
+   * O.O.O   3    2.2.2   6                 .X.X.   2    .4.4.   8             
+   * OOOOO   5    22122   9                 .....   0    .....   0             
+   *  Char Count 21    Sum Values 36         Char Count 4    Sum Values 16     
+   * 
+   * -----------------------------------------------------------------------------
+   * 
+   * RRRRIICCFF  10    2112222232  19   
+   * RRRRIICCCF  10    2101221132  15   
+   * VVRRRCCFFF  10    2211322211  17   
+   * VVRCCCJFFF  10    1133123202  18   
+   * VVVVCJJCFE  10    1022231433  21   
+   * VVIVCCJJEE  10    1133221221  18   
+   * VVIIICJJEE  10    2211231111  15   
+   * MIIIIIJJEE  10    3200121211  13   
+   * MIIISIJEEE  10    2211332201  17   
+   * MMMISSJEEE  10    2233233212  23   
+   *  Char Count 100    Sum Values 176  
+   * 
+   * 
+   * List of Regions 
+   * 
+   * Entry R4C7
+   *   -       1    R4C7  4         4        4
+   * 
+   * Entry R8C4
+   *   -       1    R8C4  3         3        3
+   *   -       2    R9C4  2         5       10
+   *   -       3    R9C5  3         8       24
+   * 
+   * Entry R3C6
+   *   -       1    R3C6  3         3        3
+   *   -       2    R4C6  1         4        8
+   *   -       3    R5C6  1         5       15
+   *   -       4    R5C7  2         7       28
+   *   -       5    R6C7  1         8       40
+   *   -       6    R7C7  2        10       60
+   *   -       7    R7C6  1        11       77
+   *   -       8    R8C6  2        13      104
+   *   -       9    R9C6  3        16      144
+   *   -      10    R6C6  1        17      170
+   *   -      11    R4C5  3        20      220
+   * 
+   * Entry R5C2
+   *   -       1    R5C2  3         3        3
+   *   -       2    R6C2  1         4        8
+   *   -       3    R6C3  1         5       15
+   *   -       4    R6C4  2         7       28
+   *   -       5    R7C4  1         8       40
+   *   -       6    R7C5  2        10       60
+   *   -       7    R8C5  3        13       91
+   *   -       8    R7C3  0        13      104
+   *   -       9    R8C3  1        14      126
+   *   -      10    R9C3  3        17      170
+   *   -      11    R8C2  1        18      198
+   *   -      12    R8C1  2        20      240
+   *   -      13    R7C1  2        22      286
+   *   -      14    R7C2  0        22      308
+   * 
+   * Entry R7C0
+   *   -       1    R7C0  3         3        3
+   *   -       2    R8C0  2         5       10
+   *   -       3    R9C0  2         7       21
+   *   -       4    R9C1  2         9       36
+   *   -       5    R9C2  3        12       60
+   * 
+   * Entry R0C8
+   *   -       1    R0C8  3         3        3
+   *   -       2    R0C9  2         5       10
+   *   -       3    R1C9  2         7       21
+   *   -       4    R2C9  1         8       32
+   *   -       5    R3C9  2        10       50
+   *   -       6    R3C8  0        10       60
+   *   -       7    R4C8  3        13       91
+   *   -       8    R3C7  2        15      120
+   *   -       9    R2C7  2        17      153
+   *   -      10    R2C8  1        18      180
+   * 
+   * Entry R0C6
+   *   -       1    R0C6  2         2        2
+   *   -       2    R0C7  2         4        8
+   *   -       3    R1C7  1         5       15
+   *   -       4    R1C8  3         8       32
+   *   -       5    R1C6  1         9       45
+   *   -       6    R2C6  2        11       66
+   *   -       7    R2C5  2        13       91
+   *   -       8    R3C5  2        15      120
+   *   -       9    R3C4  1        16      144
+   *   -      10    R4C4  2        18      180
+   *   -      11    R5C4  2        20      220
+   *   -      12    R5C5  2        22      264
+   *   -      13    R6C5  3        25      325
+   *   -      14    R3C3  3        28      392
+   * 
+   * Entry R0C4
+   *   -       1    R0C4  2         2        2
+   *   -       2    R0C5  2         4        8
+   *   -       3    R1C5  2         6       18
+   *   -       4    R1C4  2         8       32
+   * 
+   * Entry R2C0
+   *   -       1    R2C0  2         2        2
+   *   -       2    R2C1  2         4        8
+   *   -       3    R3C1  1         5       15
+   *   -       4    R4C1  0         5       20
+   *   -       5    R4C2  2         7       35
+   *   -       6    R4C3  2         9       54
+   *   -       7    R5C3  3        12       84
+   *   -       8    R5C1  1        13      104
+   *   -       9    R6C1  2        15      135
+   *   -      10    R6C0  2        17      170
+   *   -      11    R5C0  1        18      198
+   *   -      12    R4C0  1        19      228
+   *   -      13    R3C0  1        20      260
+   * 
+   * Entry R0C0
+   *   -       1    R0C0  2         2        2
+   *   -       2    R0C1  1         3        6
+   *   -       3    R0C2  1         4       12
+   *   -       4    R0C3  2         6       24
+   *   -       5    R1C3  1         7       35
+   *   -       6    R2C3  1         8       48
+   *   -       7    R2C4  3        11       77
+   *   -       8    R2C2  1        12       96
+   *   -       9    R3C2  3        15      135
+   *   -      10    R1C2  0        15      150
+   *   -      11    R1C1  1        16      176
+   *   -      12    R1C0  2        18      216
+   * 
+   * Entry R4C9
+   *   -       1    R4C9  3         3        3
+   *   -       2    R5C9  1         4        8
+   *   -       3    R6C9  1         5       15
+   *   -       4    R7C9  1         6       24
+   *   -       5    R8C9  1         7       35
+   *   -       6    R9C9  2         9       54
+   *   -       7    R9C8  1        10       70
+   *   -       8    R9C7  2        12       96
+   *   -       9    R8C7  2        14      126
+   *   -      10    R8C8  0        14      140
+   *   -      11    R7C8  1        15      165
+   *   -      12    R6C8  1        16      192
+   *   -      13    R5C8  2        18      234
+   * sum_plants_count = 100
+   * sum_plants_count = 1930 <- Result Part 1
+   * 
+   * 
+   * ......CC..   2    ......22..   4       ..........   0    ..........   0       ........FF   2    ........32   5   
+   * ......CCC.   3    ......113.   5       ..........   0    ..........   0       .........F   1    .........2   2   
+   * .....CC...   2    .....22...   4       ..........   0    ..........   0       .......FFF   3    .......211   4   
+   * ...CCC....   3    ...312....   6       ..........   0    ..........   0       .......FFF   3    .......202   4   
+   * ....C..C..   2    ....2..4..   6       .........E   1    .........3   3       ........F.   1    ........3.   3   
+   * ....CC....   2    ....22....   4       ........EE   2    ........21   3       ..........   0    ..........   0   
+   * .....C....   1    .....3....   3       ........EE   2    ........11   2       ..........   0    ..........   0   
+   * ..........   0    ..........   0       ........EE   2    ........11   2       ..........   0    ..........   0   
+   * ..........   0    ..........   0       .......EEE   3    .......201   3       ..........   0    ..........   0   
+   * ..........   0    ..........   0       .......EEE   3    .......212   5       ..........   0    ..........   0   
+   *  Char Count 15    Sum Values 32         Char Count 13    Sum Values 18         Char Count 10    Sum Values 18    
+   * 
+   * 
+   * ....II....   2    ....22....   4       ..........   0    ..........   0       ..........   0    ..........   0   
+   * ....II....   2    ....22....   4       ..........   0    ..........   0       ..........   0    ..........   0   
+   * ..........   0    ..........   0       ..........   0    ..........   0       ..........   0    ..........   0   
+   * ..........   0    ..........   0       ......J...   1    ......3...   3       ..........   0    ..........   0   
+   * ..........   0    ..........   0       .....JJ...   2    .....31...   4       ..........   0    ..........   0   
+   * ..I.......   1    ..3.......   3       ......JJ..   2    ......12..   3       ..........   0    ..........   0   
+   * ..III.....   3    ..112.....   4       ......JJ..   2    ......11..   2       ..........   0    ..........   0   
+   * .IIIII....   5    .20012....   5       ......JJ..   2    ......12..   3       M.........   1    3.........   3   
+   * .III.I....   4    .211.3....   7       ......J...   1    ......2...   2       M.........   1    2.........   2   
+   * ...I......   1    ...3......   3       ......J...   1    ......3...   3       MMM.......   3    223.......   7   
+   *  Char Count 18    Sum Values 30         Char Count 11    Sum Values 20         Char Count 5    Sum Values 12     
+   * 
+   * 
+   * RRRR......   4    2112......   6       ..........   0    ..........   0       ..........   0    ..........   0   
+   * RRRR......   4    2101......   4       ..........   0    ..........   0       ..........   0    ..........   0   
+   * ..RRR.....   3    ..113.....   5       ..........   0    ..........   0       VV........   2    22........   4   
+   * ..R.......   1    ..3.......   3       ..........   0    ..........   0       VV........   2    11........   2   
+   * ..........   0    ..........   0       ..........   0    ..........   0       VVVV......   4    1022......   5   
+   * ..........   0    ..........   0       ..........   0    ..........   0       VV.V......   3    11.3......   5   
+   * ..........   0    ..........   0       ..........   0    ..........   0       VV........   2    22........   4   
+   * ..........   0    ..........   0       ..........   0    ..........   0       ..........   0    ..........   0   
+   * ..........   0    ..........   0       ....S.....   1    ....3.....   3       ..........   0    ..........   0   
+   * ..........   0    ..........   0       ....SS....   2    ....23....   5       ..........   0    ..........   0   
+   *  Char Count 12    Sum Values 18         Char Count 3    Sum Values 8           Char Count 13    Sum Values 20    
    *  
    */
 
@@ -614,11 +431,23 @@ public class Day12GardenGroups
 
   private static final long   DEFAULT_CELL_VALUE       = 4;
 
+  private static int          DEBUG_PADDING_VALUE      = 35;
+
+  private static char         DEBUG_PADDING_CHAR       = ' ';
+
+  private static final String KEY_PRAEFIX_CELL_VALUE   = "CELL_VALUE_";
+
+  private static final String KEY_PRAEFIX_CELL_FENCE   = "CELL_FENCE_";
+
+  private static final String KEY_PRAEFIX_PLANT_TYPE   = "PLANT_TYPE_";
+
   private static final long   DEFAULT_CELL_VALUE_EMPTY = 0;
 
   private static final char   DEFAULT_CHAR_NOT_FOUND   = '#';
 
   private static final char   CHAR_EMPTY_SPACE         = '.';
+
+  private static final char   CHAR_DEBUG_ALL           = '_';
 
   private static final String STR__DEBUG_SPACER        = "    ";
 
@@ -632,63 +461,45 @@ public class Day12GardenGroups
     List< String > test_content_list_2 = Arrays.stream( test_content_2.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
     List< String > test_content_list_3 = Arrays.stream( test_content_3.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
-    //String test_content_4 = "OOOOO,OXOXX,OOOXO,OOOOO";
+    calcPart01( test_content_list_1, true );
+    //calcPart01( test_content_list_2, true );
+    //calcPart01( test_content_list_3, true );
 
-    String test_content_4 = "......CC..,......CCC.,.....CC...,...CCC....,....C..C..,....CC....,.....C....,..........,..........,..........";
-
-    String test_content_5 = "....II....,....II....,..........,..........,..........,..I.......,..III.....,.IIIII....,.III.I....,...I......";
-    List< String > test_content_list_4 = Arrays.stream( test_content_5.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
-
-    String test_content_6 = "..........,..........,..........,..........,....X.....,..........,..........,.........X,..........,..........";
-    List< String > test_content_list_6 = Arrays.stream( test_content_6.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
-
-    //calcInputPart1( test_content_list_4, true );
-    calcInputPart1( test_content_list_6, true );
-    //calcInputPart1( test_content_list_2, true );
-    //calcInputPart1( test_content_list_3, true );
+    //calcPart01( getListProd(), false );
   }
 
-  private static void calcInputPart1( List< String > pListInput, boolean pKnzDebug )
+  private static HashMap< String, List< String > > m_hash_map_regions = new HashMap< String, List< String > >();
+
+  private static String calcPart01( List< String > pListInput, boolean pKnzDebug )
   {
     clearHashMap();
 
-    m_hreg = new HashMap< String, List< String > >();
+    m_hash_map_regions = new HashMap< String, List< String > >();
 
-    if ( pKnzDebug )
-    {
-      wl( "" );
-      wl( "---------------------------------------------------------" );
-      wl( "" );
-    }
+    Properties prop_debug_plant_types = new Properties();
 
-    long grid_width = pListInput.get( 0 ).length();
-    long grid_height = pListInput.size();
-    long grid_cells = grid_height * grid_width;
-    long cost_val = 4;
+    Properties prop_grid_plants = new Properties();
 
-    long result_value_sum = 0;
-
-    for ( String input_str : pListInput )
-    {
-      if ( pKnzDebug )
-      {
-        wl( input_str );
-      }
-    }
-
-    Properties propc = new Properties();
+    String res_str = "";
 
     int current_row = 0;
+    int current_col = 0;
 
+    /*
+     * Initializing the grid with coordinates for the key and 
+     * plant type for the value.
+     */
     for ( String input_str : pListInput )
     {
-      for ( int current_col = 0; current_col < input_str.length(); current_col++ )
+      for ( current_col = 0; current_col < input_str.length(); current_col++ )
       {
+        prop_grid_plants.setProperty( "R" + current_row + "C" + current_col, "" + input_str.charAt( current_col ) );
+
         char current_cell_char = input_str.charAt( current_col );
 
         if ( current_cell_char != '.' )
         {
-          propc.setProperty( "" + current_cell_char, "1" );
+          prop_debug_plant_types.setProperty( KEY_PRAEFIX_PLANT_TYPE + current_cell_char, "" + current_cell_char );
 
           long current_char_count = getCharCountDef( current_cell_char, 0 );
 
@@ -757,133 +568,6 @@ public class Day12GardenGroups
       }
 
       current_row++;
-    }
-
-    result_value_sum = getMapSumValues( pListInput );
-
-    wl( "grid_width  " + grid_width + "" );
-    wl( "grid_height " + grid_height + "" );
-    wl( "grid_cells  ( width " + grid_width + " * height " + grid_height + " ) " + grid_cells + "" );
-    wl( "grid_total  ( cells " + grid_cells + " * cost_val " + cost_val + " ) " + ( grid_cells * cost_val ) + "" );
-    wl( "" );
-    wl( "Result Part 1: " + result_value_sum );
-    wl( "" );
-    wl( "" );
-    wl( "" );
-    wl( "grid_total_start " + ( grid_cells * cost_val ) + "" );
-    wl( "grid_total_end   " + result_value_sum + "" );
-    wl( "grid_total_diff  " + ( ( grid_cells * cost_val ) - result_value_sum ) + "" );
-    wl( "" );
-    wl( "" );
-    wl( "" );
-
-    wl( getDebugMapValues( pListInput ) );
-
-    long sum_total = 0;
-
-    for ( String prop_key : propc.stringPropertyNames() )
-    {
-
-      if ( prop_key.length() == 1 )
-      {
-        propc.setProperty( prop_key, getDebugMapChar( pListInput, prop_key.charAt( 0 ) ) );
-
-        long sum_char_count = getLongValue( "RES_" + prop_key.charAt( 0 ) + "_SUM_CHAR_COUNT", 0 );
-        long sum_cell_values = getLongValue( "RES_" + prop_key.charAt( 0 ) + "_SUM_MAP_VALUES", 0 );
-        long sum_char_cost = getLongValue( "RES_" + prop_key.charAt( 0 ) + "_COST", 0 );
-
-        sum_total += sum_char_cost;
-
-        wl( "  '" + prop_key.charAt( 0 ) + "' Count " + FkStringFeld.getFeldRechtsMin( sum_char_count, 5 ) + " * Perimeter " + FkStringFeld.getFeldRechtsMin( sum_cell_values, 7 ) + " = " + FkStringFeld.getFeldRechtsMin( sum_char_cost, 7 ) );
-
-      }
-    }
-
-    wl( "           " + FkStringFeld.getFeldRechtsMin( "", 5 ) + "             " + FkStringFeld.getFeldRechtsMin( "", 7 ) + " = " + FkStringFeld.getFeldRechtsMin( sum_total, 7 ) );
-
-    wl( "" );
-    wl( "" );
-
-    /*
-     *
-     */
-    propc.stringPropertyNames().forEach( prop_key -> {
-
-      if ( prop_key.length() == 1 )
-      {
-        wl( propc.getProperty( prop_key ) );
-      }
-    } );
-
-    initPropGrid( pListInput );
-
-  }
-
-  /*
-   *
-  01234567890
-  ......CC..   2    ......22..   4
-  ......CCC.   3    ......113.   5
-  .....CC...   2    .....22...   4
-  ...CCC....   3    ...312....   6
-  ....C..C..   2    ....2..4..   6
-  ....CC....   2    ....22....   4
-  .....C....   1    .....3....   3
-  ..........   0    ..........   0
-  ..........   0    ..........   0
-  ..........   0    ..........   0
-  15      32 
-  
-  --------------------------
-   - R0C6 C Start
-   - R0C7 C hori
-   - R1C7 C vertik
-   - R1C8 C horiz
-   
-   - R1C6 C vert 
-   - R2C6 C
-  R0C6 C verbindungen 6
-  --------------------------
-   - R2C5 C
-   - R3C5 C
-  R2C5 C verbindungen 2
-  --------------------------
-   - R4C4 C
-   - R5C4 C
-   - R5C5 C
-   - R6C5 C
-  R4C4 C verbindungen 4
-  --------------------------
-   - R4C7 C
-  R4C7 C verbindungen 1
-  
-   * 
-   * 
-   */
-
-  private static HashMap< String, List< String > > m_hreg = new HashMap< String, List< String > >();
-
-  private static String initPropGrid( List< String > pListInput )
-  {
-    Properties pGrid = new Properties();
-
-    String res_str = "";
-
-    int current_row = 0;
-    int current_col = 0;
-
-    /*
-     * Initializing the grid with coordinates for the key and 
-     * plant type for the value.
-     */
-    for ( String input_str : pListInput )
-    {
-      for ( current_col = 0; current_col < input_str.length(); current_col++ )
-      {
-        pGrid.setProperty( "R" + current_row + "C" + current_col, "" + input_str.charAt( current_col ) );
-      }
-
-      current_row++;
 
       res_str += "\n";
     }
@@ -897,64 +581,157 @@ public class Day12GardenGroups
     {
       for ( current_col = 0; current_col < max_col; current_col++ )
       {
-        char current_char = pGrid.getProperty( "R" + current_row + "C" + current_col, "." ).charAt( 0 );
+        char current_char = prop_grid_plants.getProperty( "R" + current_row + "C" + current_col, "." ).charAt( 0 );
 
         if ( current_char != '.' )
         {
           List< String > pListRegions = new ArrayList< String >();
 
-          long sum_count = getPlantRegion( pListRegions, pGrid, current_row, current_col, current_char, pListInput.size(), max_col );
+          long sum_count = getPlantRegion( pListRegions, prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col );
 
-          if ( sum_count == 0 )
-          {
-            /*
-             * A lonely plant ... nope
-             */
-            //pListRegions.add( "R" + current_row + "C" + current_col );
-          }
-
-          m_hreg.put( "R" + current_row + "C" + current_col, pListRegions );
-
+          m_hash_map_regions.put( "R" + current_row + "C" + current_col, pListRegions );
         }
       }
-
-      // Nope ... current_row++;
 
       res_str += "\n";
     }
 
-    long sum_valuesg = 0;
-    long sum_plantsg = 0;
-
-    for ( Map.Entry< String, List< String > > e : m_hreg.entrySet() )
+    if ( pKnzDebug )
     {
+      wl( getDebugMapChar( pListInput, CHAR_DEBUG_ALL ) );
+
       wl( "" );
-      wl( "Entry " + e.getKey() );
-
-      long sum_values = 0;
-      long sum_plants = 0;
-
-      for ( String key_node : e.getValue() )
-      {
-        long sum_akt_v = getLongValue( key_node, 0 );
-
-        sum_values += sum_akt_v;
-        sum_plants++;
-
-        wl( "  -   " + FkStringFeld.getFeldRechtsMin( sum_plants, 7 ) + "    " + key_node + "  " + sum_akt_v + "   " + FkStringFeld.getFeldRechtsMin( sum_values, 7 ) + "  " + FkStringFeld.getFeldRechtsMin( sum_plants * sum_values, 7 ) );
-      }
-
-      sum_plantsg += sum_plants;
-
-      sum_valuesg += ( sum_values * sum_plants );
+      wl( "List of Regions " );
     }
 
-    wl( "sum_plantsg = " + sum_plantsg );
-    wl( "sum_valuesg = " + sum_valuesg );
-    wl( "" );
+    long sum_plant_values_total = 0;
+    long sum_plants_count = 0;
+
+    for ( Map.Entry< String, List< String > > map_entry : m_hash_map_regions.entrySet() )
+    {
+      if ( pKnzDebug )
+      {
+        wl( "" );
+        wl( "Entry " + map_entry.getKey() );
+      }
+
+      long current_region_sum_values = 0;
+      long current_region_sum_plants = 0;
+
+      for ( String key_node : map_entry.getValue() )
+      {
+        long cell_perimeter = getLongValue( key_node, 0 );
+
+        current_region_sum_values += cell_perimeter;
+
+        current_region_sum_plants++;
+
+        if ( pKnzDebug )
+        {
+          wl( "  -   " + FkStringFeld.getFeldRechtsMin( current_region_sum_plants, 5 ) + "    " + key_node + "  " + cell_perimeter + "   " + FkStringFeld.getFeldRechtsMin( current_region_sum_values, 7 ) + "  " + FkStringFeld.getFeldRechtsMin( current_region_sum_plants * current_region_sum_values, 7 ) );
+        }
+      }
+
+      sum_plants_count += current_region_sum_plants;
+
+      sum_plant_values_total += ( current_region_sum_values * current_region_sum_plants );
+    }
+
+    wl( "sum_plants_count = " + sum_plants_count );
+    wl( "sum_plants_count = " + sum_plant_values_total + " <- Result Part 1" );
     wl( "" );
 
+    if ( pKnzDebug )
+    {
+      String debug_plant_types = "";
+
+      wl( getDebugMapChar( pListInput, CHAR_DEBUG_ALL ) );
+
+      for ( String prop_key : prop_debug_plant_types.stringPropertyNames() )
+      {
+        if ( prop_key.startsWith( KEY_PRAEFIX_PLANT_TYPE ) )
+        {
+          char current_plant_type = prop_debug_plant_types.getProperty( prop_key, "" + DEFAULT_CHAR_NOT_FOUND ).charAt( 0 );
+
+          if ( current_plant_type != DEFAULT_CHAR_NOT_FOUND )
+          {
+            debug_plant_types += current_plant_type;
+
+            prop_debug_plant_types.setProperty( "" + current_plant_type, getDebugMapChar( pListInput, current_plant_type ) );
+          }
+        }
+      }
+
+      char[] array_chars = debug_plant_types.toCharArray();
+
+      java.util.Arrays.sort( array_chars );
+
+      String sorted_plant_types = new String( array_chars );
+
+      String debug_map_str = "";
+
+      int debug_map_nr = 1;
+
+      for ( char char_c : sorted_plant_types.toCharArray() )
+      {
+        String map_cur = prop_debug_plant_types.getProperty( "" + char_c );
+
+        if ( debug_map_nr > 1 )
+        {
+          debug_map_str = combineStrings( debug_map_str, map_cur );
+        }
+        else
+        {
+          debug_map_str = map_cur;
+        }
+
+        if ( debug_map_nr == 3 )
+        {
+          wl( debug_map_str + "\n\n" );
+
+          debug_map_str = null;
+
+          debug_map_nr = 0;
+        }
+
+        debug_map_nr++;
+      }
+
+      if ( debug_map_str != null )
+      {
+        wl( debug_map_str + "\n\n" );
+      }
+    }
+
     return res_str;
+  }
+
+  private static String combineStrings( String pString1, String pString2 )
+  {
+    String str_spacer = "    ";
+
+    String[] lines1 = pString1 != null ? pString1.split( "\r?\n" ) : new String[ 0 ];
+
+    String[] lines2 = pString2 != null ? pString2.split( "\r?\n" ) : new String[ 0 ];
+
+    int max_lines = Math.max( lines1.length, lines2.length );
+
+    StringBuilder string_builder = new StringBuilder();
+
+    for ( int line_index = 0; line_index < max_lines; line_index++ )
+    {
+      String str_a = line_index < lines1.length ? lines1[ line_index ] : "";
+      String str_b = line_index < lines2.length ? lines2[ line_index ] : "";
+
+      string_builder.append( str_a ).append( str_spacer ).append( str_b );
+
+      if ( line_index < max_lines - 1 )
+      {
+        string_builder.append( "\n" );
+      }
+    }
+
+    return string_builder.toString();
   }
 
   private static long getPlantRegion( List< String > pListRegions, Properties pGrid, long pRow, long pCol, char pTargetPlantType, int pMaxRow, int pMaxCol )
@@ -1039,48 +816,6 @@ public class Day12GardenGroups
     return sum_conections;
   }
 
-  private static long getMapSumValues( List< String > pListInput )
-  {
-    long sum_cell_values = 0;
-
-    int current_row = 0;
-
-    for ( String input_str : pListInput )
-    {
-      for ( int current_col = 0; current_col < input_str.length(); current_col++ )
-      {
-        sum_cell_values += (long) getCellValueDef( current_row, current_col, DEFAULT_CELL_VALUE_EMPTY );
-      }
-
-      current_row++;
-    }
-
-    return sum_cell_values;
-  }
-
-  private static String getDebugMapValues( List< String > pListInput )
-  {
-    String res_str = "";
-
-    int current_row = 0;
-
-    for ( String input_str : pListInput )
-    {
-      for ( int current_col = 0; current_col < input_str.length(); current_col++ )
-      {
-//        char current_cell_char = input_str.charAt( current_col );
-
-        res_str += getCellValueDef( current_row, current_col, DEFAULT_CELL_VALUE_EMPTY );
-      }
-
-      current_row++;
-
-      res_str += "\n";
-    }
-
-    return res_str;
-  }
-
   private static String getDebugMapChar( List< String > pListInput, char pChar )
   {
     String res_str = "";
@@ -1092,7 +827,6 @@ public class Day12GardenGroups
 
     for ( String input_str : pListInput )
     {
-
       long sum_row_val = 0;
       long sum_row_count = 0;
 
@@ -1101,9 +835,9 @@ public class Day12GardenGroups
 
       for ( int current_col = 0; current_col < input_str.length(); current_col++ )
       {
-        if ( input_str.charAt( current_col ) == pChar )
+        if ( ( input_str.charAt( current_col ) == pChar ) || ( pChar == CHAR_DEBUG_ALL ) )
         {
-          str_map_char += pChar;
+          str_map_char += input_str.charAt( current_col );
 
           sum_char_count++;
           sum_row_count++;
@@ -1124,38 +858,33 @@ public class Day12GardenGroups
 
       current_row++;
 
-      res_str += str_map_char + " " + FkStringFeld.getFeldRechtsMin( sum_row_count, 3 ) + STR__DEBUG_SPACER + str_map_values + " " + FkStringFeld.getFeldRechtsMin( sum_row_val, 3 ) + "\n";
+      res_str += padRight( str_map_char + " " + FkStringFeld.getFeldRechtsMin( sum_row_count, 3 ) + STR__DEBUG_SPACER + str_map_values + " " + FkStringFeld.getFeldRechtsMin( sum_row_val, 3 ), DEBUG_PADDING_VALUE, DEBUG_PADDING_CHAR ) + "\n";
     }
 
-    String str_map_char = " " + sum_char_count + " ";
-    String str_map_values = " " + sum_cell_values + " ";
+    String str_map_char = " Char Count " + sum_char_count + " ";
+    String str_map_values = " Sum Values " + sum_cell_values + " ";
 
-    res_str += str_map_char + STR__DEBUG_SPACER + str_map_values + "\n";
-
-    getHashMapCellValues().put( "RES_" + pChar + "_SUM_CHAR_COUNT", Long.valueOf( sum_char_count ) );
-    getHashMapCellValues().put( "RES_" + pChar + "_SUM_MAP_VALUES", Long.valueOf( sum_cell_values ) );
-
-    getHashMapCellValues().put( "RES_" + pChar + "_COST", Long.valueOf( sum_cell_values * sum_char_count ) );
+    res_str += padRight( str_map_char + "  " + str_map_values, DEBUG_PADDING_VALUE, DEBUG_PADDING_CHAR ) + "\n";
 
     return res_str;
   }
 
-  private static boolean checkChar( List< String > pList, int pCurrentRow, int pCurrentCol, int pDeltaRow, int pDeltaCol, char pTargetChar )
+  private static String padRight( String pString, int pLength, char pPadChar )
   {
-    int target_row = pCurrentRow + pDeltaRow;
-    int target_col = pCurrentCol + pDeltaCol;
+    if ( pString == null ) pString = "";
 
-    if ( ( target_row >= 0 ) && ( target_row < pList.size() ) )
-    {
-      String target_str = pList.get( target_row );
+    int padLength = Math.max( 0, pLength - pString.length() );
 
-      if ( ( target_col >= 0 ) && ( target_col < target_str.length() ) )
-      {
-        return target_str.charAt( target_col ) == pTargetChar;
-      }
-    }
+    if ( padLength <= 0 ) return pString;
 
-    return false;
+    StringBuilder sb = new StringBuilder( pLength );
+
+    sb.append( pString );
+
+    for ( int i = 0; i < padLength; i++ )
+      sb.append( pPadChar );
+
+    return sb.toString();
   }
 
   private static char getChar( List< String > pList, int pCurrentRow, int pCurrentCol, char pDefChar )
