@@ -439,6 +439,48 @@ public class Day12GardenGroups
 
   private static final String KEY_PRAEFIX_CELL_FENCE   = "CELL_FENCE_";
 
+  private static final String KEY_CELL_FENCE_TOP       = "CFT_";
+
+  private static final String KEY_CELL_FENCE_BOTTOM    = "CFB_";
+
+  private static final String KEY_CELL_FENCE_LEFT      = "CFL_";
+
+  private static final String KEY_CELL_FENCE_RIGHT     = "CFR_";
+
+  private static final int    FENCE_1                  = 1;
+
+  private static final int    FENCE_0                  = 0;
+
+  private static final int    FENCE_ERR                = 99;
+
+  private static final String FENCE_1_CHAR_TOP         = "-";
+
+  private static final String FENCE_1_CHAR_BOTTOM      = "-";
+
+  private static final String FENCE_1_CHAR_LEFT        = "|";
+
+  private static final String FENCE_1_CHAR_RIGHT       = "|";
+
+  //private static final String   FENCE_0_CHAR_TOP         = ".";
+  //private static final String   FENCE_0_CHAR_BOTTOM      = ".";
+  //private static final String   FENCE_0_CHAR_LEFT        = ":";
+  //private static final String   FENCE_0_CHAR_RIGHT       = ":";
+
+  //private static final String   FENCE_0_CHAR_TOP         = ".";
+  //private static final String   FENCE_0_CHAR_BOTTOM      = ".";
+  //private static final String   FENCE_0_CHAR_LEFT        = ":";
+  //private static final String   FENCE_0_CHAR_RIGHT       = ":";
+
+  private static final String FENCE_0_CHAR_TOP         = " ";
+
+  private static final String FENCE_0_CHAR_BOTTOM      = " ";
+
+  private static final String FENCE_0_CHAR_LEFT        = " ";
+
+  private static final String FENCE_0_CHAR_RIGHT       = " ";
+
+  private static final String FENCE_CHAR_EMPTY         = " ";
+
   private static final String KEY_PRAEFIX_PLANT_TYPE   = "PLANT_TYPE_";
 
   private static final long   DEFAULT_CELL_VALUE_EMPTY = 0;
@@ -456,16 +498,639 @@ public class Day12GardenGroups
     String test_content_1 = "AAAA,BBCD,BBCC,EEEC";
     String test_content_2 = "OOOOO,OXOXO,OOOOO,OXOXO,OOOOO";
     String test_content_3 = "RRRRIICCFF,RRRRIICCCF,VVRRRCCFFF,VVRCCCJFFF,VVVVCJJCFE,VVIVCCJJEE,VVIIICJJEE,MIIIIIJJEE,MIIISIJEEE,MMMISSJEEE";
+    String test_content_4 = "AAAAAA,AAABBA,AAABBA,ABBAAA,ABBAAA,AAAAAA";
+    String test_content_5 = "EEEEE,EXXXX,EEEEE,EXXXX,EEEEE";
 
     List< String > test_content_list_1 = Arrays.stream( test_content_1.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
     List< String > test_content_list_2 = Arrays.stream( test_content_2.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
     List< String > test_content_list_3 = Arrays.stream( test_content_3.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+    List< String > test_content_list_4 = Arrays.stream( test_content_4.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+    List< String > test_content_list_5 = Arrays.stream( test_content_5.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
-    calcPart01( test_content_list_1, true );
+    //String test_content_square_1 = "..........,..........,..AAAAA...,..A...A...,..A...A...,..A...A...,..AAAAA...,..........,..........";
+
+    String test_content_square_1 = "..........,...AA.....,..AAAAA...,..A...A...,..A...A...,..A...A...,..AAAAA...,..........,..........";
+
+    //String test_content_complex_1 = "..........,.AAAA.....,....A.....,..AAAAA...,..A...A...,..A...A...,..A...A...,..AAAAA...,....A.....,....AAAA..,..........";
+    String test_content_complex_1 = "..........,.A........,.A.AAA....,.A...A....,.AAAAAAA..,..AAAAAAA.,.AAAAAAA..,....A.....,..AAAAA...,....A.....,....AAAA..,..........";
+
+    List< String > list_test_content_square_1 = Arrays.stream( test_content_square_1.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+    List< String > test_content_complex_1l = Arrays.stream( test_content_complex_1.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+
+    //String test_content_4 = "OOOOO,OXOXX,OOOXO,OOOOO";
+
+//    String test_content_4 = "......CC..,......CCC.,.....CC...,...CCC....,....C..C..,....CC....,.....C....,..........,..........,..........";
+//
+//    String test_content_5 = "....II....,....II....,..........,..........,..........,..I.......,..III.....,.IIIII....,.III.I....,...I......";
+//    List< String > test_content_list_4 = Arrays.stream( test_content_5.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+//
+//    String test_content_6 = "..........,..........,..........,..........,....X.....,..........,..........,.........X,..........,..........";
+//    List< String > test_content_list_6 = Arrays.stream( test_content_6.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+
+    //calcPart01( test_content_list_6, true );
+    //calcPart01( test_content_list_1, true );
+
+    //calcPart01( test_content_list_1, true );
     //calcPart01( test_content_list_2, true );
     //calcPart01( test_content_list_3, true );
 
+    calcPart02( test_content_complex_1l, true );
+
     //calcPart01( getListProd(), false );
+  }
+
+  private static String calcPart02( List< String > pListInput, boolean pKnzDebug )
+  {
+    clearHashMap();
+
+    m_hash_map_regions = new HashMap< String, List< String > >();
+
+    Properties prop_debug_plant_types = new Properties();
+
+    Properties prop_grid_plants = new Properties();
+
+    String res_str = "";
+
+    int current_row = 0;
+    int current_col = 0;
+
+    /*
+     * Initializing the grid with coordinates for the key and 
+     * plant type for the value.
+     */
+
+    for ( String input_str : pListInput )
+    {
+      for ( current_col = 0; current_col < input_str.length(); current_col++ )
+      {
+        prop_grid_plants.setProperty( "R" + current_row + "C" + current_col, "" + input_str.charAt( current_col ) );
+
+        setCellFence( KEY_CELL_FENCE_TOP, current_row, current_col, FENCE_1 );
+        setCellFence( KEY_CELL_FENCE_BOTTOM, current_row, current_col, FENCE_1 );
+        setCellFence( KEY_CELL_FENCE_LEFT, current_row, current_col, FENCE_1 );
+        setCellFence( KEY_CELL_FENCE_RIGHT, current_row, current_col, FENCE_1 );
+      }
+
+      current_row++;
+    }
+
+    current_row = 0;
+
+    for ( String input_str : pListInput )
+    {
+      for ( current_col = 0; current_col < input_str.length(); current_col++ )
+      {
+        char current_cell_char = input_str.charAt( current_col );
+
+        if ( current_cell_char != '.' )
+        {
+          prop_debug_plant_types.setProperty( KEY_PRAEFIX_PLANT_TYPE + current_cell_char, "" + current_cell_char );
+
+          long current_char_count = getCharCountDef( current_cell_char, 0 );
+
+          current_char_count++;
+
+          setCharCount( current_cell_char, current_char_count );
+
+          long current_cell_value = getCellValueDef( current_row, current_col, DEFAULT_CELL_VALUE );
+
+          /*
+           * Check next char for same plant type
+           */
+
+          int next_col = current_col + COL_PLUS_1;
+
+          if ( ( next_col < input_str.length() ) && ( input_str.charAt( next_col ) == current_cell_char ) )
+          {
+            /*
+             * Found two matching plant types horizontal
+             * 1. remove the right fence from the current position
+             * 2. remove the left fence from the next position
+             */
+            setCellFence( KEY_CELL_FENCE_RIGHT, current_row, current_col, FENCE_0 );
+            setCellFence( KEY_CELL_FENCE_LEFT, current_row, next_col, FENCE_0 );
+
+            current_cell_value--;
+
+            setCellValue( current_row, current_col, current_cell_value );
+
+            long next_cell_value = getCellValueDef( current_row, next_col, DEFAULT_CELL_VALUE );
+
+            next_cell_value--;
+
+            setCellValue( current_row, next_col, next_cell_value );
+          }
+
+          /*
+           * Check next row same col for same plant typesetCellValue
+           */
+
+          int next_row = current_row + ROW_PLUS_1;
+
+          if ( ( next_row < pListInput.size() ) && ( getChar( pListInput, next_row, current_col, DEFAULT_CHAR_NOT_FOUND ) == current_cell_char ) )
+          {
+            /*
+             * Found two matching plant types vertical
+             * 1. remove the bottom fence from the current position
+             * 2. remove the top fence from the next position
+             */
+            setCellFence( KEY_CELL_FENCE_BOTTOM, current_row, current_col, FENCE_0 );
+            setCellFence( KEY_CELL_FENCE_TOP, next_row, current_col, FENCE_0 );
+
+            setCellValue( current_row, current_col, current_cell_value );
+
+            long next_cell_value = getCellValueDef( next_row, current_col, DEFAULT_CELL_VALUE );
+
+            next_cell_value--;
+
+            setCellValue( next_row, current_col, next_cell_value );
+          }
+        }
+      }
+
+      current_row++;
+
+      res_str += "\n";
+    }
+
+    /*
+     * Collecting the regions for the plant types.
+     */
+    int max_col = current_col + 1;
+
+    for ( current_row = 0; current_row < pListInput.size(); current_row++ )
+    {
+      for ( current_col = 0; current_col < max_col; current_col++ )
+      {
+        char current_char = prop_grid_plants.getProperty( "R" + current_row + "C" + current_col, "." ).charAt( 0 );
+
+        if ( current_char != '.' )
+        {
+          List< String > pListRegions = new ArrayList< String >();
+
+          long sum_count = getPlantRegion( pListRegions, prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col );
+
+          m_hash_map_regions.put( "R" + current_row + "C" + current_col, pListRegions );
+        }
+      }
+
+      res_str += "\n";
+    }
+
+    for ( current_row = 0; current_row < pListInput.size(); current_row++ )
+    {
+      for ( current_col = 0; current_col < max_col; current_col++ )
+      {
+        char current_char = prop_grid_plants.getProperty( "R" + current_row + "C" + current_col, "." ).charAt( 0 );
+
+        if ( current_char != '.' )
+        {
+          List< String > pListRegions = new ArrayList< String >();
+
+//          long sum_count = getPlantFence( pListRegions, prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col, current_row, current_col );
+
+          m_hash_map_regions.put( "R" + current_row + "C" + current_col, pListRegions );
+        }
+      }
+
+      res_str += "\n";
+    }
+
+    if ( pKnzDebug )
+    {
+//      wl( getDebugMapCharPart2( pListInput, CHAR_DEBUG_ALL ) );
+      wl( getDebugMapCharPart2( pListInput, 'A' ) );
+
+      wl( "" );
+      wl( "List of Regions " );
+    }
+//
+//    long sum_plant_values_total = 0;
+//    long sum_plants_count = 0;
+//
+//    for ( Map.Entry< String, List< String > > map_entry : m_hash_map_regions.entrySet() )
+//    {
+//      if ( pKnzDebug )
+//      {
+//        wl( "" );
+//        wl( "Entry " + map_entry.getKey() );
+//      }
+//
+//      long current_region_sum_values = 0;
+//      long current_region_sum_plants = 0;
+//
+//      for ( String key_node : map_entry.getValue() )
+//      {
+//        long cell_perimeter = getLongValue( key_node, 0 );
+//
+//        current_region_sum_values += cell_perimeter;
+//
+//        current_region_sum_plants++;
+//
+//        if ( pKnzDebug )
+//        {
+//          wl( "  -   " + FkStringFeld.getFeldRechtsMin( current_region_sum_plants, 5 ) + "    " + key_node + "  " + cell_perimeter + "   " + FkStringFeld.getFeldRechtsMin( current_region_sum_values, 7 ) + "  " + FkStringFeld.getFeldRechtsMin( current_region_sum_plants * current_region_sum_values, 7 ) );
+//        }
+//      }
+//
+//      sum_plants_count += current_region_sum_plants;
+//
+//      sum_plant_values_total += ( current_region_sum_values * current_region_sum_plants );
+//    }
+//
+//    wl( "sum_plants_count = " + sum_plants_count );
+//    wl( "sum_plants_count = " + sum_plant_values_total + " <- Result Part 1" );
+//    wl( "" );
+//
+//    if ( pKnzDebug )
+//    {
+//      String debug_plant_types = "";
+//
+//      wl( getDebugMapChar( pListInput, CHAR_DEBUG_ALL ) );
+//
+//      for ( String prop_key : prop_debug_plant_types.stringPropertyNames() )
+//      {
+//        if ( prop_key.startsWith( KEY_PRAEFIX_PLANT_TYPE ) )
+//        {
+//          char current_plant_type = prop_debug_plant_types.getProperty( prop_key, "" + DEFAULT_CHAR_NOT_FOUND ).charAt( 0 );
+//
+//          if ( current_plant_type != DEFAULT_CHAR_NOT_FOUND )
+//          {
+//            debug_plant_types += current_plant_type;
+//
+//            prop_debug_plant_types.setProperty( "" + current_plant_type, getDebugMapChar( pListInput, current_plant_type ) );
+//          }
+//        }
+//      }
+//
+//      char[] array_chars = debug_plant_types.toCharArray();
+//
+//      java.util.Arrays.sort( array_chars );
+//
+//      String sorted_plant_types = new String( array_chars );
+//
+//      String debug_map_str = "";
+//
+//      int debug_map_nr = 1;
+//
+//      for ( char char_c : sorted_plant_types.toCharArray() )
+//      {
+//        String map_cur = prop_debug_plant_types.getProperty( "" + char_c );
+//
+//        if ( debug_map_nr > 1 )
+//        {
+//          debug_map_str = combineStrings( debug_map_str, map_cur );
+//        }
+//        else
+//        {
+//          debug_map_str = map_cur;
+//        }
+//
+//        if ( debug_map_nr == 3 )
+//        {
+//          wl( debug_map_str + "\n\n" );
+//
+//          debug_map_str = null;
+//
+//          debug_map_nr = 0;
+//        }
+//
+//        debug_map_nr++;
+//      }
+//
+//      if ( debug_map_str != null )
+//      {
+//        wl( debug_map_str + "\n\n" );
+//      }
+//    }
+
+    return res_str;
+  }
+
+  private static String fence_outer_string = "";
+
+  private static long getPlantFence( List< String > pListRegions, Properties pGrid, long pRow, long pCol, char pTargetPlantType, int pMaxRow, int pMaxCol, int pStartRow, int pStartCol )
+  {
+    /*
+     * The new row exceeds the max rows, so no match 
+     */
+    if ( pRow > pMaxRow )
+    {
+      return 0;
+    }
+
+    /*
+     * The new col exceeds the max cols, so no match
+     */
+    if ( pCol > pMaxCol )
+    {
+      return 0;
+    }
+
+    /*
+     * Were we startet
+     */
+    if ( ( pRow == pStartRow ) && ( pCol == pStartCol ) )
+    {
+      return 0;
+    }
+
+    /*
+     * Get the plant type from the grid.
+     * The grid is just a property-instance.
+     */
+    char grid_plant_type = pGrid.getProperty( "R" + pRow + "C" + pCol, "." ).charAt( 0 );
+
+    /*
+     * If the plant type from the grid doesn't match the 
+     * target plant type, so its no match.
+     */
+    if ( grid_plant_type != pTargetPlantType )
+    {
+      return 0;
+    }
+
+    /*
+     * Found match for plant type.
+     * This match can also be the first entry grid coordinates.
+     */
+
+    /*
+     * Add the Coordinates to the List of regions
+     */
+    pListRegions.add( "R" + pRow + "C" + pCol );
+
+    /*
+     *         -  -                   -            
+     *        |A  A|                 |A|          
+     *      -        -  -       -  -  -  -  -       -  -     -  -        
+     *     |A  A  A  A  A|     |A  A  A  A  A|     |A  A  A  A  A|       
+     *         -  -  -             -  -  -             -  -  -           
+     *     |A|         |A|     |A|         |A|     |A|         |A|       
+     *     |A|         |A|     |A|         |A|     |A|         |A|       
+     *     |A|         |A|     |A|         |A|     |A|         |A|       
+     *         -  -  -             -  -  -             -  -  -           
+     *     |A  A  A  A  A|     |A  A  A  A  A|     |A  A  A  A  A|       
+     *      -  -  -  -  -       -  -  -  -  -       -  -  -  -  -
+     *   
+     *   
+     *    
+     *        -                           -  -  -  -                
+     *       |A|                         |A  A  A  A|               
+     *              -  -  -               -  -  -                   
+     *       |A|   |A  A  A|                      |A|               
+     *              -  -                     -  -     -  -          
+     *       |A|         |A|                |A  A  A  A  A|         
+     *           -  -  -     -  -               -  -  -             
+     *       |A  A  A  A  A  A  A|          |A|         |A|         
+     *        -  -  -     -  -  -           |A|         |A|         
+     *                |A|                   |A|         |A|         
+     *           -  -     -  -                  -  -  -             
+     *          |A  A  A  A  A|             |A  A  A  A  A|         
+     *           -  -     -  -               -  -     -  -          
+     *                |A|                         |A|               
+     *                    -  -  -                     -  -  -       
+     *                |A  A  A  A|                |A  A  A  A|      
+     *                 -  -  -  -                  -  -  -  -       
+     *           
+     *  
+     *      -                            
+     *     |A|                          
+     *            -  -  -               
+     *     |A|   |A  A  A|              
+     *            -  -                  
+     *     |A|         |A|              
+     *         -  -  -     -  -         
+     *     |A  A  A  A  A  A  A|        
+     *      -                    -                           
+     *        |A  A  A  A  A  A  A|     
+     *      -                    -                           
+     *     |A  A  A  A  A  A  A|        
+     *      -  -  -     -  -  -         
+     *              |A|                 
+     *         -  -     -  -            
+     *        |A  A  A  A  A|           
+     *         -  -     -  -            
+     *              |A|                 
+     *                  -  -  -         
+     *              |A  A  A  A|        
+     *               -  -  -  -         
+     * 
+     * Das Startfeld hat immer eine linke und obere Begrenzung
+     * Es geht darum die aeussere Begrenzung zu ermitteln.
+     * 
+     * Es wird nur anhand der Begrenzungen geprüft.
+     * 
+     * Die Pruefung auf gleiche Pflanzenart (=Buchstabe) wurde bei der 
+     * Ermittlung der Grenzen gemacht und kann hier entfallen.
+     * 
+     * 
+     * Es muss immer eine Bewegung nach "rechts" sein (von einem virtuellem Betrachter)
+     * Ist die Bewegung nach rechts nicht möglich, 
+     * 
+     * Die Bewegung kann nur zu einem Feld hinfuehren welches mindestens eine Begrenzung hat.
+     * 
+     * Start-position 
+     * -nach oben 
+     * -nach rechts
+     * -nach unten
+     * -nach links
+     * 
+     * Äussere Begrenzung
+     * - nach Rechts  - wenn obere begrenzung 1, wenn rechte begrenzung 0
+     * - nach Oben    - wenn obere begrenzung 0, wenn linke begrenzung 0 
+     * - nach unten   - wenn untere begrenzung 0, wenn rechte begrenzung 1
+     * - nach links   - wenn linke begrenzung 0 ist.
+     * 
+     * 
+     * - nach Rechts  - Kriterium sind die obere und rechte Begrenzungen
+     * 
+     *                - Die obere Begrenzung stellt die Beeendigung der 
+     *                  Bewegung nach rechts fest.
+     *                  
+     *                  Fehlt die obere Begrenzung kann der Algorithmus 
+     *                  eine Zeile nach oben (zeile -1) gehen. 
+     *                  
+     *                  Die rechte Begrenzung ist in diesem Fall unerheblich.
+     *                  Die Bewegung nach oben hat vorrang vor der Bewegung nach rechts.
+     *                  
+     *                - Die rechte Begrenzung stellt den Weg für eine Bewegung nach rechts dar.
+     *                 
+     *                  Fehlt die rechte Begrenzung und die Begrenzung nach oben ist vorhanden, 
+     *                  kann der Algorithmus zum nächsten horizontalen (spalte + 1) gehen.
+     *                  
+     *                  Die Begrenzung ist in diesem Fall 0.
+     *                  
+     *                - Eine Bewegung nach rechts verlängert den oberen Zaun.
+     *                  
+     * 
+     * - nach oben    - Kriterium sind die obere und linke Begrenzung
+     * 
+     *                - Die 
+     * 
+     * 
+     */
+
+    /*
+     * The function result is set to 1, to represent a valid coordinate
+     */
+    long sum_conections = 1;
+
+//    private static final String KEY_CELL_FENCE_TOP       = "CFT_";
+//
+//    private static final String KEY_CELL_FENCE_BOTTOM    = "CFB_";
+//
+//    private static final String KEY_CELL_FENCE_LEFT      = "CFL_";
+//
+//    private static final String KEY_CELL_FENCE_RIGHT     = "CFR_";
+
+    long fence_top = getCellFence( KEY_CELL_FENCE_TOP, pRow, pCol );
+    long fence_bottom = getCellFence( KEY_CELL_FENCE_BOTTOM, pRow, pCol );
+    long fence_left = getCellFence( KEY_CELL_FENCE_LEFT, pRow, pCol );
+    long fence_right = getCellFence( KEY_CELL_FENCE_RIGHT, pRow, pCol );
+
+    /*
+     * Move to the right
+     * - only when the top fence is present
+     * - movement to the right, enlarges the top fence
+     * 
+     */
+    if ( ( fence_right == FENCE_0 ) && ( fence_top == FENCE_1 ) )
+    {
+      /*
+       * count the top fence from THIS POSITION to the outer fence string
+       */
+      fence_outer_string += "T";
+
+      /*
+       * Move to the next horizontal Position
+       */
+      sum_conections += getPlantFence( pListRegions, pGrid, pRow, pCol + 1, grid_plant_type, pMaxRow, pMaxCol, pStartRow, pStartCol );
+    }
+    else
+    {
+      /*
+       * no more movement to the right
+       * the outer fence changes direction
+       * end the current line with a comma
+       */
+      fence_outer_string += ",";
+    }
+
+    /*
+     * Move up
+     * - only when the top fence is absence
+     * - only when the left fence is present (because, if was absence, we would go left)
+     */
+
+    if ( ( fence_top == FENCE_0 ) && ( fence_left == FENCE_1 ) )
+    {
+      /*
+       * count the Left fence from THIS POSITION to the outer fence string
+       */
+      fence_outer_string += "L";
+
+      /*
+       * Move to the next horizontal Position
+       */
+      sum_conections += getPlantFence( pListRegions, pGrid, pRow - 1, pCol, grid_plant_type, pMaxRow, pMaxCol, pStartRow, pStartCol );
+    }
+    else
+    {
+      /*
+       * no more movement to the top
+       * the outer fence changes direction
+       * end the current line with a comma
+       */
+      fence_outer_string += ",";
+    }
+
+    /*
+     * Move left
+     * - only when the top fence is absence
+     * - only when the left fence is present (because, if was absence, we would go left)
+     *   
+     *    
+     *        -                   
+     *       |A|                  
+     *              -  -  -       
+     *       |A|   |A  A  A|      
+     *              -  -          
+     *       |A|         |A|      
+     *           -  -  -     -  - 
+     *       |A  A  A  A  A  A  A|
+     * 
+     * 
+     */
+
+    /*
+     * Check fence left from the cell above.
+     * No boundary checks neccessary because the function "getCellFence" is
+     * getting the value from a hash map.
+     * 
+     * If the above field is not present in the hash-map the function will 
+     * return the value from FENCE_ERR.
+     * 
+     * 
+     */
+    long fence_left_above = getCellFence( KEY_CELL_FENCE_LEFT, pRow - 1, pCol );
+
+//    if ( ( fence_top == FENCE_0 ) && ( fence_left_above == FENCE_1 ) )
+    if ( ( fence_top == FENCE_0 ) )
+    {
+      /*
+       * count the Left fence from THIS POSITION to the outer fence string
+       */
+      fence_outer_string += "L";
+
+      /*
+       * Move to the next horizontal Position
+       */
+      sum_conections += getPlantFence( pListRegions, pGrid, pRow - 1, pCol, grid_plant_type, pMaxRow, pMaxCol, pStartRow, pStartCol );
+    }
+    else
+    {
+      /*
+       * no more movement to the right,
+       * so the outer fence changes direction
+       * end the current line with a comma
+       */
+      fence_outer_string += ",";
+    }
+
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    /*
+//     * Find more plants beneath this coordinates
+//     */
+//    sum_conections += getPlantFence( pListRegions, pGrid, pRow + 1, pCol, grid_plant_type, pMaxRow, pMaxCol, pStartRow, pStartCol );
+//
+//    /*
+//     * Go to the left
+//     */
+//    sum_conections += getPlantFence( pListRegions, pGrid, pRow, pCol - 1, grid_plant_type, pMaxRow, pMaxCol, pStartRow, pStartCol );
+//
+//    /*
+//     * Go up
+//     */
+//    sum_conections += getPlantFence( pListRegions, pGrid, pRow - 1, pCol, grid_plant_type, pMaxRow, pMaxCol, pStartRow, pStartCol );
+
+    /*
+     * Return all connections
+     * (... the return value is actually never used)
+     */
+    return sum_conections;
   }
 
   private static HashMap< String, List< String > > m_hash_map_regions = new HashMap< String, List< String > >();
@@ -518,7 +1183,7 @@ public class Day12GardenGroups
           if ( ( next_col < input_str.length() ) && ( input_str.charAt( next_col ) == current_cell_char ) )
           {
             /*
-             * Found to matching plant types
+             * Found two matching plant types
              * 1. reduce the current cell value by one
              * 2. save the reduced cell value in the hash map
              * 3. get the next cell value from the hash map
@@ -546,7 +1211,7 @@ public class Day12GardenGroups
           if ( ( next_row < pListInput.size() ) && ( getChar( pListInput, next_row, current_col, DEFAULT_CHAR_NOT_FOUND ) == current_cell_char ) )
           {
             /*
-             * Found to matching plant types
+             * Found two matching plant types
              * 1. reduce the current cell value by one
              * 2. save the reduced cell value in the hash map
              * 3. get the next cell value from the hash map
@@ -816,6 +1481,76 @@ public class Day12GardenGroups
     return sum_conections;
   }
 
+  private static String getDebugMapCharPart2( List< String > pListInput, char pChar )
+  {
+    String res_str = "";
+
+    String str_map_empty_cell_row = FENCE_CHAR_EMPTY + FENCE_CHAR_EMPTY + FENCE_CHAR_EMPTY;
+
+    int current_row = 0;
+
+    long sum_cell_values = 0;
+    long sum_char_count = 0;
+
+    for ( String input_str : pListInput )
+    {
+      long sum_row_val = 0;
+      long sum_row_count = 0;
+
+      String str_map_values = "";
+
+      String str_above = "";
+      String str_middle = "";
+      String str_bottom = "";
+
+      for ( int current_col = 0; current_col < input_str.length(); current_col++ )
+      {
+        if ( ( input_str.charAt( current_col ) == pChar ) || ( pChar == CHAR_DEBUG_ALL ) )
+        {
+          sum_char_count++;
+          sum_row_count++;
+
+          str_above += FENCE_CHAR_EMPTY + getCellFenceChar( KEY_CELL_FENCE_TOP, current_row, current_col ) + FENCE_CHAR_EMPTY;
+
+          str_middle += getCellFenceChar( KEY_CELL_FENCE_LEFT, current_row, current_col );
+          str_middle += input_str.charAt( current_col );
+          str_middle += getCellFenceChar( KEY_CELL_FENCE_RIGHT, current_row, current_col );
+
+          str_bottom += FENCE_CHAR_EMPTY + getCellFenceChar( KEY_CELL_FENCE_BOTTOM, current_row, current_col ) + FENCE_CHAR_EMPTY;
+
+          long current_cell_value = 0l; //getCellValueDef( current_row, current_col, FENCE_CHAR_EMPTY );
+
+          sum_row_val += (long) current_cell_value;
+          sum_cell_values += (long) current_cell_value;
+
+          str_map_values += FENCE_CHAR_EMPTY + current_cell_value + FENCE_CHAR_EMPTY;
+        }
+        else
+        {
+
+          str_above += str_map_empty_cell_row;
+          str_middle += str_map_empty_cell_row;
+          str_bottom += str_map_empty_cell_row;
+
+          str_map_values += str_map_empty_cell_row;
+        }
+      }
+
+      current_row++;
+
+      res_str += padRight( str_above + " " + FkStringFeld.getFeldRechtsMin( sum_row_count, 3 ) + STR__DEBUG_SPACER + str_map_empty_cell_row + " " + FkStringFeld.getFeldRechtsMin( sum_row_val, 3 ), DEBUG_PADDING_VALUE, DEBUG_PADDING_CHAR ) + "\n";
+      res_str += padRight( str_middle + " " + FkStringFeld.getFeldRechtsMin( sum_row_count, 3 ) + STR__DEBUG_SPACER + str_map_values + " " + FkStringFeld.getFeldRechtsMin( sum_row_val, 3 ), DEBUG_PADDING_VALUE, DEBUG_PADDING_CHAR ) + "\n";
+      res_str += padRight( str_bottom + " " + FkStringFeld.getFeldRechtsMin( sum_row_count, 3 ) + STR__DEBUG_SPACER + str_map_empty_cell_row + " " + FkStringFeld.getFeldRechtsMin( sum_row_val, 3 ), DEBUG_PADDING_VALUE, DEBUG_PADDING_CHAR ) + "\n";
+    }
+
+    String str_map_char = " Char Count " + sum_char_count + " ";
+    String str_map_values = " Sum Values " + sum_cell_values + " ";
+
+    res_str += padRight( str_map_char + "  " + str_map_values, DEBUG_PADDING_VALUE, DEBUG_PADDING_CHAR ) + "\n";
+
+    return res_str;
+  }
+
   private static String getDebugMapChar( List< String > pListInput, char pChar )
   {
     String res_str = "";
@@ -929,11 +1664,11 @@ public class Day12GardenGroups
 
   private static long getLongValue( String pKey, long pDefaultValue )
   {
-    Long int_val = getHashMapCellValues().get( pKey );
+    Long long_value = getHashMapCellValues().get( pKey );
 
-    if ( int_val != null )
+    if ( long_value != null )
     {
-      return int_val.intValue();
+      return long_value.intValue();
     }
 
     return pDefaultValue;
@@ -941,14 +1676,65 @@ public class Day12GardenGroups
 
   private static long getCellValueDef( int pRow, int pCol, long pDefaultValue )
   {
-    Long int_val = getHashMapCellValues().get( "R" + pRow + "C" + pCol );
+    Long long_value = getHashMapCellValues().get( "R" + pRow + "C" + pCol );
 
-    if ( int_val != null )
+    if ( long_value != null )
     {
-      return int_val.intValue();
+      return long_value.intValue();
     }
 
     return setCellValue( pRow, pCol, pDefaultValue );
+  }
+
+  private static long setCellFence( String pFenceType, long pRow, long pCol, long pValue )
+  {
+    getHashMapCellValues().put( pFenceType + "R" + pRow + "C" + pCol, Long.valueOf( pValue ) );
+
+    return pValue;
+  }
+
+  private static long getCellFence( String pFenceType, long pRow, long pCol )
+  {
+    Long long_value = getHashMapCellValues().get( pFenceType + "R" + pRow + "C" + pCol );
+
+    if ( long_value != null )
+    {
+      return long_value.longValue();
+    }
+
+    return FENCE_ERR;
+  }
+
+  private static String getCellFenceChar( String pFenceType, int pRow, int pCol )
+  {
+    Long long_value = getHashMapCellValues().get( pFenceType + "R" + pRow + "C" + pCol );
+
+    if ( long_value != null )
+    {
+      long l_val = long_value.longValue();
+
+      if ( pFenceType.equals( KEY_CELL_FENCE_TOP ) )
+      {
+        return ( l_val == FENCE_1 ? FENCE_1_CHAR_TOP : FENCE_0_CHAR_TOP );
+      }
+
+      if ( pFenceType.equals( KEY_CELL_FENCE_BOTTOM ) )
+      {
+        return ( l_val == FENCE_1 ? FENCE_1_CHAR_BOTTOM : FENCE_0_CHAR_BOTTOM );
+      }
+
+      if ( pFenceType.equals( KEY_CELL_FENCE_LEFT ) )
+      {
+        return ( l_val == FENCE_1 ? FENCE_1_CHAR_LEFT : FENCE_0_CHAR_LEFT );
+      }
+
+      if ( pFenceType.equals( KEY_CELL_FENCE_RIGHT ) )
+      {
+        return ( l_val == FENCE_1 ? FENCE_1_CHAR_RIGHT : FENCE_0_CHAR_RIGHT );
+      }
+    }
+
+    return FENCE_CHAR_EMPTY;
   }
 
   private static long setCellValue( int pRow, int pCol, long pValue )
@@ -960,11 +1746,11 @@ public class Day12GardenGroups
 
   private static long getCharCountDef( char pChar, long pDefaultValue )
   {
-    Long int_val = getHashMapCellValues().get( "char_" + pChar );
+    Long long_value = getHashMapCellValues().get( "char_" + pChar );
 
-    if ( int_val != null )
+    if ( long_value != null )
     {
-      return int_val.longValue();
+      return long_value.longValue();
     }
 
     return setCharCount( pChar, pDefaultValue );
@@ -1012,4 +1798,5 @@ public class Day12GardenGroups
   {
     System.out.println( pString );
   }
+
 }
