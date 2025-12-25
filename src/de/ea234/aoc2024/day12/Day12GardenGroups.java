@@ -425,41 +425,56 @@ public class Day12GardenGroups
    *  
    */
 
-  private static final int    ROW_PLUS_1               = 1;
 
-  private static final int    COL_PLUS_1               = 1;
+  private static final int    ROW_PLUS_1                 = 1;
 
-  private static final long   DEFAULT_CELL_VALUE       = 4;
+  private static final int    COL_PLUS_1                 = 1;
 
-  private static int          DEBUG_PADDING_VALUE      = 35;
+  private static final long   DEFAULT_CELL_VALUE         = 4;
 
-  private static char         DEBUG_PADDING_CHAR       = ' ';
+  private static int          DEBUG_PADDING_VALUE        = 35;
 
-  private static final String KEY_PRAEFIX_CELL_VALUE   = "CELL_VALUE_";
+  private static char         DEBUG_PADDING_CHAR         = ' ';
 
-  private static final String KEY_PRAEFIX_CELL_FENCE   = "CELL_FENCE_";
+  private static final String KEY_PRAEFIX_CELL_VALUE     = "CELL_VALUE_";
 
-  private static final String KEY_CELL_FENCE_TOP       = "CFT_";
+  private static final String KEY_PRAEFIX_CELL_FENCE     = "CELL_FENCE_";
 
-  private static final String KEY_CELL_FENCE_BOTTOM    = "CFB_";
+  private static final String KEY_PRAEFIX_CELL_DIRECTION = "CELL_DIR_";
 
-  private static final String KEY_CELL_FENCE_LEFT      = "CFL_";
+  private static final String KEY_CELL_FENCE_TOP         = "CFT_";
 
-  private static final String KEY_CELL_FENCE_RIGHT     = "CFR_";
+  private static final String KEY_CELL_FENCE_BOTTOM      = "CFB_";
 
-  private static final int    FENCE_1                  = 1;
+  private static final String KEY_CELL_FENCE_LEFT        = "CFL_";
 
-  private static final int    FENCE_0                  = 0;
+  private static final String KEY_CELL_FENCE_RIGHT       = "CFR_";
 
-  private static final int    FENCE_ERR                = 99;
+  private static final int    FENCE_1                    = 1;
 
-  private static final String FENCE_1_CHAR_TOP         = "-";
+  private static final int    FENCE_0                    = 0;
 
-  private static final String FENCE_1_CHAR_BOTTOM      = "-";
+  private static final int    DIRECTION_NONE             = 0;
 
-  private static final String FENCE_1_CHAR_LEFT        = "|";
+  private static final int    DIRECTION_UP               = 1;
 
-  private static final String FENCE_1_CHAR_RIGHT       = "|";
+  private static final int    DIRECTION_RIGHT            = 2;
+
+  private static final int    DIRECTION_DOWN             = 3;
+
+  private static final int    DIRECTION_LEFT             = 4;
+
+  private static final int    DIRECTION_FINISHED         = 5;
+
+  private static final int    FENCE_ERR                  = 99;
+
+  private static final String FENCE_1_CHAR_TOP           = "-";
+
+  private static final String FENCE_1_CHAR_BOTTOM        = "-";
+
+  private static final String FENCE_1_CHAR_LEFT          = "|";
+
+  private static final String FENCE_1_CHAR_RIGHT         = "|";
 
   //private static final String   FENCE_0_CHAR_TOP         = ".";
   //private static final String   FENCE_0_CHAR_BOTTOM      = ".";
@@ -471,27 +486,27 @@ public class Day12GardenGroups
   //private static final String   FENCE_0_CHAR_LEFT        = ":";
   //private static final String   FENCE_0_CHAR_RIGHT       = ":";
 
-  private static final String FENCE_0_CHAR_TOP         = " ";
+  private static final String FENCE_0_CHAR_TOP           = " ";
 
-  private static final String FENCE_0_CHAR_BOTTOM      = " ";
+  private static final String FENCE_0_CHAR_BOTTOM        = " ";
 
-  private static final String FENCE_0_CHAR_LEFT        = " ";
+  private static final String FENCE_0_CHAR_LEFT          = " ";
 
-  private static final String FENCE_0_CHAR_RIGHT       = " ";
+  private static final String FENCE_0_CHAR_RIGHT         = " ";
 
-  private static final String FENCE_CHAR_EMPTY         = " ";
+  private static final String FENCE_CHAR_EMPTY           = " ";
 
-  private static final String KEY_PRAEFIX_PLANT_TYPE   = "PLANT_TYPE_";
+  private static final String KEY_PRAEFIX_PLANT_TYPE     = "PLANT_TYPE_";
 
-  private static final long   DEFAULT_CELL_VALUE_EMPTY = 0;
+  private static final long   DEFAULT_CELL_VALUE_EMPTY   = 0;
 
-  private static final char   DEFAULT_CHAR_NOT_FOUND   = '#';
+  private static final char   DEFAULT_CHAR_NOT_FOUND     = '#';
 
-  private static final char   CHAR_EMPTY_SPACE         = '.';
+  private static final char   CHAR_EMPTY_SPACE           = '.';
 
-  private static final char   CHAR_DEBUG_ALL           = '_';
+  private static final char   CHAR_DEBUG_ALL             = '_';
 
-  private static final String STR__DEBUG_SPACER        = "    ";
+  private static final String STR__DEBUG_SPACER          = "    ";
 
   public static void main( String[] args )
   {
@@ -512,7 +527,7 @@ public class Day12GardenGroups
     String test_content_square_1 = "..........,...AA.....,..AAAAA...,..A...A...,..A...A...,..A...A...,..AAAAA...,..........,..........";
 
     //String test_content_complex_1 = "..........,.AAAA.....,....A.....,..AAAAA...,..A...A...,..A...A...,..A...A...,..AAAAA...,....A.....,....AAAA..,..........";
-    String test_content_complex_1 = "..........,.A........,.A.AAA....,.A...A....,.AAAAAAA..,..AAAAAAA.,.AAAAAAA..,....A.....,..AAAAA...,....A.....,....AAAA..,..........";
+    String test_content_complex_1 = "..........,.A........,.A.AAA....,.A...A....,.AAAAAAA..,..AA..AAA.,..AAA.AA..,.AAAAAAA..,....A.....,..AAAAA...,..A.A.....,....AAAA..,..........";
 
     List< String > list_test_content_square_1 = Arrays.stream( test_content_square_1.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
     List< String > test_content_complex_1l = Arrays.stream( test_content_complex_1.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
@@ -670,6 +685,8 @@ public class Day12GardenGroups
 
           long sum_count = getPlantRegion( pListRegions, prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col );
 
+          getPlantFenceLinear( prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col, current_row, current_col );
+
           m_hash_map_regions.put( "R" + current_row + "C" + current_col, pListRegions );
         }
       }
@@ -689,12 +706,16 @@ public class Day12GardenGroups
 
 //          long sum_count = getPlantFence( pListRegions, prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col, current_row, current_col );
 
+          getPlantFenceLinear( prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col, current_row, current_col );
+
           m_hash_map_regions.put( "R" + current_row + "C" + current_col, pListRegions );
         }
       }
 
       res_str += "\n";
     }
+
+    wl( "fence_outer_string " + fence_outer_string );
 
     if ( pKnzDebug )
     {
@@ -809,6 +830,233 @@ public class Day12GardenGroups
 
   private static String fence_outer_string = "";
 
+  private static long getPlantFenceLinear( Properties pGrid, long pRow, long pCol, char pTargetPlantType, int pMaxRow, int pMaxCol, int pStartRow, int pStartCol )
+  {
+    /*
+     * The new row exceeds the max rows, so no match 
+     */
+    if ( pRow > pMaxRow )
+    {
+      return 0;
+    }
+
+    /*
+     * The new col exceeds the max cols, so no match
+     */
+    if ( pCol > pMaxCol )
+    {
+      return 0;
+    }
+
+    long current_row = pRow;
+    long current_col = pCol;
+
+    long row_next = pRow;
+    long col_next = pCol;
+
+    long cell_direct_cur = DIRECTION_UP;
+    long long_while_nr = 0;
+    boolean knz_do_while = true;
+
+    while ( knz_do_while )
+    {
+      long_while_nr++;
+
+      long fence_top = getCellFence( KEY_CELL_FENCE_TOP, current_row, current_col );
+      long fence_bottom = getCellFence( KEY_CELL_FENCE_BOTTOM, current_row, current_col );
+      long fence_left = getCellFence( KEY_CELL_FENCE_LEFT, current_row, current_col );
+      long fence_right = getCellFence( KEY_CELL_FENCE_RIGHT, current_row, current_col );
+
+      boolean knz_can_move_up = fence_top == FENCE_0;
+      boolean knz_can_move_down = fence_bottom == FENCE_0;
+      boolean knz_can_move_left = fence_left == FENCE_0;
+      boolean knz_can_move_right = fence_right == FENCE_0;
+
+      long cell_direction = getCellDirection( current_row, current_col );
+
+      long knz_moved = 0;
+
+      row_next = current_row;
+      col_next = current_col;
+
+      if ( ( cell_direct_cur == DIRECTION_NONE ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = cell_direct_cur;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_up )
+        {
+          row_next--;
+
+          knz_moved = 1;
+        }
+      }
+
+      if ( ( cell_direct_cur == DIRECTION_UP ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = cell_direct_cur;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_up )
+        {
+          row_next--;
+
+          knz_moved = 1;
+        }
+
+      }
+
+      if ( ( cell_direct_cur == DIRECTION_RIGHT ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = cell_direct_cur;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_right )
+        {
+          col_next++;
+
+          knz_moved = 1;
+        }
+      }
+
+      if ( ( cell_direct_cur == DIRECTION_DOWN ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = cell_direct_cur;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_down )
+        {
+          row_next++;
+
+          knz_moved = 1;
+        }
+      }
+
+      if ( ( cell_direction == DIRECTION_LEFT ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = cell_direct_cur;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_left )
+        {
+          col_next--;
+
+          knz_moved = 1;
+        }
+
+      }
+
+      /*
+       * 
+       * 
+       * 
+       * 
+       * 
+       * 
+       * 
+       * 
+       * 
+       * 
+       * 
+       */
+
+      if ( ( cell_direction == DIRECTION_NONE ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = DIRECTION_UP;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_up )
+        {
+          row_next--;
+
+          knz_moved = 1;
+        }
+      }
+
+      if ( ( cell_direction == DIRECTION_UP ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = DIRECTION_RIGHT;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_right )
+        {
+          col_next++;
+
+          knz_moved = 1;
+        }
+      }
+
+      if ( ( cell_direction == DIRECTION_RIGHT ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = DIRECTION_DOWN;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_down )
+        {
+          row_next++;
+
+          knz_moved = 1;
+        }
+      }
+
+      if ( ( cell_direction == DIRECTION_DOWN ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = DIRECTION_LEFT;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_left )
+        {
+          col_next--;
+
+          knz_moved = 1;
+        }
+      }
+
+      if ( ( cell_direction == DIRECTION_LEFT ) && ( knz_moved == 0 ) )
+      {
+        cell_direction = DIRECTION_UP;
+
+        setCellDirection( current_row, current_col, cell_direction );
+
+        if ( knz_can_move_up )
+        {
+          row_next--;
+
+          knz_moved = 1;
+        }
+        else
+        {
+          cell_direction = DIRECTION_FINISHED;
+
+          setCellDirection( current_row, current_col, cell_direction );
+        }
+      }
+
+      fence_outer_string += cell_direction;
+
+      current_row = row_next;
+      current_col = col_next;
+
+      cell_direct_cur = cell_direction;
+
+      if ( long_while_nr > 255 )
+      {
+        knz_do_while = false;
+      }
+    }
+
+    return 0l;
+  }
+
   private static long getPlantFence( List< String > pListRegions, Properties pGrid, long pRow, long pCol, char pTargetPlantType, int pMaxRow, int pMaxCol, int pStartRow, int pStartCol )
   {
     /*
@@ -873,48 +1121,32 @@ public class Day12GardenGroups
      *     |A  A  A  A  A|     |A  A  A  A  A|     |A  A  A  A  A|       
      *      -  -  -  -  -       -  -  -  -  -       -  -  -  -  -
      *   
+     * 
+     *     -                          
+     *    |A|                         
+     *           -  -  -              
+     *    |A|   |A  A  A|             
+     *           -  -                 
+     *    |A|         |A|             
+     *        -  -  -     -  -        
+     *    |A  A  A  A  A  A  A|       
+     *     -        -  -        -              
+     *       |A  A|      |A  A  A|    
+     *              -           -       
+     *       |A  A  A|   |A  A|    
+     *     -           -                      
+     *    |A  A  A  A  A  A  A|       
+     *     -  -  -     -  -  -        
+     *             |A|                
+     *        -  -     -  -           
+     *       |A  A  A  A  A|          
+     *           -     -  -           
+     *       |A|   |A|                
+     *        -                       
+     *                 -  -  -        
+     *             |A  A  A  A|       
+     *              -  -  -  -        
      *   
-     *    
-     *        -                           -  -  -  -                
-     *       |A|                         |A  A  A  A|               
-     *              -  -  -               -  -  -                   
-     *       |A|   |A  A  A|                      |A|               
-     *              -  -                     -  -     -  -          
-     *       |A|         |A|                |A  A  A  A  A|         
-     *           -  -  -     -  -               -  -  -             
-     *       |A  A  A  A  A  A  A|          |A|         |A|         
-     *        -  -  -     -  -  -           |A|         |A|         
-     *                |A|                   |A|         |A|         
-     *           -  -     -  -                  -  -  -             
-     *          |A  A  A  A  A|             |A  A  A  A  A|         
-     *           -  -     -  -               -  -     -  -          
-     *                |A|                         |A|               
-     *                    -  -  -                     -  -  -       
-     *                |A  A  A  A|                |A  A  A  A|      
-     *                 -  -  -  -                  -  -  -  -       
-     *           
-     *  
-     *      -                            
-     *     |A|                          
-     *            -  -  -               
-     *     |A|   |A  A  A|              
-     *            -  -                  
-     *     |A|         |A|              
-     *         -  -  -     -  -         
-     *     |A  A  A  A  A  A  A|        
-     *      -                    -                           
-     *        |A  A  A  A  A  A  A|     
-     *      -                    -                           
-     *     |A  A  A  A  A  A  A|        
-     *      -  -  -     -  -  -         
-     *              |A|                 
-     *         -  -     -  -            
-     *        |A  A  A  A  A|           
-     *         -  -     -  -            
-     *              |A|                 
-     *                  -  -  -         
-     *              |A  A  A  A|        
-     *               -  -  -  -         
      * 
      * Das Startfeld hat immer eine linke und obere Begrenzung
      * Es geht darum die aeussere Begrenzung zu ermitteln.
@@ -926,7 +1158,7 @@ public class Day12GardenGroups
      * 
      * 
      * Es muss immer eine Bewegung nach "rechts" sein (von einem virtuellem Betrachter)
-     * Ist die Bewegung nach rechts nicht möglich, 
+     * Ist die Bewegung nach rechts nicht möglich, ....
      * 
      * Die Bewegung kann nur zu einem Feld hinfuehren welches mindestens eine Begrenzung hat.
      * 
@@ -935,6 +1167,24 @@ public class Day12GardenGroups
      * -nach rechts
      * -nach unten
      * -nach links
+     * 
+     * 
+     * Eventuell ist die Rekursion nicht zielführend.
+     * Mit der Rekursion würde für jedes Feld sichergestellt werden, dass alle Richtungen 
+     * vollzogen werden. Dass muss nicht immer stimmen.
+     * 
+     * Eventuell wäre es besser einen start punkt zu haben und sich durch das feld 
+     * zu hangeln. 
+     * 
+     * Für jedes Feld wird festgehalten, welche die letzte richtung war (hashmap)
+     * Kommt der Algorithmuss wieder beim Feld vorbei, kann diese Richtung wieder 
+     * gelesen werden und um 90 Grad gedreht werden. 
+     * 
+     * Kann keine neue richtung mehr ermittelt werden, ist der algorithmus beendet.
+     * (Es sollte dann wieder der Startpunkt sein).
+     * 
+     * 
+     * 
      * 
      * Äussere Begrenzung
      * - nach Rechts  - wenn obere begrenzung 1, wenn rechte begrenzung 0
@@ -1705,6 +1955,25 @@ public class Day12GardenGroups
     return FENCE_ERR;
   }
 
+  private static long setCellDirection( long pRow, long pCol, long pDirection )
+  {
+    getHashMapCellValues().put( KEY_PRAEFIX_CELL_DIRECTION + "R" + pRow + "C" + pCol, Long.valueOf( pDirection ) );
+
+    return pDirection;
+  }
+
+  private static long getCellDirection( long pRow, long pDirection )
+  {
+    Long long_value = getHashMapCellValues().get( KEY_PRAEFIX_CELL_DIRECTION + "R" + pRow + "C" + pDirection );
+
+    if ( long_value != null )
+    {
+      return long_value.longValue();
+    }
+
+    return DIRECTION_NONE;
+  }
+
   private static String getCellFenceChar( String pFenceType, int pRow, int pCol )
   {
     Long long_value = getHashMapCellValues().get( pFenceType + "R" + pRow + "C" + pCol );
@@ -1798,5 +2067,4 @@ public class Day12GardenGroups
   {
     System.out.println( pString );
   }
-
 }
