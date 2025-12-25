@@ -18,13 +18,14 @@ public class Day12GardenGroups
 {
   /*
    * --- Day 12: Garden Groups ---
+   * https://adventofcode.com/2024/day/12
    * 
    * https://www.youtube.com/watch?v=jx0Y07_LcfQ
    * 
    * https://www.reddit.com/r/adventofcode/comments/1hcdnk0/2024_day_12_solutions/
    * https://www.reddit.com/r/adventofcode/comments/1hcfuz6/2024_day_12_part_2_solutions_handle_all_5/
    * https://www.reddit.com/r/adventofcode/comments/1hcpyic/2024_day_12_part_2_what_kind_of_algorithm_did_you/
-   *  
+
    * -------------------------------------------------------------------------------------
    * 
    * ANMERKUNG: Diese Kommentare stimmen fuer die Berechnung der Grenzen.
@@ -503,14 +504,14 @@ public class Day12GardenGroups
    * 
    * Lines for Region with starts at R1C3
    * 
-   * B_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line lenght    1    line count 1     last_start B_LINE_BOTTOM_R0002
-   * B_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line lenght    2    line count 1     last_start B_LINE_BOTTOM_R0002
-   * B_LINE_LEFT___C0003,R0001  -  0001 diff    0  line lenght    1    line count 2     last_start B_LINE_LEFT___C0003
-   * B_LINE_LEFT___C0003,R0002  -  0002 diff    1  line lenght    2    line count 2     last_start B_LINE_LEFT___C0003
-   * B_LINE_RIGHT__C0004,R0001  -  0001 diff    0  line lenght    1    line count 3     last_start B_LINE_RIGHT__C0004
-   * B_LINE_RIGHT__C0004,R0002  -  0002 diff    1  line lenght    2    line count 3     last_start B_LINE_RIGHT__C0004
-   * B_LINE_TOP____R0001,C0003  -  0003 diff    0  line lenght    1    line count 4     last_start B_LINE_TOP____R0001
-   * B_LINE_TOP____R0001,C0004  -  0004 diff    1  line lenght    2    line count 4     last_start B_LINE_TOP____R0001
+   * B_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line length    1    line count 1     last_start B_LINE_BOTTOM_R0002
+   * B_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line length    2    line count 1     last_start B_LINE_BOTTOM_R0002
+   * B_LINE_LEFT___C0003,R0001  -  0001 diff    0  line length    1    line count 2     last_start B_LINE_LEFT___C0003
+   * B_LINE_LEFT___C0003,R0002  -  0002 diff    1  line length    2    line count 2     last_start B_LINE_LEFT___C0003
+   * B_LINE_RIGHT__C0004,R0001  -  0001 diff    0  line length    1    line count 3     last_start B_LINE_RIGHT__C0004
+   * B_LINE_RIGHT__C0004,R0002  -  0002 diff    1  line length    2    line count 3     last_start B_LINE_RIGHT__C0004
+   * B_LINE_TOP____R0001,C0003  -  0003 diff    0  line length    1    line count 4     last_start B_LINE_TOP____R0001
+   * B_LINE_TOP____R0001,C0004  -  0004 diff    1  line length    2    line count 4     last_start B_LINE_TOP____R0001
    * 
    * Region R1C3 count_plants    4 count_lines    4 region_price         16
    * 
@@ -518,60 +519,60 @@ public class Day12GardenGroups
    * 
    * Lines for Region with starts at R3C1
    * 
-   * B_LINE_BOTTOM_R0004,C0001  -  0001 diff    0  line lenght    1    line count 1     last_start B_LINE_BOTTOM_R0004
-   * B_LINE_BOTTOM_R0004,C0002  -  0002 diff    1  line lenght    2    line count 1     last_start B_LINE_BOTTOM_R0004
-   * B_LINE_LEFT___C0001,R0003  -  0003 diff    0  line lenght    1    line count 2     last_start B_LINE_LEFT___C0001
-   * B_LINE_LEFT___C0001,R0004  -  0004 diff    1  line lenght    2    line count 2     last_start B_LINE_LEFT___C0001
-   * B_LINE_RIGHT__C0002,R0003  -  0003 diff    0  line lenght    1    line count 3     last_start B_LINE_RIGHT__C0002
-   * B_LINE_RIGHT__C0002,R0004  -  0004 diff    1  line lenght    2    line count 3     last_start B_LINE_RIGHT__C0002
-   * B_LINE_TOP____R0003,C0001  -  0001 diff    0  line lenght    1    line count 4     last_start B_LINE_TOP____R0003
-   * B_LINE_TOP____R0003,C0002  -  0002 diff    1  line lenght    2    line count 4     last_start B_LINE_TOP____R0003
+   * B_LINE_BOTTOM_R0004,C0001  -  0001 diff    0  line length    1    line count 1     last_start B_LINE_BOTTOM_R0004
+   * B_LINE_BOTTOM_R0004,C0002  -  0002 diff    1  line length    2    line count 1     last_start B_LINE_BOTTOM_R0004
+   * B_LINE_LEFT___C0001,R0003  -  0003 diff    0  line length    1    line count 2     last_start B_LINE_LEFT___C0001
+   * B_LINE_LEFT___C0001,R0004  -  0004 diff    1  line length    2    line count 2     last_start B_LINE_LEFT___C0001
+   * B_LINE_RIGHT__C0002,R0003  -  0003 diff    0  line length    1    line count 3     last_start B_LINE_RIGHT__C0002
+   * B_LINE_RIGHT__C0002,R0004  -  0004 diff    1  line length    2    line count 3     last_start B_LINE_RIGHT__C0002
+   * B_LINE_TOP____R0003,C0001  -  0001 diff    0  line length    1    line count 4     last_start B_LINE_TOP____R0003
+   * B_LINE_TOP____R0003,C0002  -  0002 diff    1  line length    2    line count 4     last_start B_LINE_TOP____R0003
    * 
    * Region R3C1 count_plants    4 count_lines    4 region_price         16
    * Start R0C0
    * 
    * Lines for Region with starts at R0C0
    * 
-   * A_LINE_BOTTOM_R0000,C0003  -  0003 diff    0  line lenght    1    line count 1     last_start A_LINE_BOTTOM_R0000
-   * A_LINE_BOTTOM_R0000,C0004  -  0004 diff    1  line lenght    2    line count 1     last_start A_LINE_BOTTOM_R0000
-   * A_LINE_BOTTOM_R0002,C0001  -  0001 diff    0  line lenght    1    line count 2     last_start A_LINE_BOTTOM_R0002
-   * A_LINE_BOTTOM_R0002,C0002  -  0002 diff    1  line lenght    2    line count 2     last_start A_LINE_BOTTOM_R0002
-   * A_LINE_BOTTOM_R0005,C0000  -  0000 diff    0  line lenght    1    line count 3     last_start A_LINE_BOTTOM_R0005
-   * A_LINE_BOTTOM_R0005,C0001  -  0001 diff    1  line lenght    2    line count 3     last_start A_LINE_BOTTOM_R0005
-   * A_LINE_BOTTOM_R0005,C0002  -  0002 diff    1  line lenght    3    line count 3     last_start A_LINE_BOTTOM_R0005
-   * A_LINE_BOTTOM_R0005,C0003  -  0003 diff    1  line lenght    4    line count 3     last_start A_LINE_BOTTOM_R0005
-   * A_LINE_BOTTOM_R0005,C0004  -  0004 diff    1  line lenght    5    line count 3     last_start A_LINE_BOTTOM_R0005
-   * A_LINE_BOTTOM_R0005,C0005  -  0005 diff    1  line lenght    6    line count 3     last_start A_LINE_BOTTOM_R0005
-   * A_LINE_LEFT___C0000,R0000  -  0000 diff    0  line lenght    1    line count 4     last_start A_LINE_LEFT___C0000
-   * A_LINE_LEFT___C0000,R0001  -  0001 diff    1  line lenght    2    line count 4     last_start A_LINE_LEFT___C0000
-   * A_LINE_LEFT___C0000,R0002  -  0002 diff    1  line lenght    3    line count 4     last_start A_LINE_LEFT___C0000
-   * A_LINE_LEFT___C0000,R0003  -  0003 diff    1  line lenght    4    line count 4     last_start A_LINE_LEFT___C0000
-   * A_LINE_LEFT___C0000,R0004  -  0004 diff    1  line lenght    5    line count 4     last_start A_LINE_LEFT___C0000
-   * A_LINE_LEFT___C0000,R0005  -  0005 diff    1  line lenght    6    line count 4     last_start A_LINE_LEFT___C0000
-   * A_LINE_LEFT___C0003,R0003  -  0003 diff    0  line lenght    1    line count 5     last_start A_LINE_LEFT___C0003
-   * A_LINE_LEFT___C0003,R0004  -  0004 diff    1  line lenght    2    line count 5     last_start A_LINE_LEFT___C0003
-   * A_LINE_LEFT___C0005,R0001  -  0001 diff    0  line lenght    1    line count 6     last_start A_LINE_LEFT___C0005
-   * A_LINE_LEFT___C0005,R0002  -  0002 diff    1  line lenght    2    line count 6     last_start A_LINE_LEFT___C0005
-   * A_LINE_RIGHT__C0000,R0003  -  0003 diff    0  line lenght    1    line count 7     last_start A_LINE_RIGHT__C0000
-   * A_LINE_RIGHT__C0000,R0004  -  0004 diff    1  line lenght    2    line count 7     last_start A_LINE_RIGHT__C0000
-   * A_LINE_RIGHT__C0002,R0001  -  0001 diff    0  line lenght    1    line count 8     last_start A_LINE_RIGHT__C0002
-   * A_LINE_RIGHT__C0002,R0002  -  0002 diff    1  line lenght    2    line count 8     last_start A_LINE_RIGHT__C0002
-   * A_LINE_RIGHT__C0005,R0000  -  0000 diff    0  line lenght    1    line count 9     last_start A_LINE_RIGHT__C0005
-   * A_LINE_RIGHT__C0005,R0001  -  0001 diff    1  line lenght    2    line count 9     last_start A_LINE_RIGHT__C0005
-   * A_LINE_RIGHT__C0005,R0002  -  0002 diff    1  line lenght    3    line count 9     last_start A_LINE_RIGHT__C0005
-   * A_LINE_RIGHT__C0005,R0003  -  0003 diff    1  line lenght    4    line count 9     last_start A_LINE_RIGHT__C0005
-   * A_LINE_RIGHT__C0005,R0004  -  0004 diff    1  line lenght    5    line count 9     last_start A_LINE_RIGHT__C0005
-   * A_LINE_RIGHT__C0005,R0005  -  0005 diff    1  line lenght    6    line count 9     last_start A_LINE_RIGHT__C0005
-   * A_LINE_TOP____R0000,C0000  -  0000 diff    0  line lenght    1    line count 10     last_start A_LINE_TOP____R0000
-   * A_LINE_TOP____R0000,C0001  -  0001 diff    1  line lenght    2    line count 10     last_start A_LINE_TOP____R0000
-   * A_LINE_TOP____R0000,C0002  -  0002 diff    1  line lenght    3    line count 10     last_start A_LINE_TOP____R0000
-   * A_LINE_TOP____R0000,C0003  -  0003 diff    1  line lenght    4    line count 10     last_start A_LINE_TOP____R0000
-   * A_LINE_TOP____R0000,C0004  -  0004 diff    1  line lenght    5    line count 10     last_start A_LINE_TOP____R0000
-   * A_LINE_TOP____R0000,C0005  -  0005 diff    1  line lenght    6    line count 10     last_start A_LINE_TOP____R0000
-   * A_LINE_TOP____R0003,C0003  -  0003 diff    0  line lenght    1    line count 11     last_start A_LINE_TOP____R0003
-   * A_LINE_TOP____R0003,C0004  -  0004 diff    1  line lenght    2    line count 11     last_start A_LINE_TOP____R0003
-   * A_LINE_TOP____R0005,C0001  -  0001 diff    0  line lenght    1    line count 12     last_start A_LINE_TOP____R0005
-   * A_LINE_TOP____R0005,C0002  -  0002 diff    1  line lenght    2    line count 12     last_start A_LINE_TOP____R0005
+   * A_LINE_BOTTOM_R0000,C0003  -  0003 diff    0  line length    1    line count 1     last_start A_LINE_BOTTOM_R0000
+   * A_LINE_BOTTOM_R0000,C0004  -  0004 diff    1  line length    2    line count 1     last_start A_LINE_BOTTOM_R0000
+   * A_LINE_BOTTOM_R0002,C0001  -  0001 diff    0  line length    1    line count 2     last_start A_LINE_BOTTOM_R0002
+   * A_LINE_BOTTOM_R0002,C0002  -  0002 diff    1  line length    2    line count 2     last_start A_LINE_BOTTOM_R0002
+   * A_LINE_BOTTOM_R0005,C0000  -  0000 diff    0  line length    1    line count 3     last_start A_LINE_BOTTOM_R0005
+   * A_LINE_BOTTOM_R0005,C0001  -  0001 diff    1  line length    2    line count 3     last_start A_LINE_BOTTOM_R0005
+   * A_LINE_BOTTOM_R0005,C0002  -  0002 diff    1  line length    3    line count 3     last_start A_LINE_BOTTOM_R0005
+   * A_LINE_BOTTOM_R0005,C0003  -  0003 diff    1  line length    4    line count 3     last_start A_LINE_BOTTOM_R0005
+   * A_LINE_BOTTOM_R0005,C0004  -  0004 diff    1  line length    5    line count 3     last_start A_LINE_BOTTOM_R0005
+   * A_LINE_BOTTOM_R0005,C0005  -  0005 diff    1  line length    6    line count 3     last_start A_LINE_BOTTOM_R0005
+   * A_LINE_LEFT___C0000,R0000  -  0000 diff    0  line length    1    line count 4     last_start A_LINE_LEFT___C0000
+   * A_LINE_LEFT___C0000,R0001  -  0001 diff    1  line length    2    line count 4     last_start A_LINE_LEFT___C0000
+   * A_LINE_LEFT___C0000,R0002  -  0002 diff    1  line length    3    line count 4     last_start A_LINE_LEFT___C0000
+   * A_LINE_LEFT___C0000,R0003  -  0003 diff    1  line length    4    line count 4     last_start A_LINE_LEFT___C0000
+   * A_LINE_LEFT___C0000,R0004  -  0004 diff    1  line length    5    line count 4     last_start A_LINE_LEFT___C0000
+   * A_LINE_LEFT___C0000,R0005  -  0005 diff    1  line length    6    line count 4     last_start A_LINE_LEFT___C0000
+   * A_LINE_LEFT___C0003,R0003  -  0003 diff    0  line length    1    line count 5     last_start A_LINE_LEFT___C0003
+   * A_LINE_LEFT___C0003,R0004  -  0004 diff    1  line length    2    line count 5     last_start A_LINE_LEFT___C0003
+   * A_LINE_LEFT___C0005,R0001  -  0001 diff    0  line length    1    line count 6     last_start A_LINE_LEFT___C0005
+   * A_LINE_LEFT___C0005,R0002  -  0002 diff    1  line length    2    line count 6     last_start A_LINE_LEFT___C0005
+   * A_LINE_RIGHT__C0000,R0003  -  0003 diff    0  line length    1    line count 7     last_start A_LINE_RIGHT__C0000
+   * A_LINE_RIGHT__C0000,R0004  -  0004 diff    1  line length    2    line count 7     last_start A_LINE_RIGHT__C0000
+   * A_LINE_RIGHT__C0002,R0001  -  0001 diff    0  line length    1    line count 8     last_start A_LINE_RIGHT__C0002
+   * A_LINE_RIGHT__C0002,R0002  -  0002 diff    1  line length    2    line count 8     last_start A_LINE_RIGHT__C0002
+   * A_LINE_RIGHT__C0005,R0000  -  0000 diff    0  line length    1    line count 9     last_start A_LINE_RIGHT__C0005
+   * A_LINE_RIGHT__C0005,R0001  -  0001 diff    1  line length    2    line count 9     last_start A_LINE_RIGHT__C0005
+   * A_LINE_RIGHT__C0005,R0002  -  0002 diff    1  line length    3    line count 9     last_start A_LINE_RIGHT__C0005
+   * A_LINE_RIGHT__C0005,R0003  -  0003 diff    1  line length    4    line count 9     last_start A_LINE_RIGHT__C0005
+   * A_LINE_RIGHT__C0005,R0004  -  0004 diff    1  line length    5    line count 9     last_start A_LINE_RIGHT__C0005
+   * A_LINE_RIGHT__C0005,R0005  -  0005 diff    1  line length    6    line count 9     last_start A_LINE_RIGHT__C0005
+   * A_LINE_TOP____R0000,C0000  -  0000 diff    0  line length    1    line count 10     last_start A_LINE_TOP____R0000
+   * A_LINE_TOP____R0000,C0001  -  0001 diff    1  line length    2    line count 10     last_start A_LINE_TOP____R0000
+   * A_LINE_TOP____R0000,C0002  -  0002 diff    1  line length    3    line count 10     last_start A_LINE_TOP____R0000
+   * A_LINE_TOP____R0000,C0003  -  0003 diff    1  line length    4    line count 10     last_start A_LINE_TOP____R0000
+   * A_LINE_TOP____R0000,C0004  -  0004 diff    1  line length    5    line count 10     last_start A_LINE_TOP____R0000
+   * A_LINE_TOP____R0000,C0005  -  0005 diff    1  line length    6    line count 10     last_start A_LINE_TOP____R0000
+   * A_LINE_TOP____R0003,C0003  -  0003 diff    0  line length    1    line count 11     last_start A_LINE_TOP____R0003
+   * A_LINE_TOP____R0003,C0004  -  0004 diff    1  line length    2    line count 11     last_start A_LINE_TOP____R0003
+   * A_LINE_TOP____R0005,C0001  -  0001 diff    0  line length    1    line count 12     last_start A_LINE_TOP____R0005
+   * A_LINE_TOP____R0005,C0002  -  0002 diff    1  line length    2    line count 12     last_start A_LINE_TOP____R0005
    * 
    * Region R0C0 count_plants   28 count_lines   12 region_price        336
    * 
@@ -604,38 +605,38 @@ public class Day12GardenGroups
    * 
    * Lines for Region with starts at R2C2
    * 
-   * A_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line lenght    1    line count 1     last_start A_LINE_BOTTOM_R0002
-   * A_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line lenght    2    line count 1     last_start A_LINE_BOTTOM_R0002
-   * A_LINE_BOTTOM_R0002,C0005  -  0005 diff    1  line lenght    3    line count 1     last_start A_LINE_BOTTOM_R0002
-   * A_LINE_BOTTOM_R0006,C0002  -  0002 diff    0  line lenght    1    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_BOTTOM_R0006,C0003  -  0003 diff    1  line lenght    2    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_BOTTOM_R0006,C0004  -  0004 diff    1  line lenght    3    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_BOTTOM_R0006,C0005  -  0005 diff    1  line lenght    4    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_BOTTOM_R0006,C0006  -  0006 diff    1  line lenght    5    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_LEFT___C0002,R0002  -  0002 diff    0  line lenght    1    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0002,R0003  -  0003 diff    1  line lenght    2    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0002,R0004  -  0004 diff    1  line lenght    3    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0002,R0005  -  0005 diff    1  line lenght    4    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0002,R0006  -  0006 diff    1  line lenght    5    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0006,R0003  -  0003 diff    0  line lenght    1    line count 4     last_start A_LINE_LEFT___C0006
-   * A_LINE_LEFT___C0006,R0004  -  0004 diff    1  line lenght    2    line count 4     last_start A_LINE_LEFT___C0006
-   * A_LINE_LEFT___C0006,R0005  -  0005 diff    1  line lenght    3    line count 4     last_start A_LINE_LEFT___C0006
-   * A_LINE_RIGHT__C0002,R0003  -  0003 diff    0  line lenght    1    line count 5     last_start A_LINE_RIGHT__C0002
-   * A_LINE_RIGHT__C0002,R0004  -  0004 diff    1  line lenght    2    line count 5     last_start A_LINE_RIGHT__C0002
-   * A_LINE_RIGHT__C0002,R0005  -  0005 diff    1  line lenght    3    line count 5     last_start A_LINE_RIGHT__C0002
-   * A_LINE_RIGHT__C0006,R0002  -  0002 diff    0  line lenght    1    line count 6     last_start A_LINE_RIGHT__C0006
-   * A_LINE_RIGHT__C0006,R0003  -  0003 diff    1  line lenght    2    line count 6     last_start A_LINE_RIGHT__C0006
-   * A_LINE_RIGHT__C0006,R0004  -  0004 diff    1  line lenght    3    line count 6     last_start A_LINE_RIGHT__C0006
-   * A_LINE_RIGHT__C0006,R0005  -  0005 diff    1  line lenght    4    line count 6     last_start A_LINE_RIGHT__C0006
-   * A_LINE_RIGHT__C0006,R0006  -  0006 diff    1  line lenght    5    line count 6     last_start A_LINE_RIGHT__C0006
-   * A_LINE_TOP____R0002,C0002  -  0002 diff    0  line lenght    1    line count 7     last_start A_LINE_TOP____R0002
-   * A_LINE_TOP____R0002,C0003  -  0003 diff    1  line lenght    2    line count 7     last_start A_LINE_TOP____R0002
-   * A_LINE_TOP____R0002,C0004  -  0004 diff    1  line lenght    3    line count 7     last_start A_LINE_TOP____R0002
-   * A_LINE_TOP____R0002,C0005  -  0005 diff    1  line lenght    4    line count 7     last_start A_LINE_TOP____R0002
-   * A_LINE_TOP____R0002,C0006  -  0006 diff    1  line lenght    5    line count 7     last_start A_LINE_TOP____R0002
-   * A_LINE_TOP____R0006,C0003  -  0003 diff    0  line lenght    1    line count 8     last_start A_LINE_TOP____R0006
-   * A_LINE_TOP____R0006,C0004  -  0004 diff    1  line lenght    2    line count 8     last_start A_LINE_TOP____R0006
-   * A_LINE_TOP____R0006,C0005  -  0005 diff    1  line lenght    3    line count 8     last_start A_LINE_TOP____R0006
+   * A_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line length    1    line count 1     last_start A_LINE_BOTTOM_R0002
+   * A_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line length    2    line count 1     last_start A_LINE_BOTTOM_R0002
+   * A_LINE_BOTTOM_R0002,C0005  -  0005 diff    1  line length    3    line count 1     last_start A_LINE_BOTTOM_R0002
+   * A_LINE_BOTTOM_R0006,C0002  -  0002 diff    0  line length    1    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_BOTTOM_R0006,C0003  -  0003 diff    1  line length    2    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_BOTTOM_R0006,C0004  -  0004 diff    1  line length    3    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_BOTTOM_R0006,C0005  -  0005 diff    1  line length    4    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_BOTTOM_R0006,C0006  -  0006 diff    1  line length    5    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_LEFT___C0002,R0002  -  0002 diff    0  line length    1    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0002,R0003  -  0003 diff    1  line length    2    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0002,R0004  -  0004 diff    1  line length    3    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0002,R0005  -  0005 diff    1  line length    4    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0002,R0006  -  0006 diff    1  line length    5    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0006,R0003  -  0003 diff    0  line length    1    line count 4     last_start A_LINE_LEFT___C0006
+   * A_LINE_LEFT___C0006,R0004  -  0004 diff    1  line length    2    line count 4     last_start A_LINE_LEFT___C0006
+   * A_LINE_LEFT___C0006,R0005  -  0005 diff    1  line length    3    line count 4     last_start A_LINE_LEFT___C0006
+   * A_LINE_RIGHT__C0002,R0003  -  0003 diff    0  line length    1    line count 5     last_start A_LINE_RIGHT__C0002
+   * A_LINE_RIGHT__C0002,R0004  -  0004 diff    1  line length    2    line count 5     last_start A_LINE_RIGHT__C0002
+   * A_LINE_RIGHT__C0002,R0005  -  0005 diff    1  line length    3    line count 5     last_start A_LINE_RIGHT__C0002
+   * A_LINE_RIGHT__C0006,R0002  -  0002 diff    0  line length    1    line count 6     last_start A_LINE_RIGHT__C0006
+   * A_LINE_RIGHT__C0006,R0003  -  0003 diff    1  line length    2    line count 6     last_start A_LINE_RIGHT__C0006
+   * A_LINE_RIGHT__C0006,R0004  -  0004 diff    1  line length    3    line count 6     last_start A_LINE_RIGHT__C0006
+   * A_LINE_RIGHT__C0006,R0005  -  0005 diff    1  line length    4    line count 6     last_start A_LINE_RIGHT__C0006
+   * A_LINE_RIGHT__C0006,R0006  -  0006 diff    1  line length    5    line count 6     last_start A_LINE_RIGHT__C0006
+   * A_LINE_TOP____R0002,C0002  -  0002 diff    0  line length    1    line count 7     last_start A_LINE_TOP____R0002
+   * A_LINE_TOP____R0002,C0003  -  0003 diff    1  line length    2    line count 7     last_start A_LINE_TOP____R0002
+   * A_LINE_TOP____R0002,C0004  -  0004 diff    1  line length    3    line count 7     last_start A_LINE_TOP____R0002
+   * A_LINE_TOP____R0002,C0005  -  0005 diff    1  line length    4    line count 7     last_start A_LINE_TOP____R0002
+   * A_LINE_TOP____R0002,C0006  -  0006 diff    1  line length    5    line count 7     last_start A_LINE_TOP____R0002
+   * A_LINE_TOP____R0006,C0003  -  0003 diff    0  line length    1    line count 8     last_start A_LINE_TOP____R0006
+   * A_LINE_TOP____R0006,C0004  -  0004 diff    1  line length    2    line count 8     last_start A_LINE_TOP____R0006
+   * A_LINE_TOP____R0006,C0005  -  0005 diff    1  line length    3    line count 8     last_start A_LINE_TOP____R0006
    * 
    * Region R2C2 count_plants   16 count_lines    8 region_price        128
    * 
@@ -690,40 +691,40 @@ public class Day12GardenGroups
    * 
    * Lines for Region with starts at R1C3
    * 
-   * A_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line lenght    1    line count 1     last_start A_LINE_BOTTOM_R0002
-   * A_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line lenght    2    line count 1     last_start A_LINE_BOTTOM_R0002
-   * A_LINE_BOTTOM_R0002,C0005  -  0005 diff    1  line lenght    3    line count 1     last_start A_LINE_BOTTOM_R0002
-   * A_LINE_BOTTOM_R0006,C0002  -  0002 diff    0  line lenght    1    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_BOTTOM_R0006,C0003  -  0003 diff    1  line lenght    2    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_BOTTOM_R0006,C0004  -  0004 diff    1  line lenght    3    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_BOTTOM_R0006,C0005  -  0005 diff    1  line lenght    4    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_BOTTOM_R0006,C0006  -  0006 diff    1  line lenght    5    line count 2     last_start A_LINE_BOTTOM_R0006
-   * A_LINE_LEFT___C0002,R0002  -  0002 diff    0  line lenght    1    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0002,R0003  -  0003 diff    1  line lenght    2    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0002,R0004  -  0004 diff    1  line lenght    3    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0002,R0005  -  0005 diff    1  line lenght    4    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0002,R0006  -  0006 diff    1  line lenght    5    line count 3     last_start A_LINE_LEFT___C0002
-   * A_LINE_LEFT___C0003,R0001  -  0001 diff    0  line lenght    1    line count 4     last_start A_LINE_LEFT___C0003
-   * A_LINE_LEFT___C0006,R0003  -  0003 diff    0  line lenght    1    line count 5     last_start A_LINE_LEFT___C0006
-   * A_LINE_LEFT___C0006,R0004  -  0004 diff    1  line lenght    2    line count 5     last_start A_LINE_LEFT___C0006
-   * A_LINE_LEFT___C0006,R0005  -  0005 diff    1  line lenght    3    line count 5     last_start A_LINE_LEFT___C0006
-   * A_LINE_RIGHT__C0002,R0003  -  0003 diff    0  line lenght    1    line count 6     last_start A_LINE_RIGHT__C0002
-   * A_LINE_RIGHT__C0002,R0004  -  0004 diff    1  line lenght    2    line count 6     last_start A_LINE_RIGHT__C0002
-   * A_LINE_RIGHT__C0002,R0005  -  0005 diff    1  line lenght    3    line count 6     last_start A_LINE_RIGHT__C0002
-   * A_LINE_RIGHT__C0004,R0001  -  0001 diff    0  line lenght    1    line count 7     last_start A_LINE_RIGHT__C0004
-   * A_LINE_RIGHT__C0006,R0002  -  0002 diff    0  line lenght    1    line count 8     last_start A_LINE_RIGHT__C0006
-   * A_LINE_RIGHT__C0006,R0003  -  0003 diff    1  line lenght    2    line count 8     last_start A_LINE_RIGHT__C0006
-   * A_LINE_RIGHT__C0006,R0004  -  0004 diff    1  line lenght    3    line count 8     last_start A_LINE_RIGHT__C0006
-   * A_LINE_RIGHT__C0006,R0005  -  0005 diff    1  line lenght    4    line count 8     last_start A_LINE_RIGHT__C0006
-   * A_LINE_RIGHT__C0006,R0006  -  0006 diff    1  line lenght    5    line count 8     last_start A_LINE_RIGHT__C0006
-   * A_LINE_TOP____R0001,C0003  -  0003 diff    0  line lenght    1    line count 9     last_start A_LINE_TOP____R0001
-   * A_LINE_TOP____R0001,C0004  -  0004 diff    1  line lenght    2    line count 9     last_start A_LINE_TOP____R0001
-   * A_LINE_TOP____R0002,C0002  -  0002 diff    0  line lenght    1    line count 10     last_start A_LINE_TOP____R0002
-   * A_LINE_TOP____R0002,C0005  -  0005 diff    3  line lenght    1    line count 11     last_start A_LINE_TOP____R0002
-   * A_LINE_TOP____R0002,C0006  -  0006 diff    1  line lenght    2    line count 11     last_start A_LINE_TOP____R0002
-   * A_LINE_TOP____R0006,C0003  -  0003 diff    0  line lenght    1    line count 12     last_start A_LINE_TOP____R0006
-   * A_LINE_TOP____R0006,C0004  -  0004 diff    1  line lenght    2    line count 12     last_start A_LINE_TOP____R0006
-   * A_LINE_TOP____R0006,C0005  -  0005 diff    1  line lenght    3    line count 12     last_start A_LINE_TOP____R0006
+   * A_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line length    1    line count 1     last_start A_LINE_BOTTOM_R0002
+   * A_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line length    2    line count 1     last_start A_LINE_BOTTOM_R0002
+   * A_LINE_BOTTOM_R0002,C0005  -  0005 diff    1  line length    3    line count 1     last_start A_LINE_BOTTOM_R0002
+   * A_LINE_BOTTOM_R0006,C0002  -  0002 diff    0  line length    1    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_BOTTOM_R0006,C0003  -  0003 diff    1  line length    2    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_BOTTOM_R0006,C0004  -  0004 diff    1  line length    3    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_BOTTOM_R0006,C0005  -  0005 diff    1  line length    4    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_BOTTOM_R0006,C0006  -  0006 diff    1  line length    5    line count 2     last_start A_LINE_BOTTOM_R0006
+   * A_LINE_LEFT___C0002,R0002  -  0002 diff    0  line length    1    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0002,R0003  -  0003 diff    1  line length    2    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0002,R0004  -  0004 diff    1  line length    3    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0002,R0005  -  0005 diff    1  line length    4    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0002,R0006  -  0006 diff    1  line length    5    line count 3     last_start A_LINE_LEFT___C0002
+   * A_LINE_LEFT___C0003,R0001  -  0001 diff    0  line length    1    line count 4     last_start A_LINE_LEFT___C0003
+   * A_LINE_LEFT___C0006,R0003  -  0003 diff    0  line length    1    line count 5     last_start A_LINE_LEFT___C0006
+   * A_LINE_LEFT___C0006,R0004  -  0004 diff    1  line length    2    line count 5     last_start A_LINE_LEFT___C0006
+   * A_LINE_LEFT___C0006,R0005  -  0005 diff    1  line length    3    line count 5     last_start A_LINE_LEFT___C0006
+   * A_LINE_RIGHT__C0002,R0003  -  0003 diff    0  line length    1    line count 6     last_start A_LINE_RIGHT__C0002
+   * A_LINE_RIGHT__C0002,R0004  -  0004 diff    1  line length    2    line count 6     last_start A_LINE_RIGHT__C0002
+   * A_LINE_RIGHT__C0002,R0005  -  0005 diff    1  line length    3    line count 6     last_start A_LINE_RIGHT__C0002
+   * A_LINE_RIGHT__C0004,R0001  -  0001 diff    0  line length    1    line count 7     last_start A_LINE_RIGHT__C0004
+   * A_LINE_RIGHT__C0006,R0002  -  0002 diff    0  line length    1    line count 8     last_start A_LINE_RIGHT__C0006
+   * A_LINE_RIGHT__C0006,R0003  -  0003 diff    1  line length    2    line count 8     last_start A_LINE_RIGHT__C0006
+   * A_LINE_RIGHT__C0006,R0004  -  0004 diff    1  line length    3    line count 8     last_start A_LINE_RIGHT__C0006
+   * A_LINE_RIGHT__C0006,R0005  -  0005 diff    1  line length    4    line count 8     last_start A_LINE_RIGHT__C0006
+   * A_LINE_RIGHT__C0006,R0006  -  0006 diff    1  line length    5    line count 8     last_start A_LINE_RIGHT__C0006
+   * A_LINE_TOP____R0001,C0003  -  0003 diff    0  line length    1    line count 9     last_start A_LINE_TOP____R0001
+   * A_LINE_TOP____R0001,C0004  -  0004 diff    1  line length    2    line count 9     last_start A_LINE_TOP____R0001
+   * A_LINE_TOP____R0002,C0002  -  0002 diff    0  line length    1    line count 10     last_start A_LINE_TOP____R0002
+   * A_LINE_TOP____R0002,C0005  -  0005 diff    3  line length    1    line count 11     last_start A_LINE_TOP____R0002
+   * A_LINE_TOP____R0002,C0006  -  0006 diff    1  line length    2    line count 11     last_start A_LINE_TOP____R0002
+   * A_LINE_TOP____R0006,C0003  -  0003 diff    0  line length    1    line count 12     last_start A_LINE_TOP____R0006
+   * A_LINE_TOP____R0006,C0004  -  0004 diff    1  line length    2    line count 12     last_start A_LINE_TOP____R0006
+   * A_LINE_TOP____R0006,C0005  -  0005 diff    1  line length    3    line count 12     last_start A_LINE_TOP____R0006
    * 
    * Region R1C3 count_plants   18 count_lines   12 region_price        216
    * 
@@ -837,6 +838,11 @@ public class Day12GardenGroups
 
     String test_content_square_2 = "..........,...AA.....,..AAAAA...,..A...A...,..A...A...,..A...A...,..AAAAA...,..........,..........";
 
+    /*
+     * https://www.reddit.com/r/adventofcode/comments/1hcfurk/2024_day_12_another_test_case/
+     */
+    String test_content_reddit = "AAAAAAAA,AACBBDDA,AACBBAAA,ABBAAAAA,ABBADDDA,AAAADADA,AAAAAAAA";
+    
     //String test_content_complex_1 = "..........,.AAAA.....,....A.....,..AAAAA...,..A...A...,..A...A...,..A...A...,..AAAAA...,....A.....,....AAAA..,..........";
     String test_content_complex_1 = "..........,.A........,.A.AAA....,.A...A....,.AAAAAAA..,..AA..AAA.,..AAA.AA..,.AAAAAAA..,....A.....,..AAAAA...,..A.A.....,....AAAA..,..........";
 
@@ -844,6 +850,8 @@ public class Day12GardenGroups
     List< String > list_test_content_square_2 = Arrays.stream( test_content_square_2.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
     List< String > test_content_complex_1l = Arrays.stream( test_content_complex_1.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+
+    List< String > test_content_redditl = Arrays.stream( test_content_reddit.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
     //String test_content_4 = "OOOOO,OXOXX,OOOXO,OOOOO";
 
@@ -858,13 +866,13 @@ public class Day12GardenGroups
     //calcPart01( test_content_list_6, true );
     //calcPart01( test_content_list_1, true );
 
-    calcPart01( test_content_list_1, true );
+    //calcPart01( test_content_list_1, true );
     //calcPart01( test_content_list_2, true );
     //calcPart01( test_content_list_3, true );
 
-    //calcPart02( list_test_content_square_2, true );
+    calcPart02( test_content_redditl, true );
 
-    calcPart02( getListProd(), false );
+//    calcPart02( getListProd(), false );
   }
 
   private static HashMap< String, List< String > > m_hash_map_regions     = new HashMap< String, List< String > >();
@@ -1009,8 +1017,6 @@ public class Day12GardenGroups
           List< String > list_line_info = new ArrayList< String >();
 
           long sum_count = getPlantRegion2( list_line_info, list_regions, prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col );
-
-          //getPlantFenceLinear( prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col, current_row, current_col );
 
           m_hash_map_regions.put( PRAEFIX_REGION + "R" + current_row + "C" + current_col, list_regions );
 
@@ -1168,10 +1174,10 @@ public class Day12GardenGroups
     long line_length = 0;
 
     /*
-     * A_LINE_BOTTOM_R0000,C0003  -  0003 diff    0  line lenght    1    line count 1     last_start A_LINE_BOTTOM_R0000
-     * A_LINE_BOTTOM_R0000,C0004  -  0004 diff    1  line lenght    2    line count 1     last_start A_LINE_BOTTOM_R0000
-     * A_LINE_BOTTOM_R0002,C0001  -  0001 diff    0  line lenght    1    line count 2     last_start A_LINE_BOTTOM_R0002 <- Change in the start string
-     * A_LINE_BOTTOM_R0002,C0002  -  0002 diff    1  line lenght    2    line count 2     last_start A_LINE_BOTTOM_R0002    Horizontal line on row 2
+     * A_LINE_BOTTOM_R0000,C0003  -  0003 diff    0  line length    1    line count 1     last_start A_LINE_BOTTOM_R0000
+     * A_LINE_BOTTOM_R0000,C0004  -  0004 diff    1  line length    2    line count 1     last_start A_LINE_BOTTOM_R0000
+     * A_LINE_BOTTOM_R0002,C0001  -  0001 diff    0  line length    1    line count 2     last_start A_LINE_BOTTOM_R0002 <- Change in the start string
+     * A_LINE_BOTTOM_R0002,C0002  -  0002 diff    1  line length    2    line count 2     last_start A_LINE_BOTTOM_R0002    Horizontal line on row 2
      */
 
     String last_start = "start";
@@ -1233,7 +1239,7 @@ public class Day12GardenGroups
 
       if ( pKnzDebug )
       {
-        wl( cur_line_str + "  -  " + last_bits + " diff " + FkStringFeld.getFeldRechtsMin( "" + difference_to_last_value, 4 ) + "  line lenght " + FkStringFeld.getFeldRechtsMin( line_length, 4 ) + "    line count " + line_count + "     last_start " + last_start );
+        wl( cur_line_str + "  -  " + last_bits + " diff " + FkStringFeld.getFeldRechtsMin( "" + difference_to_last_value, 4 ) + "  line length " + FkStringFeld.getFeldRechtsMin( line_length, 4 ) + "    line count " + line_count + "     last_start " + last_start );
       }
 
       /*
@@ -2032,4 +2038,5 @@ public class Day12GardenGroups
 
     return ergebnis.substring( 0, pAnzahlStellen );
   }
+
 }
