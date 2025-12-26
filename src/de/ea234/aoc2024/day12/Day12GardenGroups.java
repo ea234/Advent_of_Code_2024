@@ -24,6 +24,8 @@ public class Day12GardenGroups
   * https://www.reddit.com/r/adventofcode/comments/1hcdnk0/2024_day_12_solutions/
   * https://www.reddit.com/r/adventofcode/comments/1hcfuz6/2024_day_12_part_2_solutions_handle_all_5/
   * https://www.reddit.com/r/adventofcode/comments/1hcpyic/2024_day_12_part_2_what_kind_of_algorithm_did_you/
+  * 
+  * https://www.reddit.com/r/adventofcode/comments/1pvfh5d/2024_day_12_part_2_line_count_via_sorted_list/
   *  
   *   
   * AAAA   4    3223  10               
@@ -356,6 +358,9 @@ public class Day12GardenGroups
   *   Horizontal lines store the col-information
   *   Vertical lines store the row-information.
   *   The number is stored with a length of 4 characters, with leading zeros.
+  *   
+  * You end up with the pattern:
+  * <plant_type><Line type><Row or Column 1><sperator><Row or Column 2>
   * 
   * This would result in a list like this: (... after sorting)
   * B_LINE_BOTTOM_R0002,C0003 
@@ -397,7 +402,7 @@ public class Day12GardenGroups
   * 
   * Start R1C3
   * 
-  * Lines for Region with starts at R1C3
+  * Lines for Region which starts at R1C3
   * 
   * B_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line length    1    line count 1     last_start B_LINE_BOTTOM_R0002
   * B_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line length    2    line count 1     last_start B_LINE_BOTTOM_R0002
@@ -412,7 +417,7 @@ public class Day12GardenGroups
   * 
   * Start R3C1
   * 
-  * Lines for Region with starts at R3C1
+  * Lines for Region which starts at R3C1
   * 
   * B_LINE_BOTTOM_R0004,C0001  -  0001 diff    0  line length    1    line count 1     last_start B_LINE_BOTTOM_R0004
   * B_LINE_BOTTOM_R0004,C0002  -  0002 diff    1  line length    2    line count 1     last_start B_LINE_BOTTOM_R0004
@@ -426,7 +431,7 @@ public class Day12GardenGroups
   * Region R3C1 count_plants    4 count_lines    4 region_price         16
   * Start R0C0
   * 
-  * Lines for Region with starts at R0C0
+  * Lines for Region which starts at R0C0
   * 
   * A_LINE_BOTTOM_R0000,C0003  -  0003 diff    0  line length    1    line count 1     last_start A_LINE_BOTTOM_R0000
   * A_LINE_BOTTOM_R0000,C0004  -  0004 diff    1  line length    2    line count 1     last_start A_LINE_BOTTOM_R0000
@@ -498,7 +503,7 @@ public class Day12GardenGroups
   * Start Region R2C2
   * 
   * 
-  * Lines for Region with starts at R2C2
+  * Lines for Region which starts at R2C2
   * 
   * A_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line length    1    line count 1     last_start A_LINE_BOTTOM_R0002
   * A_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line length    2    line count 1     last_start A_LINE_BOTTOM_R0002
@@ -564,7 +569,6 @@ public class Day12GardenGroups
   *  Char Count 16    Sum Values 40
   *  
   *  
-  
   * ---------------------------------------------------------------------------------------------------------------- 
   *  
   * 
@@ -585,7 +589,7 @@ public class Day12GardenGroups
   * Start Region R1C3
   * 
   * 
-  * Lines for Region with starts at R1C3
+  * Lines for Region which starts at R1C3
   * 
   * A_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line length    1    line count 1     last_start A_LINE_BOTTOM_R0002
   * A_LINE_BOTTOM_R0002,C0004  -  0004 diff    1  line length    2    line count 1     last_start A_LINE_BOTTOM_R0002
@@ -653,12 +657,117 @@ public class Day12GardenGroups
   * ..........   0    ..........   0   
   * ..........   0    ..........   0   
   *  Char Count 18    Sum Values 44    
+  *  
+  *  
+  * ----------------------------------------------------------------------------------------------------------------
+  *  
+  * It's a triangular World
+  * Try maps with different input line length.  
+  * 
+  * AAAAAAAA   8    21222113  14       
+  * AABBBAA-   7    1121312-  11       
+  * AABBAA--   6    111222--   9       
+  * AABAA---   5    11322---   9       
+  * AAAA----   4    1012----   4       
+  * AAA-----   3    102-----   3       
+  * AA------   2    12------   3       
+  * A-------   1    3-------   3       
+  *  Char Count 36    Sum Values 56    
+  * 
+  * AAAAAAAA   8    21222113  14           ........   0    ........   0       
+  * AA...AA-   4    11...12-   5           ..BBB..-   3    ..213..-   6       
+  * AA..AA--   4    11..22--   6           ..BB..--   2    ..12..--   3       
+  * AA.AA---   4    11.22---   6           ..B..---   1    ..3..---   3       
+  * AAAA----   4    1012----   4           ....----   0    ....----   0       
+  * AAA-----   3    102-----   3           ...-----   0    ...-----   0       
+  * AA------   2    12------   3           ..------   0    ..------   0       
+  * A-------   1    3-------   3           .-------   0    .-------   0       
+  *  Char Count 30    Sum Values 44         Char Count 6    Sum Values 12     
+  * 
+  * 
+  * part_1_sum_price_total = 1392 <- Result Part 1
+  * part_2_sum_price_total = 828 <- Result Part 2
+  *      
+  * 
+  * Lines for Region which starts at R1C2
+  * 
+  * B_LINE_BOTTOM_R0001,C0004  -  0004 diff    0  line length    1    line count 1     last_start B_LINE_BOTTOM_R0001
+  * B_LINE_BOTTOM_R0002,C0003  -  0003 diff    0  line length    1    line count 2     last_start B_LINE_BOTTOM_R0002
+  * B_LINE_BOTTOM_R0003,C0002  -  0002 diff    0  line length    1    line count 3     last_start B_LINE_BOTTOM_R0003
+  * B_LINE_LEFT___C0002,R0001  -  0001 diff    0  line length    1    line count 4     last_start B_LINE_LEFT___C0002
+  * B_LINE_LEFT___C0002,R0002  -  0002 diff    1  line length    2    line count 4     last_start B_LINE_LEFT___C0002
+  * B_LINE_LEFT___C0002,R0003  -  0003 diff    1  line length    3    line count 4     last_start B_LINE_LEFT___C0002
+  * B_LINE_RIGHT__C0002,R0003  -  0003 diff    0  line length    1    line count 5     last_start B_LINE_RIGHT__C0002
+  * B_LINE_RIGHT__C0003,R0002  -  0002 diff    0  line length    1    line count 6     last_start B_LINE_RIGHT__C0003
+  * B_LINE_RIGHT__C0004,R0001  -  0001 diff    0  line length    1    line count 7     last_start B_LINE_RIGHT__C0004
+  * B_LINE_TOP____R0001,C0002  -  0002 diff    0  line length    1    line count 8     last_start B_LINE_TOP____R0001
+  * B_LINE_TOP____R0001,C0003  -  0003 diff    1  line length    2    line count 8     last_start B_LINE_TOP____R0001
+  * B_LINE_TOP____R0001,C0004  -  0004 diff    1  line length    3    line count 8     last_start B_LINE_TOP____R0001
+  * Region R1C2       count_plants    6 count_lines    8 region_price         48
+  * 
+  * Start Region R0C0, Plant-Type A
+  * 
+  * 
+  * Lines for Region which starts at R0C0
+  * 
+  * A_LINE_BOTTOM_R0000,C0002  -  0002 diff    0  line length    1    line count 1     last_start A_LINE_BOTTOM_R0000
+  * A_LINE_BOTTOM_R0000,C0003  -  0003 diff    1  line length    2    line count 1     last_start A_LINE_BOTTOM_R0000
+  * A_LINE_BOTTOM_R0000,C0004  -  0004 diff    1  line length    3    line count 1     last_start A_LINE_BOTTOM_R0000
+  * A_LINE_BOTTOM_R0000,C0007  -  0007 diff    3  line length    1    line count 2     last_start A_LINE_BOTTOM_R0000
+  * A_LINE_BOTTOM_R0001,C0006  -  0006 diff    0  line length    1    line count 3     last_start A_LINE_BOTTOM_R0001
+  * A_LINE_BOTTOM_R0002,C0005  -  0005 diff    0  line length    1    line count 4     last_start A_LINE_BOTTOM_R0002
+  * A_LINE_BOTTOM_R0003,C0004  -  0004 diff    0  line length    1    line count 5     last_start A_LINE_BOTTOM_R0003
+  * A_LINE_BOTTOM_R0004,C0003  -  0003 diff    0  line length    1    line count 6     last_start A_LINE_BOTTOM_R0004
+  * A_LINE_BOTTOM_R0005,C0002  -  0002 diff    0  line length    1    line count 7     last_start A_LINE_BOTTOM_R0005
+  * A_LINE_BOTTOM_R0006,C0001  -  0001 diff    0  line length    1    line count 8     last_start A_LINE_BOTTOM_R0006
+  * A_LINE_BOTTOM_R0007,C0000  -  0000 diff    0  line length    1    line count 9     last_start A_LINE_BOTTOM_R0007
+  * A_LINE_LEFT___C0000,R0000  -  0000 diff    0  line length    1    line count 10     last_start A_LINE_LEFT___C0000
+  * A_LINE_LEFT___C0000,R0001  -  0001 diff    1  line length    2    line count 10     last_start A_LINE_LEFT___C0000
+  * A_LINE_LEFT___C0000,R0002  -  0002 diff    1  line length    3    line count 10     last_start A_LINE_LEFT___C0000
+  * A_LINE_LEFT___C0000,R0003  -  0003 diff    1  line length    4    line count 10     last_start A_LINE_LEFT___C0000
+  * A_LINE_LEFT___C0000,R0004  -  0004 diff    1  line length    5    line count 10     last_start A_LINE_LEFT___C0000
+  * A_LINE_LEFT___C0000,R0005  -  0005 diff    1  line length    6    line count 10     last_start A_LINE_LEFT___C0000
+  * A_LINE_LEFT___C0000,R0006  -  0006 diff    1  line length    7    line count 10     last_start A_LINE_LEFT___C0000
+  * A_LINE_LEFT___C0000,R0007  -  0007 diff    1  line length    8    line count 10     last_start A_LINE_LEFT___C0000
+  * A_LINE_LEFT___C0003,R0003  -  0003 diff    0  line length    1    line count 11     last_start A_LINE_LEFT___C0003
+  * A_LINE_LEFT___C0004,R0002  -  0002 diff    0  line length    1    line count 12     last_start A_LINE_LEFT___C0004
+  * A_LINE_LEFT___C0005,R0001  -  0001 diff    0  line length    1    line count 13     last_start A_LINE_LEFT___C0005
+  * A_LINE_RIGHT__C0000,R0007  -  0007 diff    0  line length    1    line count 14     last_start A_LINE_RIGHT__C0000
+  * A_LINE_RIGHT__C0001,R0001  -  0001 diff    0  line length    1    line count 15     last_start A_LINE_RIGHT__C0001
+  * A_LINE_RIGHT__C0001,R0002  -  0002 diff    1  line length    2    line count 15     last_start A_LINE_RIGHT__C0001
+  * A_LINE_RIGHT__C0001,R0003  -  0003 diff    1  line length    3    line count 15     last_start A_LINE_RIGHT__C0001
+  * A_LINE_RIGHT__C0001,R0006  -  0006 diff    3  line length    1    line count 16     last_start A_LINE_RIGHT__C0001
+  * A_LINE_RIGHT__C0002,R0005  -  0005 diff    0  line length    1    line count 17     last_start A_LINE_RIGHT__C0002
+  * A_LINE_RIGHT__C0003,R0004  -  0004 diff    0  line length    1    line count 18     last_start A_LINE_RIGHT__C0003
+  * A_LINE_RIGHT__C0004,R0003  -  0003 diff    0  line length    1    line count 19     last_start A_LINE_RIGHT__C0004
+  * A_LINE_RIGHT__C0005,R0002  -  0002 diff    0  line length    1    line count 20     last_start A_LINE_RIGHT__C0005
+  * A_LINE_RIGHT__C0006,R0001  -  0001 diff    0  line length    1    line count 21     last_start A_LINE_RIGHT__C0006
+  * A_LINE_RIGHT__C0007,R0000  -  0000 diff    0  line length    1    line count 22     last_start A_LINE_RIGHT__C0007
+  * A_LINE_TOP____R0000,C0000  -  0000 diff    0  line length    1    line count 23     last_start A_LINE_TOP____R0000
+  * A_LINE_TOP____R0000,C0001  -  0001 diff    1  line length    2    line count 23     last_start A_LINE_TOP____R0000
+  * A_LINE_TOP____R0000,C0002  -  0002 diff    1  line length    3    line count 23     last_start A_LINE_TOP____R0000
+  * A_LINE_TOP____R0000,C0003  -  0003 diff    1  line length    4    line count 23     last_start A_LINE_TOP____R0000
+  * A_LINE_TOP____R0000,C0004  -  0004 diff    1  line length    5    line count 23     last_start A_LINE_TOP____R0000
+  * A_LINE_TOP____R0000,C0005  -  0005 diff    1  line length    6    line count 23     last_start A_LINE_TOP____R0000
+  * A_LINE_TOP____R0000,C0006  -  0006 diff    1  line length    7    line count 23     last_start A_LINE_TOP____R0000
+  * A_LINE_TOP____R0000,C0007  -  0007 diff    1  line length    8    line count 23     last_start A_LINE_TOP____R0000
+  * A_LINE_TOP____R0002,C0004  -  0004 diff    0  line length    1    line count 24     last_start A_LINE_TOP____R0002
+  * A_LINE_TOP____R0003,C0003  -  0003 diff    0  line length    1    line count 25     last_start A_LINE_TOP____R0003
+  * A_LINE_TOP____R0004,C0002  -  0002 diff    0  line length    1    line count 26     last_start A_LINE_TOP____R0004
+  * Region R0C0       count_plants   30 count_lines   26 region_price        780
+  * 
+  * -----------------------------------------------------------------------------------
+  * 
+  * Region R1C2       count_plants    6 count_lines    8 region_price         48
+  * Region R0C0       count_plants   30 count_lines   26 region_price        780
   *      
   */
 
   private static final int    ROW_PLUS_1               = 1;
 
   private static final int    COL_PLUS_1               = 1;
+
+  private static final int    DEBUG_MAX_MAPS_IN_ROW    = 3;
 
   private static final int    NR_OF_DIGITS_LINE_INFO   = 4;
 
@@ -669,6 +778,8 @@ public class Day12GardenGroups
   private static char         DEBUG_PADDING_CHAR       = ' ';
 
   private static final String KEY_CELL_FENCE_TOP       = "CFT_";
+
+  private static final String KEY_CELL_EDGE            = "EDGE_";
 
   private static final String KEY_CELL_FENCE_BOTTOM    = "CFB_";
 
@@ -714,6 +825,8 @@ public class Day12GardenGroups
 
   private static final char   CHAR_DEBUG_ALL           = '_';
 
+  private static final char   CHAR_NO_MAP              = '-';
+
   private static final String STR_DEBUG_SPACER         = "    ";
 
   private static final String STR_COMBINE_SPACER       = "    ";
@@ -725,6 +838,8 @@ public class Day12GardenGroups
     String test_content_3 = "RRRRIICCFF,RRRRIICCCF,VVRRRCCFFF,VVRCCCJFFF,VVVVCJJCFE,VVIVCCJJEE,VVIIICJJEE,MIIIIIJJEE,MIIISIJEEE,MMMISSJEEE";
     String test_content_4 = "AAAAAA,AAABBA,AAABBA,ABBAAA,ABBAAA,AAAAAA";
     String test_content_5 = "EEEEE,EXXXX,EEEEE,EXXXX,EEEEE";
+
+    String test_triangle_map = "AAAAAAAA,AABBBAA,AABBAA,AABAA,AAAA,AAA,AA,A";
 
     List< String > test_content_list_1 = Arrays.stream( test_content_1.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
     List< String > test_content_list_2 = Arrays.stream( test_content_2.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
@@ -753,6 +868,8 @@ public class Day12GardenGroups
 
     List< String > list_test_content_reddit = Arrays.stream( test_content_reddit.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
+    List< String > list_test_triangle_map = Arrays.stream( test_triangle_map.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+
     //String test_content_4 = "OOOOO,OXOXX,OOOXO,OOOOO";
 
     //String test_content_4 = "......CC..,......CCC.,.....CC...,...CCC....,....C..C..,....CC....,.....C....,..........,..........,..........";
@@ -774,6 +891,7 @@ public class Day12GardenGroups
     //calculateGrid( list_test_content_square_2, true );
     //calculateGrid( list_test_content_complex_1, true );
     //calculateGrid( list_test_content_reddit, true );
+    calculateGrid( list_test_triangle_map, true );
 
     //calculateGrid( getListProd(), false );
   }
@@ -782,11 +900,20 @@ public class Day12GardenGroups
 
   private static HashMap< String, Long >           m_hash_map_cell_values = null;
 
+  private static int                               m_max_col              = 0;
+
   private static void calculateGrid( List< String > pListInput, boolean pKnzDebug )
   {
+    /*
+     * *******************************************************************************************************
+     * Initializing Hash-Maps and Property-Instances
+     * *******************************************************************************************************
+     */
     clearHashMapCellValues();
 
     m_hash_map_region_info = new HashMap< String, List< String > >();
+
+    m_max_col = 0;
 
     Properties prop_debug_plant_types = new Properties();
 
@@ -808,6 +935,16 @@ public class Day12GardenGroups
 
     for ( String input_str : pListInput )
     {
+      /*
+       * Find the max input line length.
+       * 
+       * (Not needed for Advent of Code challenge, but hey, I can)
+       */
+      if ( input_str.length() > m_max_col )
+      {
+        m_max_col = input_str.length();
+      }
+
       for ( current_col = 0; current_col < input_str.length(); current_col++ )
       {
         /*
@@ -987,7 +1124,7 @@ public class Day12GardenGroups
      * 
      * The lists are calculated with a recursive function. 
      */
-    int max_col = current_col + 1;
+    int max_col = m_max_col + 1;
 
     for ( current_row = 0; current_row < pListInput.size(); current_row++ )
     {
@@ -997,6 +1134,8 @@ public class Day12GardenGroups
 
         if ( current_char != CHAR_EMPTY_SPACE )
         {
+          wl( "Calulating Region Entry at " + "R" + current_row + "C" + current_col + ", Plant Type " + current_char );
+
           /*
            * List to store all coordinates for one region.
            * Something like this: [R1C3, R1C4, R2C4, R2C3]
@@ -1013,7 +1152,7 @@ public class Day12GardenGroups
            */
           List< String > list_line_info = new ArrayList< String >();
 
-          long sum_count = getPlantRegion( list_line_info, list_regions, prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col );
+          getPlantRegion( list_line_info, list_regions, prop_grid_plants, current_row, current_col, current_char, pListInput.size(), max_col );
 
           m_hash_map_region_info.put( PRAEFIX_REGION + "R" + current_row + "C" + current_col, list_regions );
 
@@ -1042,14 +1181,14 @@ public class Day12GardenGroups
 
     for ( Map.Entry< String, List< String > > map_entry : m_hash_map_region_info.entrySet() )
     {
-      if ( pKnzDebug )
-      {
-        wl( "" );
-        wl( "Entry " + map_entry.getKey() );
-      }
-
       if ( map_entry.getKey().startsWith( PRAEFIX_REGION ) )
       {
+        if ( pKnzDebug )
+        {
+          wl( "" );
+          wl( "Calculating Part 01 - Region " + map_entry.getKey() );
+        }
+
         long current_region_sum_values = 0;
 
         long current_region_sum_plants = 0;
@@ -1074,8 +1213,6 @@ public class Day12GardenGroups
       }
     }
 
-    wl( "sum_plants_count = " + sum_plants_count );
-
     /*
      * *******************************************************************************************************
      * Calculating Part 2
@@ -1089,7 +1226,7 @@ public class Day12GardenGroups
       if ( pKnzDebug )
       {
         wl( "" );
-        wl( "Start Region " + prop_key );
+        wl( "Start Region " + prop_key + ", Plant-Type " + prop_grid_start_regions.getProperty( prop_key ) );
         wl( "" );
       }
 
@@ -1111,7 +1248,6 @@ public class Day12GardenGroups
 
       if ( pKnzDebug )
       {
-        wl( "" );
         wl( debug_string );
       }
     }
@@ -1180,7 +1316,7 @@ public class Day12GardenGroups
           debug_map_str = map_cur;
         }
 
-        if ( debug_map_nr == 3 )
+        if ( debug_map_nr == DEBUG_MAX_MAPS_IN_ROW )
         {
           wl( debug_map_str + "\n\n" );
 
@@ -1197,8 +1333,8 @@ public class Day12GardenGroups
         wl( debug_map_str + "\n\n" );
       }
 
-      //wl( getDebugMapCharPart2( pListInput, 'A' ) );
-      //wl( getDebugMapCharPart2( pListInput, 'B' ) );
+      //wl( getDebugMapPart2( pListInput, 'A' ) );
+      //wl( getDebugMapPart2( pListInput, 'B' ) );
     }
 
     wl( "" );
@@ -1210,12 +1346,12 @@ public class Day12GardenGroups
     clearHashMapCellValues();
   }
 
-  private static long getLineCount( String key, List< String > pListLines, boolean pKnzDebug )
+  private static long getLineCount( String pRegionStartCoordinates, List< String > pListLines, boolean pKnzDebug )
   {
     if ( pKnzDebug )
     {
       wl( "" );
-      wl( "Lines for Region with starts at " + key );
+      wl( "Lines for Region which starts at " + pRegionStartCoordinates );
       wl( "" );
     }
 
@@ -1257,7 +1393,7 @@ public class Day12GardenGroups
          * Calculate the difference.
          * In a continious line, the new number is 1 higher than the last number.
          */
-        difference_to_last_value = ( Long.parseLong( last_bits ) - last_value );
+        difference_to_last_value = Long.parseLong( last_bits ) - last_value;
 
         if ( difference_to_last_value == 1 )
         {
@@ -1313,14 +1449,14 @@ public class Day12GardenGroups
     return line_count;
   }
 
-  private static long getPlantRegion( List< String > pListLines, List< String > pListRegions, Properties pGrid, long pRow, long pCol, char pTargetPlantType, int pMaxRow, int pMaxCol )
+  private static void getPlantRegion( List< String > pListLines, List< String > pListRegions, Properties pGrid, long pRow, long pCol, char pTargetPlantType, int pMaxRow, int pMaxCol )
   {
     /*
      * The new row exceeds the max rows, so no match 
      */
     if ( pRow > pMaxRow )
     {
-      return 0;
+      return;
     }
 
     /*
@@ -1328,7 +1464,7 @@ public class Day12GardenGroups
      */
     if ( pCol > pMaxCol )
     {
-      return 0;
+      return;
     }
 
     /*
@@ -1343,7 +1479,7 @@ public class Day12GardenGroups
      */
     if ( grid_plant_type != pTargetPlantType )
     {
-      return 0;
+      return;
     }
 
     /*
@@ -1364,76 +1500,94 @@ public class Day12GardenGroups
     pGrid.setProperty( "R" + pRow + "C" + pCol, "." );
 
     /*
-     * If the List for the line-storage is set,
-     * we do store the line (fence) info.
+     * Get all 4 fence info settings from the hashmap.
+     * 
+     * A fence is set, when its value is 1 (=FENCE_1). 
+     * A fence is not present, when its value is 0 (=FENCE_0).
      */
-    if ( pListLines != null )
+    long fence_top = getCellFence( KEY_CELL_FENCE_TOP, pRow, pCol );
+
+    long fence_bottom = getCellFence( KEY_CELL_FENCE_BOTTOM, pRow, pCol );
+
+    long fence_left = getCellFence( KEY_CELL_FENCE_LEFT, pRow, pCol );
+
+    long fence_right = getCellFence( KEY_CELL_FENCE_RIGHT, pRow, pCol );
+
+    if ( fence_top == FENCE_1 )
     {
-      /*
-       * Get all 4 fence info settings from the hashmap.
-       * 
-       * A fence is set, when its value is 1 (=FENCE_1). 
-       * A fence is not present, when its value is 0 (=FENCE_0).
-       */
-      long fence_top = getCellFence( KEY_CELL_FENCE_TOP, pRow, pCol );
+      pListLines.add( grid_plant_type + "_LINE_TOP____R" + getNumberWithLeadingZeros( pRow, NR_OF_DIGITS_LINE_INFO ) + ",C" + getNumberWithLeadingZeros( pCol, NR_OF_DIGITS_LINE_INFO ) );
+    }
 
-      long fence_bottom = getCellFence( KEY_CELL_FENCE_BOTTOM, pRow, pCol );
+    if ( fence_bottom == FENCE_1 )
+    {
+      pListLines.add( grid_plant_type + "_LINE_BOTTOM_R" + getNumberWithLeadingZeros( pRow, NR_OF_DIGITS_LINE_INFO ) + ",C" + getNumberWithLeadingZeros( pCol, NR_OF_DIGITS_LINE_INFO ) );
+    }
 
-      long fence_left = getCellFence( KEY_CELL_FENCE_LEFT, pRow, pCol );
+    if ( fence_left == FENCE_1 )
+    {
+      pListLines.add( grid_plant_type + "_LINE_LEFT___C" + getNumberWithLeadingZeros( pCol, NR_OF_DIGITS_LINE_INFO ) + ",R" + getNumberWithLeadingZeros( pRow, NR_OF_DIGITS_LINE_INFO ) );
+    }
 
-      long fence_right = getCellFence( KEY_CELL_FENCE_RIGHT, pRow, pCol );
-
-      if ( fence_top == FENCE_1 )
-      {
-        pListLines.add( grid_plant_type + "_LINE_TOP____R" + getNumberWithLeadingZeros( pRow, NR_OF_DIGITS_LINE_INFO ) + ",C" + getNumberWithLeadingZeros( pCol, NR_OF_DIGITS_LINE_INFO ) );
-      }
-
-      if ( fence_bottom == FENCE_1 )
-      {
-        pListLines.add( grid_plant_type + "_LINE_BOTTOM_R" + getNumberWithLeadingZeros( pRow, NR_OF_DIGITS_LINE_INFO ) + ",C" + getNumberWithLeadingZeros( pCol, NR_OF_DIGITS_LINE_INFO ) );
-      }
-
-      if ( fence_left == FENCE_1 )
-      {
-        pListLines.add( grid_plant_type + "_LINE_LEFT___C" + getNumberWithLeadingZeros( pCol, NR_OF_DIGITS_LINE_INFO ) + ",R" + getNumberWithLeadingZeros( pRow, NR_OF_DIGITS_LINE_INFO ) );
-      }
-
-      if ( fence_right == FENCE_1 )
-      {
-        pListLines.add( grid_plant_type + "_LINE_RIGHT__C" + getNumberWithLeadingZeros( pCol, NR_OF_DIGITS_LINE_INFO ) + ",R" + getNumberWithLeadingZeros( pRow, NR_OF_DIGITS_LINE_INFO ) );
-      }
+    if ( fence_right == FENCE_1 )
+    {
+      pListLines.add( grid_plant_type + "_LINE_RIGHT__C" + getNumberWithLeadingZeros( pCol, NR_OF_DIGITS_LINE_INFO ) + ",R" + getNumberWithLeadingZeros( pRow, NR_OF_DIGITS_LINE_INFO ) );
     }
 
     /*
-     * The function result is set to 1, to represent a valid coordinate
-     */
-    long sum_conections = 1;
+     * 
+     * Some preparations for edge finding ... since i learned that is another way for solving part 2
+     * 
+    
+    long edges = 0;
+    
+    if ( ( fence_top == FENCE_1 ) && ( fence_left == FENCE_1 ) )
+    {
+      edges += 1;
+    }
+    
+    if ( ( fence_top == FENCE_1 ) && ( fence_right == FENCE_1 ) )
+    {
+      edges += 1;
+    }
+    
+    if ( ( fence_bottom == FENCE_1 ) && ( fence_right == FENCE_1 ) )
+    {
+      edges += 1;
+    }
+    
+    if ( ( fence_bottom == FENCE_1 ) && ( fence_left == FENCE_1 ) )
+    {
+      edges += 1;
+    }
+    
+    if ( edges > 0 )
+    {
+      setCellEdge( pRow, pCol, edges );
+    }
+    
+    */
 
     /*
      * Find more plants of the same type to the right
      */
-    sum_conections += getPlantRegion( pListLines, pListRegions, pGrid, pRow, pCol + 1, grid_plant_type, pMaxRow, pMaxCol );
+    getPlantRegion( pListLines, pListRegions, pGrid, pRow, pCol + 1, grid_plant_type, pMaxRow, pMaxCol );
 
     /*
      * Find more plants beneath this coordinates
      */
-    sum_conections += getPlantRegion( pListLines, pListRegions, pGrid, pRow + 1, pCol, grid_plant_type, pMaxRow, pMaxCol );
+    getPlantRegion( pListLines, pListRegions, pGrid, pRow + 1, pCol, grid_plant_type, pMaxRow, pMaxCol );
 
     /*
      * Go to the left
      */
-    sum_conections += getPlantRegion( pListLines, pListRegions, pGrid, pRow, pCol - 1, grid_plant_type, pMaxRow, pMaxCol );
+    getPlantRegion( pListLines, pListRegions, pGrid, pRow, pCol - 1, grid_plant_type, pMaxRow, pMaxCol );
 
     /*
      * Go up
      */
-    sum_conections += getPlantRegion( pListLines, pListRegions, pGrid, pRow - 1, pCol, grid_plant_type, pMaxRow, pMaxCol );
+    getPlantRegion( pListLines, pListRegions, pGrid, pRow - 1, pCol, grid_plant_type, pMaxRow, pMaxCol );
 
-    /*
-     * Return all connections
-     * (... the return value is actually never used)
-     */
-    return sum_conections;
+    return;
   }
 
   private static String getDebugMapPart1( List< String > pListInput, char pChar )
@@ -1452,10 +1606,21 @@ public class Day12GardenGroups
 
       String str_map_char = "";
       String str_map_values = "";
+      String str_map_edges = "";
 
-      for ( int current_col = 0; current_col < input_str.length(); current_col++ )
+      long input_str_len = input_str.length();
+
+      for ( int current_col = 0; current_col < m_max_col; current_col++ )
       {
-        if ( ( input_str.charAt( current_col ) == pChar ) || ( pChar == CHAR_DEBUG_ALL ) )
+        if ( current_col >= input_str_len )
+        {
+          str_map_values += CHAR_NO_MAP;
+
+          str_map_char += CHAR_NO_MAP;
+
+          str_map_edges += CHAR_NO_MAP;
+        }
+        else if ( ( input_str.charAt( current_col ) == pChar ) || ( pChar == CHAR_DEBUG_ALL ) )
         {
           str_map_char += input_str.charAt( current_col );
 
@@ -1470,18 +1635,24 @@ public class Day12GardenGroups
           sum_cell_values += (long) current_cell_value;
 
           str_map_values += current_cell_value;
+
+          str_map_edges += getCellEdge( current_row, current_col );
         }
         else
         {
           str_map_values += CHAR_EMPTY_SPACE;
 
           str_map_char += CHAR_EMPTY_SPACE;
+
+          str_map_edges += CHAR_EMPTY_SPACE;
         }
       }
 
       current_row++;
 
       result_str += padRight( str_map_char + " " + FkStringFeld.getFeldRechtsMin( sum_row_count, 3 ) + STR_DEBUG_SPACER + str_map_values + " " + FkStringFeld.getFeldRechtsMin( sum_row_val, 3 ), DEBUG_PADDING_VALUE, DEBUG_PADDING_CHAR ) + "\n";
+
+      //result_str += padRight( str_map_char + " " + FkStringFeld.getFeldRechtsMin( sum_row_count, 3 ) + STR_DEBUG_SPACER + str_map_values + " " + FkStringFeld.getFeldRechtsMin( sum_row_val, 3 ) + "   " + str_map_edges, DEBUG_PADDING_VALUE, DEBUG_PADDING_CHAR ) + "\n";
     }
 
     String str_map_char = " Char Count " + sum_char_count + " ";
@@ -1497,7 +1668,14 @@ public class Day12GardenGroups
     String result_str = "";
 
     String str_map_empty_cell_row = FENCE_CHAR_EMPTY + FENCE_CHAR_EMPTY + FENCE_CHAR_EMPTY;
+    String str_map_overflow_row = "";
 
+    str_map_overflow_row += CHAR_NO_MAP;
+    str_map_overflow_row += CHAR_NO_MAP;
+    str_map_overflow_row += CHAR_NO_MAP;
+//    
+//    + CHAR_NO_MAP  + CHAR_NO_MAP + CHAR_NO_MAP;
+//
     int current_row = 0;
 
     long sum_cell_values = 0;
@@ -1513,10 +1691,19 @@ public class Day12GardenGroups
       String str_above = "";
       String str_middle = "";
       String str_bottom = "";
+      long input_str_len = input_str.length();
 
-      for ( int current_col = 0; current_col < input_str.length(); current_col++ )
+      for ( int current_col = 0; current_col < m_max_col; current_col++ )
       {
-        if ( ( input_str.charAt( current_col ) == pChar ) || ( pChar == CHAR_DEBUG_ALL ) )
+        if ( current_col >= input_str_len )
+        {
+          str_above += str_map_overflow_row;
+          str_middle += str_map_overflow_row;
+          str_bottom += str_map_overflow_row;
+
+          str_map_values += str_map_overflow_row;
+        }
+        else if ( ( input_str.charAt( current_col ) == pChar ) || ( pChar == CHAR_DEBUG_ALL ) )
         {
           sum_char_count++;
           sum_row_count++;
@@ -1539,7 +1726,6 @@ public class Day12GardenGroups
         }
         else
         {
-
           str_above += str_map_empty_cell_row;
           str_middle += str_map_empty_cell_row;
           str_bottom += str_map_empty_cell_row;
@@ -1649,6 +1835,25 @@ public class Day12GardenGroups
     }
 
     return FENCE_ERR;
+  }
+
+  private static long setCellEdge( long pRow, long pCol, long pValue )
+  {
+    getHashMapCellValues().put( KEY_CELL_EDGE + "R" + pRow + "C" + pCol, Long.valueOf( pValue ) );
+
+    return pValue;
+  }
+
+  private static long getCellEdge( long pRow, long pCol )
+  {
+    Long long_value = getHashMapCellValues().get( KEY_CELL_EDGE + "R" + pRow + "C" + pCol );
+
+    if ( long_value != null )
+    {
+      return long_value.longValue();
+    }
+
+    return 0l;
   }
 
   private static String getCellFenceChar( String pFenceType, int pRow, int pCol )
