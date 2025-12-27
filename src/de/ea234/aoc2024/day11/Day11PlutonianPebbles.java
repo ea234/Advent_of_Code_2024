@@ -243,6 +243,39 @@ public class Day11PlutonianPebbles
     return getElementCountFromList( list_stones_new ); // Anzahl der letzten liste
   }
 
+
+  private static long calcNewListX( String pListInput, long pMaxIteration )
+  {
+    String[] list_stones_string = pListInput.trim().split( STR_SPACE );
+
+    long element_count = 0;
+
+    long iteration_nr_max = pMaxIteration;
+
+    for ( long iteration_nr_current = 0; iteration_nr_current < iteration_nr_max; iteration_nr_current++ )
+    {
+      long iteration_cycles_left = iteration_nr_max - iteration_nr_current;
+
+      for ( String current_number : list_stones_string )
+      {
+        long hash_map_element_count_long = getHashMapElementCount( current_number, iteration_cycles_left );
+
+        if ( hash_map_element_count_long < 0 )
+        {
+          String list_stones_new = calcNewList( current_number );
+
+          hash_map_element_count_long = getElementCountFromList( list_stones_new );
+
+          setHashMapElementCount( current_number, iteration_nr_current, hash_map_element_count_long );
+
+          element_count += hash_map_element_count_long;
+        }
+      }
+    }
+
+    return element_count;
+  }
+
   private static String calcNewList( String pListInput )
   {
     String[] list_stones_string = pListInput.trim().split( STR_SPACE );
