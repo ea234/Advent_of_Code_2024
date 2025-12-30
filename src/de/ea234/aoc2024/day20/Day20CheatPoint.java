@@ -55,6 +55,6 @@ public class Day20CheatPoint
 
   public String toString()
   {
-    return "CNR " + FkStringFeld.getFeldRechtsMin( m_cheat_point_nr, 6 ) + " Len " + FkStringFeld.getFeldRechtsMin( getLenAbs(), 6 ) + " Start " + FkStringFeld.getFeldLinksMin( m_start_coordinates, 10 ) + " To " + FkStringFeld.getFeldLinksMin( m_end_coordinates, 10 ) + "   " + m_start_len + " - " + m_end_len + " = " + getLen();
+    return "CNR " + FkStringFeld.getFeldRechtsMin( m_cheat_point_nr, 6 ) + " Len " + FkStringFeld.getFeldRechtsMin( getLenAbs(), 6 ) + " Start " + FkStringFeld.getFeldLinksMin( m_start_coordinates, 10 ) + " To " + FkStringFeld.getFeldLinksMin( m_end_coordinates, 10 ) + "   " + FkStringFeld.getFeldRechtsMin( m_start_len, 6 ) + " - " + FkStringFeld.getFeldRechtsMin( m_end_len, 6 ) + " = " + FkStringFeld.getFeldRechtsMin( getLen(), 6 );
   }
 }
