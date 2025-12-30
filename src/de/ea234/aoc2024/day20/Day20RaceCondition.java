@@ -405,9 +405,9 @@ public class Day20RaceCondition
 
   private static final String RACETRACK_NOT_FOUND       = "K";
 
-  private static final String PRAEFIX_TO_COORDINATES    = "ToCoordinates";
+  private static final String PREFIX_TO_COORDINATES     = "ToCoordinates";
 
-  private enum MoveDirection
+  private static enum MoveDirection
   {
     UP, RIGHT, DOWN, LEFT
   }
@@ -518,21 +518,13 @@ public class Day20RaceCondition
 
       switch ( cur_move_direction )
       {
-        case UP :
-          next_row--;
-          break;
+        case UP    : next_row--; break;
+        
+        case DOWN  : next_row++; break;
 
-        case DOWN :
-          next_row++;
-          break;
+        case LEFT  : next_col--; break;
 
-        case LEFT :
-          next_col--;
-          break;
-
-        case RIGHT :
-          next_col++;
-          break;
+        case RIGHT : next_col++; break;
       }
 
       char next_char_rct = prop_grid_racetrack.getProperty( "R" + next_row + "C" + next_col, RACETRACK_NOT_FOUND ).charAt( 0 );
@@ -568,21 +560,13 @@ public class Day20RaceCondition
 
           switch ( new_move_direction )
           {
-            case UP :
-              next_row--;
-              break;
-
-            case DOWN :
-              next_row++;
-              break;
-
-            case LEFT :
-              next_col--;
-              break;
-
-            case RIGHT :
-              next_col++;
-              break;
+            case UP    : next_row--; break;
+            
+            case DOWN  : next_row++; break;
+  
+            case LEFT  : next_col--; break;
+  
+            case RIGHT : next_col++; break;
           }
 
           next_char_rct = prop_grid_racetrack.getProperty( "R" + next_row + "C" + next_col, RACETRACK_NOT_FOUND ).charAt( 0 );
@@ -612,10 +596,7 @@ public class Day20RaceCondition
         /*
          * Check Cheat-Point start, from the current position (before move)
          */
-        checkCheatStart( MoveDirection.UP, current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
-        checkCheatStart( MoveDirection.DOWN, current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
-        checkCheatStart( MoveDirection.LEFT, current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
-        checkCheatStart( MoveDirection.RIGHT, current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
+        checkCheatStart( current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
 
         /*
          * Increase the race track len
@@ -657,10 +638,7 @@ public class Day20RaceCondition
          * Check for existing Cheat Endpoint (after move)
          * ... is the current position has a mark in the properties
          */
-        checkCheatEnd( MoveDirection.UP, current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
-        checkCheatEnd( MoveDirection.DOWN, current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
-        checkCheatEnd( MoveDirection.LEFT, current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
-        checkCheatEnd( MoveDirection.RIGHT, current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
+        checkCheatEnd( current_row, current_col, len_race_track, prop_grid_racetrack, pKnzDebug );
       }
       else
       {
@@ -798,129 +776,135 @@ public class Day20RaceCondition
     wl( "count_part_1   " + result_count_cheats_part_1 );
   }
 
-  private static void checkCheatEnd( MoveDirection pMoveDirection, long pCurrentRow, long pCurrentCol, long pRaceTrackLen, Properties pPropGridRacetrack, boolean pKnzDebug )
+  private static void checkCheatEnd( long pCurrentRow, long pCurrentCol, long pRaceTrackLen, Properties pPropGridRacetrack, boolean pKnzDebug )
   {
-    /*
-     * Construct the praefix for the key
-     */
-    String preafix_direction = pMoveDirection.toString() + "_";
-
-    /*
-     * Try to find a key in the properties.
-     * Is there a field in the properties wich is the end-point of a cheat-point.
-     * If there is a field, it's propertie-value is the key for the hashmap.
-     */
-    String prop_key_from_coordinates = pPropGridRacetrack.getProperty( preafix_direction + PRAEFIX_TO_COORDINATES + "R" + pCurrentRow + "C" + pCurrentCol );
-
-    /*
-     * Check if a field was found
-     */
-    if ( prop_key_from_coordinates != null )
+    for ( MoveDirection move_direction : MoveDirection.values() )
     {
       /*
-       * If a key was found, get the cheat point from the hashmap
+       * Construct the praefix for the key
        */
-      Day20CheatPoint cach_cheat_point = m_hash_map_cheat_points.get( prop_key_from_coordinates );
+      String prefix_direction = move_direction.toString() + "_";
 
       /*
-       * If the cheatpoint was found in the hashmap, the end length must be set.
+       * Try to find a key in the properties.
+       * Is there a field in the properties wich is the end-point of a cheat-point.
+       * If there is a field, it's propertie-value is the key for the hashmap.
        */
-      if ( cach_cheat_point != null )
-      {
-        if ( pKnzDebug )
-        {
-          wl( "#### FOUND CHEAT POINT END ##### Nr " + cach_cheat_point.getNr() + "  Direction " + FkStringFeld.getFeldLinksMin( pMoveDirection.toString(), 6 ) + "   To " + "R" + pCurrentRow + "C" + pCurrentCol );
-        }
+      String prop_key_from_coordinates = pPropGridRacetrack.getProperty( prefix_direction + PREFIX_TO_COORDINATES + "R" + pCurrentRow + "C" + pCurrentCol );
 
-        cach_cheat_point.setEndLen( pRaceTrackLen );
+      /*
+       * Check if a field was found
+       */
+      if ( prop_key_from_coordinates != null )
+      {
+        /*
+         * If a key was found, get the cheat point from the hashmap
+         */
+        Day20CheatPoint cach_cheat_point = m_hash_map_cheat_points.get( prop_key_from_coordinates );
+
+        /*
+         * If the cheatpoint was found in the hashmap, the end length must be set.
+         */
+        if ( cach_cheat_point != null )
+        {
+          if ( pKnzDebug )
+          {
+            wl( "#### FOUND CHEAT POINT END ##### Nr " + cach_cheat_point.getNr() + "  Direction " + FkStringFeld.getFeldLinksMin( move_direction.toString(), 6 ) + "   To " + "R" + pCurrentRow + "C" + pCurrentCol );
+          }
+
+          cach_cheat_point.setEndLen( pRaceTrackLen );
+        }
       }
     }
   }
 
-  private static void checkCheatStart( MoveDirection pMoveDirection, long pCurrentRow, long pCurrentCol, long pRaceTrackLen, Properties pPropGridRacetrack, boolean pKnzDebug )
+  private static void checkCheatStart( long pCurrentRow, long pCurrentCol, long pRaceTrackLen, Properties pPropGridRacetrack, boolean pKnzDebug )
   {
-    /*
-     * Init coordinats with the current positions.
-     */
-    long coordinates_cp_wall_row = pCurrentRow;
-    long coordinates_cp_wall_col = pCurrentCol;
-
-    long coordinates_cp_end_row = pCurrentRow;
-    long coordinates_cp_end_col = pCurrentCol;
-
-    /*
-     * Calc the new coordinates with the current move direction
-     */
-    switch ( pMoveDirection )
-    {
-      case UP :
-        coordinates_cp_wall_row = pCurrentRow - 1;
-        coordinates_cp_end_row = pCurrentRow - 2;
-        break;
-
-      case DOWN :
-        coordinates_cp_wall_row = pCurrentRow + 1;
-        coordinates_cp_end_row = pCurrentRow + 2;
-        break;
-
-      case LEFT :
-        coordinates_cp_wall_col = pCurrentCol - 1;
-        coordinates_cp_end_col = pCurrentCol - 2;
-        break;
-
-      case RIGHT :
-        coordinates_cp_wall_col = pCurrentCol + 1;
-        coordinates_cp_end_col = pCurrentCol + 2;
-        break;
-    }
-
-    /*
-     * Get both chars
-     * - The first must be a wall (Wall Set or Wall CheatPoint)
-     * - The second must be a part of the racetrack (Racetrack given or Racetrack end)
-     */
-
-    char char_wall = pPropGridRacetrack.getProperty( "R" + coordinates_cp_wall_row + "C" + coordinates_cp_wall_col, RACETRACK_NOT_FOUND ).charAt( 0 );
-
-    char char_behind_the_wall = pPropGridRacetrack.getProperty( "R" + coordinates_cp_end_row + "C" + coordinates_cp_end_col, RACETRACK_NOT_FOUND ).charAt( 0 );
-
-    if ( ( ( char_behind_the_wall == CHAR_RACETRACK_GIVEN ) || ( char_behind_the_wall == CHAR_RACETRACK_END ) ) && ( ( char_wall == CHAR_WALL_SET ) || ( char_wall == CHAR_WALL_CHEAT_POINT ) ) )
+    for ( MoveDirection move_direction : MoveDirection.values() )
     {
       /*
-       * Increment the global cheat point count
+       * Init coordinats with the current positions.
        */
-      m_global_cheat_point_count++;
+      long coordinates_cp_wall_row = pCurrentRow;
+      long coordinates_cp_wall_col = pCurrentCol;
+
+      long coordinates_cp_end_row = pCurrentRow;
+      long coordinates_cp_end_col = pCurrentCol;
 
       /*
-       * Set a new Character at the Wall-Coordinates (... just for debugging and visualisation)
+       * Calc the new coordinates with the current move direction
        */
-      pPropGridRacetrack.setProperty( "R" + coordinates_cp_wall_row + "C" + coordinates_cp_wall_col, "" + CHAR_WALL_CHEAT_POINT );
-
-      String preafix_direction = pMoveDirection.toString() + "_";
-
-      /*
-       * Do some debug stuff
-       */
-      if ( pKnzDebug )
+      switch ( move_direction )
       {
-        wl( "#### FOUND CHEAT POINT START ##### Nr " + m_global_cheat_point_count + "  Direction " + FkStringFeld.getFeldLinksMin( pMoveDirection.toString(), 6 ) + "   From " + "R" + coordinates_cp_end_row + "C" + coordinates_cp_end_col + " To " + "R" + coordinates_cp_wall_row + "C" + coordinates_cp_wall_col );
+        case UP :
+          coordinates_cp_wall_row = pCurrentRow - 1;
+          coordinates_cp_end_row = pCurrentRow - 2;
+          break;
+
+        case DOWN :
+          coordinates_cp_wall_row = pCurrentRow + 1;
+          coordinates_cp_end_row = pCurrentRow + 2;
+          break;
+
+        case LEFT :
+          coordinates_cp_wall_col = pCurrentCol - 1;
+          coordinates_cp_end_col = pCurrentCol - 2;
+          break;
+
+        case RIGHT :
+          coordinates_cp_wall_col = pCurrentCol + 1;
+          coordinates_cp_end_col = pCurrentCol + 2;
+          break;
       }
 
       /*
-       * Set a virtual "break point", so that the cheat-point-to coordinats can be found.
-       * The value are the origin coordinates ... which will serve as a key for the hash map.
+       * Get both chars
+       * - The first must be a wall (Wall Set or Wall CheatPoint)
+       * - The second must be a part of the racetrack (Racetrack given or Racetrack end)
        */
-      pPropGridRacetrack.setProperty( preafix_direction + PRAEFIX_TO_COORDINATES + "R" + coordinates_cp_end_row + "C" + coordinates_cp_end_col, preafix_direction + "R" + pCurrentRow + "C" + pCurrentCol );
 
-      /*
-       * Create a new cheat point instance
-       */
-      Day20CheatPoint new_cheat_point = new Day20CheatPoint( pCurrentRow, pCurrentCol, pRaceTrackLen, coordinates_cp_end_row, coordinates_cp_end_col, m_global_cheat_point_count );
+      char char_wall = pPropGridRacetrack.getProperty( "R" + coordinates_cp_wall_row + "C" + coordinates_cp_wall_col, RACETRACK_NOT_FOUND ).charAt( 0 );
 
-      /*
-       * Store the new cheat-point-instance in the hash map.
-       */
-      m_hash_map_cheat_points.put( preafix_direction + "R" + pCurrentRow + "C" + pCurrentCol, new_cheat_point );
+      char char_behind_the_wall = pPropGridRacetrack.getProperty( "R" + coordinates_cp_end_row + "C" + coordinates_cp_end_col, RACETRACK_NOT_FOUND ).charAt( 0 );
+
+      if ( ( ( char_behind_the_wall == CHAR_RACETRACK_GIVEN ) || ( char_behind_the_wall == CHAR_RACETRACK_END ) ) && ( ( char_wall == CHAR_WALL_SET ) || ( char_wall == CHAR_WALL_CHEAT_POINT ) ) )
+      {
+        /*
+         * Increment the global cheat point count
+         */
+        m_global_cheat_point_count++;
+
+        /*
+         * Set a new Character at the Wall-Coordinates (... just for debugging and visualisation)
+         */
+        pPropGridRacetrack.setProperty( "R" + coordinates_cp_wall_row + "C" + coordinates_cp_wall_col, "" + CHAR_WALL_CHEAT_POINT );
+
+        String prefix_direction = move_direction.toString() + "_";
+
+        /*
+         * Do some debug stuff
+         */
+        if ( pKnzDebug )
+        {
+          wl( "#### FOUND CHEAT POINT START ##### Nr " + m_global_cheat_point_count + "  Direction " + FkStringFeld.getFeldLinksMin( move_direction.toString(), 6 ) + "   From " + "R" + coordinates_cp_end_row + "C" + coordinates_cp_end_col + " To " + "R" + coordinates_cp_wall_row + "C" + coordinates_cp_wall_col );
+        }
+
+        /*
+         * Set a virtual "break point", so that the cheat-point-to coordinats can be found.
+         * The value are the origin coordinates ... which will serve as a key for the hash map.
+         */
+        pPropGridRacetrack.setProperty( prefix_direction + PREFIX_TO_COORDINATES + "R" + coordinates_cp_end_row + "C" + coordinates_cp_end_col, prefix_direction + "R" + pCurrentRow + "C" + pCurrentCol );
+
+        /*
+         * Create a new cheat point instance
+         */
+        Day20CheatPoint new_cheat_point = new Day20CheatPoint( pCurrentRow, pCurrentCol, pRaceTrackLen, coordinates_cp_end_row, coordinates_cp_end_col, m_global_cheat_point_count );
+
+        /*
+         * Store the new cheat-point-instance in the hash map.
+         */
+        m_hash_map_cheat_points.put( prefix_direction + "R" + pCurrentRow + "C" + pCurrentCol, new_cheat_point );
+      }
     }
   }
 
@@ -959,4 +943,5 @@ public class Day20RaceCondition
   {
     System.out.println( pString );
   }
+
 }
