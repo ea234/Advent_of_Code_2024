@@ -23,6 +23,27 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
    * https://www.youtube.com/watch?v=jnAj6cB2NvI
    * 
    * https://www.reddit.com/r/adventofcode/comments/1hele8m/2024_day_15_solutions/
+   * 
+   * 
+
+Example works
+
+####################
+##[].......[].[][]##
+##[]...........[].##
+##[]........[][][]##
+##[]......[]....[]##
+##..##......[]....##
+##..[]............##
+##..@......[].[][]##
+##......[][]..[]..##
+####################
+
+GPS 9021
+
+
+
+
    */
 
   private static final int    ROW_UP                    = -1;
@@ -61,9 +82,9 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
   public static void main( String[] args )
   {
-    String test_content_1_map = "########,#..O.O.#,##@.O..#,#...O..#,#.#.O..#,#...O..#,#......#,########";
+    String test_content_temp_map = "########,#..O.O.#,##@.O..#,#...O..#,#.#.O..#,#...O..#,#......#,########";
 
-    String test_content_1_cmds = "<^^>>>vv<v>>v<<";
+    String test_content_temp_cmds = "<^^>>>vv<v>>v<<";
 
     String test_content_2_map = "##########,#..O..O.O#,#......O.#,#.OO..O.O#,#..O@..O.#,#O#..O...#,#O..O..O.#,#.OO.O.OO#,#....O...#,##########";
 
@@ -83,22 +104,52 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
     //test_content_1 = "######,#....#,#....#,#.@O.#,#....#,######";
     //test_content_1 = "########,#......#,#..OO..#,#......#,#.@O...#,#......#,########";
 
-    test_content_1_map = "#########,#.......#,#..OOO..#,#.......#,#.@O....#,#.......#,#########";
-    test_content_1_cmds = ">>>^^^";
+    test_content_temp_map = "#########,#.......#,#..OOO..#,#.......#,#.@O....#,#.......#,#########";
+    test_content_temp_cmds = ">>>^^^";
 
-    test_content_1_map = "#########,#.......#,#.......#,#.......#,#.O.OO..#,#..OOO..#,#.O.OO..#,#.......#,#.@O....#,#.......#,#########";
-    test_content_1_cmds = ">>>^^^^^^^^^^^^vv>>>>>>>>>>>>>>>>>>>><";
+    test_content_temp_map = "#########,#.......#,#.......#,#.......#,#.O.OO..#,#..OOO..#,#.O.OO..#,#.......#,#.@O....#,#.......#,#########";
+    test_content_temp_cmds = ">>>^^^^^^^^^^^^vv>>>>>>>>>>>>>>>>>>>><";
 
-    test_content_1_map = "#########,#.......#,#.......#,#.......#,#.O.OO..#,#..OOO..#,#.O.OO..#,#.......#,#..O.@..#,#.......#,#########";
-    test_content_1_cmds = "<<<<<<<^^^^^^^vv>>vv>>>^^^";
+    test_content_temp_map = "#########,#.......#,#.......#,#.......#,#.O.OO..#,#..OOO..#,#.O.OO..#,#.......#,#..O.@..#,#.......#,#########";
+    test_content_temp_cmds = "<<<<<<<^^^^^^^vv>>vv>>>^^^";
 
     //test_content_1 = "########,#...#.E#,#.#.#.##,#S#...##,########";
+
+    /*
+     * Streight up
+     */
+    test_content_temp_map = "#########,#.......#,#.......#,#...OO..#,#...OO..#,#...@O..#,#.......#,#########";
+    test_content_temp_cmds = "^^^";
+
+    test_content_temp_map = "#########,#.......#,#.......#,#..O.O..#,#...OO..#,#...@O..#,#.......#,#########";
+    test_content_temp_cmds = "^^^";
+
+    test_content_temp_map = "#########,#.......#,#.......#,#...OO..#,#...OO..#,#...O@..#,#.......#,#########";
+    test_content_temp_cmds = "<v<^^^";
+
+    /*
+     * Box right
+     */
+    test_content_temp_map = "#########,#.......#,#.......#,#.......#,#...OO..#,#...O@..#,#.......#,#########";
+    test_content_temp_cmds = "<v<^^^^^^^^^";
+
+    /*
+     * Box right and left
+     */
+    test_content_temp_map = "#########,#.......#,#.......#,#.......#,#..OOO..#,#...O@..#,#.......#,#########";
+    test_content_temp_cmds = "<v<^^^^^^^^^";
+
+    String test_content_1_map = "########,#..O.O.#,##@.O..#,#...O..#,#.#.O..#,#...O..#,#......#,########";
+
+    String test_content_1_cmds = "<^^>>>vv<v>>v<<";
 
     List< String > test_content_list_1 = Arrays.stream( ( test_content_1_map + ",," + test_content_1_cmds ).split( "," ) ).map( String::trim ).collect( Collectors.toList() );
     List< String > test_content_list_2 = Arrays.stream( ( test_content_2_map + ",," + test_content_2_cmds ).split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
+    List< String > test_content_list_temp = Arrays.stream( ( test_content_temp_map + ",," + test_content_temp_cmds ).split( "," ) ).map( String::trim ).collect( Collectors.toList() );
+
     calculatePart1( test_content_list_1, 20, true );
-    //calculatePart1( test_content_list_2, 20, true );
+    calculatePart1( test_content_list_2, 20, true );
 
     //calculatePart1( getListProd(), 100, false );
   }
@@ -377,11 +428,6 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
       return 0;
     }
 
-    if ( pListC.contains( "vv" + "R" + check_row + "C" + check_col1 ) )
-    {
-
-    }
-
     /*
      * Get the chars from the check coordinates
      * 
@@ -429,21 +475,37 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
       return 1;
     }
 
+    long box_left_col1 = -1;
+    long box_left_col2 = -1;
+
+    long box_right_col1 = -1;
+    long box_right_col2 = -1;
+
+    if ( ( char_col1 == CHAR_BOX2_S ) && ( char_col2 == CHAR_BOX2_E ) )
+    {
+      box_left_col1 = check_col1;
+      box_left_col2 = check_col2;
+    }
+    else
+    {
+      if ( char_col1 == CHAR_BOX2_E )
+      {
+        box_left_col1 = check_col1 - 1;
+        box_left_col2 = check_col2 - 1;
+      }
+
+      if ( char_col2 == CHAR_BOX2_S )
+      {
+        box_right_col1 = check_col1 + 1;
+        box_right_col2 = check_col2 + 1;
+      }
+    }
+
     long do_move = 0; // dont move
 
     if ( ( char_col1 == CHAR_BOX2_S ) && ( char_col2 == CHAR_BOX2_E ) )
     {
-      /*
-       * Box direct over box
-       * Check the box above.
-       * Only the row changes
-       * The columns stay on their values 
-       * ........
-       * ...[]...
-       * ...[]...
-       * ........
-       */
-      do_move = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, check_col1, check_col2 );
+      do_move = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, box_left_col1, box_left_col2 );
     }
     else
     {
@@ -452,38 +514,14 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
       if ( char_col1 == CHAR_BOX2_E )
       {
-        /*
-         * Char col 1 hit the box-end.
-         * Check the box to the left.
-         * The row changes according to delta_row.
-         * From the current position, the box found has an offset to the left. (=col -1)
-         * To get the box-start-char, the col 1 has to be decreased by one (... also col 2 -1). 
-         * ........
-         * ..[]....
-         * ...[]...
-         * ...@....
-         */
-        do_move_left = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, check_col1 - 1, check_col2 - 1 );
+        do_move_left = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, box_left_col1, box_left_col2 );
 
         do_move = do_move_left;
       }
 
       if ( ( do_move_left == 1 ) && ( char_col2 == CHAR_BOX2_S ) )
       {
-        /*
-         * If a move to the left is possible
-         * Char col 2 hit the box-start-char.
-         * Check the box to the right
-         * The row changes according to delta_row.
-         * From the current position, the box found has an offset to the right. (=col +1)
-         * To get the box-start-char, the col 1 has to be increased by one (... also col 2 +1).
-         * 
-         * ........
-         * ....[]..
-         * ...[]...
-         * ...@....
-         */
-        do_move_right = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, check_col1 + 1, check_col2 + 1 );
+        do_move_right = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, box_right_col1, box_right_col2 );
 
         do_move = do_move_right;
       }
@@ -491,16 +529,14 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
     if ( ( knz_change_grid ) && ( do_move == 1 ) )
     {
-      long current_box_col1 = check_col1;
-      long current_box_col2 = check_col2;
-
-      if ( ( char_col1 == CHAR_BOX2_S ) && ( char_col2 == CHAR_BOX2_E ) )
+      if ( box_left_col1 > 0 )
       {
         String prop_key = "";
 
-        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( check_col1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
-        prop_key += "," + "R" + ( check_row ) + "C" + current_box_col1; // From
-        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + current_box_col1; // To
+        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( box_left_col1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        prop_key += "," + "R" + ( check_row ) + "C" + box_left_col1; // From
+        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + box_left_col1; // To
+        prop_key += "," + CHAR_BOX2_S; // Char-Info
         prop_key += "," + char_col1; // Char-Info
         prop_key += ",START"; // Debug-Info
 
@@ -508,100 +544,42 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
         prop_key = "";
 
-        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( check_col2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
-        prop_key += "," + "R" + ( check_row ) + "C" + current_box_col2; // From
-        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + current_box_col2; // To
+        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( box_left_col2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        prop_key += "," + "R" + ( check_row ) + "C" + box_left_col2; // From
+        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + box_left_col2; // To
+        prop_key += "," + CHAR_BOX2_E; // Char-Info
         prop_key += "," + char_col2; // Char-Info
         prop_key += ",END"; // Debug-Info
 
         pListC.add( prop_key );
       }
 
+      if ( box_right_col1 > 0 )
+      {
+        String prop_key = "";
+
+        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( box_right_col1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        prop_key += "," + "R" + ( check_row ) + "C" + box_right_col1; // From
+        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + box_right_col1; // To
+        prop_key += "," + CHAR_BOX2_S; // Char-Info
+        prop_key += "," + char_col1; // Char-Info
+        prop_key += ",START"; // Debug-Info
+
+        pListC.add( prop_key );
+
+        prop_key = "";
+
+        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( box_right_col2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        prop_key += "," + "R" + ( check_row ) + "C" + box_right_col2; // From
+        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + box_right_col2; // To
+        prop_key += "," + CHAR_BOX2_E; // Char-Info
+        prop_key += "," + char_col2; // Char-Info
+        prop_key += ",END"; // Debug-Info
+
+        pListC.add( prop_key );
+      }
     }
 
-/*
- * --------------------------------------------------------------
- * cmd > nr 22
- * robot R7C8   free space R7C9  .
- * robot R7C8   free space R7C9  "@"    free space R7C8  "@"
- * 
- * ##################
- * ##..[]..........##
- * ##..[]..........##
- * ##..............##
- * ##......[][]....##
- * ##.....[][][]...##
- * ##......[][]....##
- * ##.......@......##
- * ##[]............##
- * ##..............##
- * ##################
- * 
- * GPS 4673
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 23
- * List Info R0006C0008,R6C8,R5C8,[,START
- * List Info R0006C0009,R6C9,R5C9,],END
- * 
- * ##################
- * ##..[]..........##
- * ##..[]..........##
- * ##..............##
- * ##......[][]....##
- * ##.....[[]][]...##
- * ##.......@[]....##
- * ##..............##
- * ##[]............##
- * ##..............##
- * ##################
- * 
- * GPS 4064
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 24
- * List Info R0004C0008,R4C8,R3C8,[,START
- * List Info R0004C0009,R4C9,R3C9,],END
- * List Info R0005C0008,R5C8,R4C8,[,START
- * List Info R0005C0009,R5C9,R4C9,],END
- * 
- * ##################
- * ##..[]..........##
- * ##..[]..........##
- * ##......[]......##
- * ##......[][]....##
- * ##.....[.@][]...##
- * ##........[]....##
- * ##..............##
- * ##[]............##
- * ##..............##
- * ##################
- * 
- * GPS 3864
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 25
- * List Info R0003C0008,R3C8,R2C8,[,START
- * List Info R0003C0009,R3C9,R2C9,],END
- * List Info R0004C0008,R4C8,R3C8,[,START
- * List Info R0004C0009,R4C9,R3C9,],END
- * 
- * ##################
- * ##..[]..........##
- * ##..[]..[]......##
- * ##......[]......##
- * ##.......@[]....##
- * ##.....[..][]...##
- * ##........[]....##
- * ##..............##
- * ##[]............##
- * ##..............##
- * ##################
- * 
- * GPS 3664
- * 
- * 
- */
     return do_move;
   }
 
