@@ -1,6 +1,5 @@
 package de.ea234.aoc2024.day15;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 
 public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 {
-
   /*
    * --- Day 15: Warehouse Woes ---
    * https://adventofcode.com/2024/day/15 
@@ -21,8 +19,6 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
    * https://www.youtube.com/watch?v=jnAj6cB2NvI
    * 
    * https://www.reddit.com/r/adventofcode/comments/1hele8m/2024_day_15_solutions/
-   * 
-   * 
    */
 
   private static final int    ROW_UP                    = -1;
@@ -80,9 +76,6 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
     test_content_2_cmds += "^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>";
     test_content_2_cmds += "v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^";
 
-    //test_content_1 = "######,#....#,#....#,#.@O.#,#....#,######";
-    //test_content_1 = "########,#......#,#..OO..#,#......#,#.@O...#,#......#,########";
-
     test_content_temp_map = "#########,#.......#,#..OOO..#,#.......#,#.@O....#,#.......#,#########";
     test_content_temp_cmds = ">>>^^^";
 
@@ -91,8 +84,6 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
     test_content_temp_map = "#########,#.......#,#.......#,#.......#,#.O.OO..#,#..OOO..#,#.O.OO..#,#.......#,#..O.@..#,#.......#,#########";
     test_content_temp_cmds = "<<<<<<<^^^^^^^vv>>vv>>>^^^";
-
-    //test_content_1 = "########,#...#.E#,#.#.#.##,#S#...##,########";
 
     /*
      * Streight up
@@ -131,18 +122,14 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
     //calcConvertedMap( test_content_2_map + ",," + test_content_2_cmds );
 
-    calculatePart1( getListProd2(), false );
+    calculatePart02( getMapConverted( getListProd() ), false );
 
     /*
      * Result: 1472235
-     *         1472235
-    
-    Elapsed time: 0.019317 seconds
-    
      */
 
     //calcTestMapMoveDirections();
-    calcTestMapX();
+    //calcTestMapX();
   }
 
   private static void calcConvertedMap( String pString )
@@ -154,123 +141,11 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
     calculatePart02( converted_string_list, true );
   }
 
-
-  private static void calcTestMapX()
+  private static void calculatePart02( String pString, boolean pKnzDebug )
   {
-    List< String > list_map_input = new ArrayList< String >();
+    List< String > converted_string_list = Arrays.stream( pString.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
 
-    list_map_input.add( "##################" );
-    list_map_input.add( "##[].....[]....##" );
-    list_map_input.add( "##......@......##" );
-    list_map_input.add( "##.....[]......##" );
-    list_map_input.add( "##..[][]....[].##" );
-    list_map_input.add( "##....[]##.[]..##" );
-    list_map_input.add( "##....[][][][].##" );
-    list_map_input.add( "##..........##.##" );
-    list_map_input.add( "##.............##" );
-    list_map_input.add( "##....[].......##" );
-    list_map_input.add( "##...[]...##[].##" );
-    list_map_input.add( "##################" );
-    
-
-    list_map_input.add( "" );
-
- //   list_map_input.add( "vvvv<<>v<" );
-    list_map_input.add( "vvv" );
-
-    calculatePart02( list_map_input, true );
-  }
-  
-
-  
-  
-  private static void calcTestMap1()
-  {
-    List< String > list_map_input = new ArrayList< String >();
-
-    list_map_input.add( "##################" );
-    list_map_input.add( "##.....@........##" );
-    list_map_input.add( "##....[]........##" );
-    list_map_input.add( "##....[][]......##" );
-    list_map_input.add( "##.....[].[]....##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##....#.........##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##################" );
-
-    list_map_input.add( "" );
-
-    list_map_input.add( "vvvvvv" );
-
-    calculatePart02( list_map_input, true );
-  }
-
-  private static void calcTestMap2()
-  {
-    List< String > list_map_input = new ArrayList< String >();
-
-    list_map_input.add( "##################" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##....#.........##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##....[]........##" );
-    list_map_input.add( "##....[][]......##" );
-    list_map_input.add( "##.....[].[]....##" );
-    list_map_input.add( "##......@.......##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##################" );
-
-    list_map_input.add( "" );
-
-    list_map_input.add( "^^^^" );
-
-    calculatePart02( list_map_input, true );
-  }
-
-  private static void calcTestMap3()
-  {
-    List< String > list_map_input = new ArrayList< String >();
-
-    list_map_input.add( "##################" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##....#.........##" );
-    list_map_input.add( "##.....[].......##" );
-    list_map_input.add( "##....[][]......##" );
-    list_map_input.add( "##.....[].[]....##" );
-    list_map_input.add( "##......@.......##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##################" );
-
-    list_map_input.add( "" );
-
-    list_map_input.add( "^^^^" );
-
-    calculatePart02( list_map_input, true );
-  }
-
-  private static void calcTestMapMoveDirections()
-  {
-    List< String > list_map_input = new ArrayList< String >();
-
-    list_map_input.add( "##################" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##....[]........##" );
-    list_map_input.add( "##.....[].......##" );
-    list_map_input.add( "##..[][]@[][]...##" );
-    list_map_input.add( "##.....[].......##" );
-    list_map_input.add( "##......[]......##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##################" );
-
-    list_map_input.add( "" );
-
-    list_map_input.add( "^vv^<>><" );
-    //list_map_input.add( "^v" );
-
-    calculatePart02( list_map_input, true );
+    calculatePart02( converted_string_list, pKnzDebug );
   }
 
   private static void calculatePart02( List< String > pListInput, boolean pKnzDebug )
@@ -281,7 +156,7 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
      * *******************************************************************************************************
      */
 
-    String cmd_string = ""; // ">^^<<<<<<<<<<<<>>>>>>>>>vvvvvvvvvvv<<<<<<<<<<<<";
+    String cmd_string = "";
 
     m_prop_grid_map = new Properties();
 
@@ -350,6 +225,12 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
       wl( getDebugMap( m_prop_grid_map, grid_height, grid_width ) );
     }
 
+    /*
+     * *******************************************************************************************************
+     * Doing all robot commands
+     * *******************************************************************************************************
+     */
+
     for ( int index_command = 0; index_command < cmd_string.length(); index_command++ )
     {
       char cmd_char = cmd_string.charAt( index_command );
@@ -378,6 +259,21 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
         robot_col = moveHorizontal( robot_row, robot_col, COL_RIGHT, pKnzDebug );
       }
 
+      //if ( index_command > 240 )
+      //{
+      //  String debug_file_content = getDebugMap1( m_prop_grid_map, grid_height, grid_width ) + "\n";
+      //
+      //  debug_file_content += " " + index_command + " " + calcResult( m_prop_grid_map, grid_height, grid_width ) + " \n";
+      //  debug_file_content += " " + index_command + " " + cmd_char + " \n\n\n\n\n";
+      //  debug_file_content += " " + index_command + " " + Mid( cmd_string, index_command, 10 ) + " \n\n\n\n\nx";
+      //
+      //  String debug_file_name = "/mnt/hd4tbb/daten/ang/xyaoc_2024_calc_nr_" + index_command + "_" + calcResult( m_prop_grid_map, grid_height, grid_width ) + "_JAVA.txt";
+      //
+      //  schreibeDatei( debug_file_name, debug_file_content );
+      //
+      //  wl( index_command + " " + calcResult( m_prop_grid_map, grid_height, grid_width ) );
+      //}
+
       if ( pKnzDebug )
       {
         wl( "" );
@@ -387,224 +283,11 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
     /*
      * *******************************************************************************************************
-     * Debug Grid
+     * Show End Map with the Result-Value
      * *******************************************************************************************************
      */
     wl( "" );
     wl( getDebugMap( m_prop_grid_map, grid_height, grid_width ) );
-  }
-
-  private static void calculatePart1( List< String > pListInput, boolean pKnzDebug )
-  {
-    /*
-     * *******************************************************************************************************
-     * Initializing Variables
-     * *******************************************************************************************************
-     */
-
-    String cmd_string = ""; // ">^^<<<<<<<<<<<<>>>>>>>>>vvvvvvvvvvv<<<<<<<<<<<<";
-
-    m_prop_grid_map = new Properties();
-
-    long current_row = 0;
-    long current_col = 0;
-
-    long robot_row = 0;
-    long robot_col = 0;
-
-    long grid_height = pListInput.size() * 2;
-    long grid_width = pListInput.get( 0 ).length() * 2;
-
-    /*
-     * *******************************************************************************************************
-     * Initializing the grid
-     * *******************************************************************************************************
-     */
-
-    boolean knz_load_map = true;
-
-    for ( String input_str : pListInput )
-    {
-      /*
-       * Blank line seperates the map from the commands
-       */
-      if ( input_str.trim().isBlank() )
-      {
-        knz_load_map = false;
-
-      }
-
-      if ( knz_load_map )
-      {
-        grid_height = current_row + 1;
-
-        long current_new_grid_col = 0;
-
-        for ( current_col = 0; current_col < input_str.length(); current_col++ )
-        {
-          char current_char = input_str.charAt( (int) current_col );
-
-          char char_1 = CHAR_WALL;
-          char char_2 = CHAR_WALL;
-
-          if ( current_char == CHAR_EMPTY_FLOOR )
-          {
-            char_1 = CHAR_EMPTY_FLOOR;
-            char_2 = CHAR_EMPTY_FLOOR;
-          }
-          else if ( current_char == CHAR_BOX )
-          {
-            char_1 = CHAR_BOX2_S;
-            char_2 = CHAR_BOX2_E;
-          }
-          else if ( current_char == CHAR_ROBOT )
-          {
-            char_1 = CHAR_ROBOT;
-            char_2 = CHAR_EMPTY_FLOOR;
-
-            robot_row = current_row;
-            robot_col = current_new_grid_col;
-          }
-
-          m_prop_grid_map.setProperty( "R" + current_row + "C" + current_new_grid_col, "" + char_1 );
-          m_prop_grid_map.setProperty( "OX" + current_row + "C" + current_new_grid_col, "" + char_1 );
-
-          current_new_grid_col++;
-
-          m_prop_grid_map.setProperty( "R" + current_row + "C" + current_new_grid_col, "" + char_2 );
-          m_prop_grid_map.setProperty( "OX" + current_row + "C" + current_new_grid_col, "" + char_2 );
-
-          current_new_grid_col++;
-        }
-      }
-      else
-      {
-        cmd_string += input_str;
-      }
-
-      current_row++;
-    }
-
-    if ( pKnzDebug )
-    {
-      wl( "" );
-      wl( "Robot start at X" + robot_row + "C" + robot_col );
-      wl( "" );
-      wl( getDebugMap( m_prop_grid_map, grid_height, grid_width ) );
-    }
-// && ( index_command < 234 )
-    for ( int index_command = 0; ( index_command < cmd_string.length() ); index_command++ )
-    {
-      char cmd_char = cmd_string.charAt( index_command );
-
-//      if ( pKnzDebug )
-//      {
-//        wl( "" );
-//        wl( "--------------------------------------------------------------" );
-//        wl( "cmd " + cmd_char + " nr " + index_command );
-//      }
-
-      if ( cmd_char == CHAR_CMD_UP )
-      {
-        robot_row = moveVertical( robot_row, robot_col, ROW_UP, pKnzDebug );
-      }
-      else if ( cmd_char == CHAR_CMD_DOWN )
-      {
-        robot_row = moveVertical( robot_row, robot_col, ROW_DOWN, pKnzDebug );
-      }
-      else if ( cmd_char == CHAR_CMD_LEFT )
-      {
-        robot_col = moveHorizontal( robot_row, robot_col, COL_LEFT, pKnzDebug );
-      }
-      else if ( cmd_char == CHAR_CMD_RIGHT )
-      {
-        robot_col = moveHorizontal( robot_row, robot_col, COL_RIGHT, pKnzDebug );
-      }
-
-
-//      if ( pKnzDebug )
-//      {
-//        wl( "" );
-//        wl( getDebugMap( m_prop_grid_map, grid_height, grid_width ) );
-//      }
-
-      if ( index_command > 240 )
-      {
-        String da_inh = getDebugMap1( m_prop_grid_map, grid_height, grid_width ) + "\n";
-
-        da_inh += " " + index_command + " " + calcResult( m_prop_grid_map, grid_height, grid_width ) + " \n";
-        da_inh += " " + index_command + " " + cmd_char + " \n\n\n\n\n";
-        da_inh += " " + index_command + " " + Mid( cmd_string, index_command, 10 ) + " \n\n\n\n\nx";
-
-        String da_nam = "/mnt/hd4tbb/daten/ang/xyaoc_2024_calc_nr_" + index_command + "_" + calcResult( m_prop_grid_map, grid_height, grid_width ) + "_JAVA.txt";
-
-        schreibeDatei( da_nam, da_inh );
-      }
-      wl( index_command + " " + calcResult( m_prop_grid_map, grid_height, grid_width ) );
-    }
-
-    /*
-     * *******************************************************************************************************
-     * Debug Grid
-     * *******************************************************************************************************
-     */
-    wl( "" );
-    wl( getDebugMap( m_prop_grid_map, grid_height, grid_width ) );
-  }
-
-  public static String Mid( String pString, long pAbPosition, int pLaenge )
-  {
-    try
-    {
-      if ( pString != null )
-      {
-        if ( pLaenge < 0 )
-        {
-          return pString.substring( (int) pAbPosition );
-        }
-
-        long ab_pos = pAbPosition < 0 ? 0 : pAbPosition;
-
-        long bis_pos = ab_pos + pLaenge > pString.length() ? pString.length() : ab_pos + pLaenge;
-
-        return pString.substring( (int) ab_pos, (int) bis_pos );
-      }
-    }
-    catch ( Exception err_inst )
-    {
-    }
-
-    return "";
-  }
-
-  public static boolean schreibeDatei( String pDateiName, String pInhalt )
-  {
-    try
-    {
-      FileWriter output_stream = new FileWriter( pDateiName, false );
-
-      if ( pInhalt != null )
-      {
-        output_stream.write( pInhalt );
-      }
-
-      /*
-       * Aufruf von "stream.flush()"
-       */
-      output_stream.flush();
-
-      output_stream.close();
-
-      output_stream = null;
-
-      return true;
-    }
-    catch ( Exception err_inst )
-    {
-      wl( "Fehler: errSchreibeDatei" + err_inst.getLocalizedMessage() );
-    }
-
-    return false;
   }
 
   private static long moveVertical( long robot_row, long robot_col, long delta_row, boolean pKnzDebug )
@@ -671,9 +354,13 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
          * at the given position.
          * 
          * ........
-         * ...[].....
+         * ...[]...
          * ..[][]..
          * ...@....
+         * 
+         * ....@...
+         * ...[]...
+         * 
          * 
          * Ensure that the space over the robot is always 
          * the start of the box.
@@ -767,7 +454,7 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
     char char_col1 = m_prop_grid_map.getProperty( "R" + check_row + "C" + check_col1, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
     char char_col2 = m_prop_grid_map.getProperty( "R" + check_row + "C" + check_col2, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
 
-    if ( ( char_col1 == CHAR_WALL ) || ( char_col1 == CHAR_WALL ) )
+    if ( ( char_col1 == CHAR_WALL ) || ( char_col2 == CHAR_WALL ) )
     {
       /*
        * No move possible if one char hit a wall.
@@ -1031,58 +718,6 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
     return debug_map;
   }
 
-  private static String getDebugMap1( Properties pGrid, long grid_height, long grid_width )
-  {
-    long goods_position_system_sum_value = 0;
-
-    String debug_map = "";
-
-    for ( long cur_x = 0; cur_x < grid_height; cur_x++ )
-    {
-      String cur_line = "";
-
-      for ( long cur_y = 0; cur_y < grid_width; cur_y++ )
-      {
-        char cur_char = pGrid.getProperty( "R" + cur_x + "C" + cur_y, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
-
-        if ( cur_char == CHAR_BOX2_S )
-        {
-          long goods_position_system_value = ( cur_x * 100 ) + cur_y;
-
-          goods_position_system_sum_value += goods_position_system_value;
-        }
-
-        cur_line += cur_char;
-      }
-
-      debug_map += cur_line + "\n";
-    }
-
-    return debug_map;
-  }
-
-  private static long calcResult( Properties pGrid, long grid_height, long grid_width )
-  {
-    long goods_position_system_sum_value = 0;
-
-    for ( long cur_x = 0; cur_x < grid_height; cur_x++ )
-    {
-      for ( long cur_y = 0; cur_y < grid_width; cur_y++ )
-      {
-        char cur_char = pGrid.getProperty( "R" + cur_x + "C" + cur_y, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
-
-        if ( cur_char == CHAR_BOX2_S )
-        {
-          long goods_position_system_value = ( cur_x * 100 ) + cur_y;
-
-          goods_position_system_sum_value += goods_position_system_value;
-        }
-      }
-    }
-
-    return goods_position_system_sum_value;
-  }
-
   private static String getMapConverted( String pInput )
   {
     List< String > list_map_input = Arrays.stream( pInput.split( "," ) ).map( String::trim ).collect( Collectors.toList() );
@@ -1164,22 +799,116 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
     return string_array;
   }
 
-  private static List< String > getListProd2()
+  private static void calcTestMapX()
   {
-    List< String > string_array = null;
+    List< String > list_map_input = new ArrayList< String >();
 
-    String datei_input = "/mnt/hd4tbb/daten/ang/advent_of_code_2024__day15_input.txt";
+    list_map_input.add( "#################" );
+    list_map_input.add( "##[].....[]....##" );
+    list_map_input.add( "##......@......##" );
+    list_map_input.add( "##.....[]......##" );
+    list_map_input.add( "##..[][]....[].##" );
+    list_map_input.add( "##....[]##.[]..##" );
+    list_map_input.add( "##....[][][][].##" );
+    list_map_input.add( "##..........##.##" );
+    list_map_input.add( "##.............##" );
+    list_map_input.add( "##....[].......##" );
+    list_map_input.add( "##...[]...##[].##" );
+    list_map_input.add( "#################" );
 
-    try
-    {
-      string_array = Files.readAllLines( Path.of( datei_input ) );
-    }
-    catch ( IOException e )
-    {
-      e.printStackTrace();
-    }
+    list_map_input.add( "" );
 
-    return string_array;
+    list_map_input.add( "vvv" );
+
+    calculatePart02( list_map_input, true );
+  }
+
+  private static void calcTestMap1()
+  {
+    List< String > list_map_input = new ArrayList< String >();
+
+    list_map_input.add( "##################" );
+    list_map_input.add( "##.....@........##" );
+    list_map_input.add( "##....[]........##" );
+    list_map_input.add( "##....[][]......##" );
+    list_map_input.add( "##.....[].[]....##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##....#.........##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##################" );
+
+    list_map_input.add( "" );
+
+    list_map_input.add( "vvvvvv" );
+
+    calculatePart02( list_map_input, true );
+  }
+
+  private static void calcTestMap2()
+  {
+    List< String > list_map_input = new ArrayList< String >();
+
+    list_map_input.add( "##################" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##....#.........##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##....[]........##" );
+    list_map_input.add( "##....[][]......##" );
+    list_map_input.add( "##.....[].[]....##" );
+    list_map_input.add( "##......@.......##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##################" );
+
+    list_map_input.add( "" );
+
+    list_map_input.add( "^^^^" );
+
+    calculatePart02( list_map_input, true );
+  }
+
+  private static void calcTestMap3()
+  {
+    List< String > list_map_input = new ArrayList< String >();
+
+    list_map_input.add( "##################" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##....#.........##" );
+    list_map_input.add( "##.....[].......##" );
+    list_map_input.add( "##....[][]......##" );
+    list_map_input.add( "##.....[].[]....##" );
+    list_map_input.add( "##......@.......##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##################" );
+
+    list_map_input.add( "" );
+
+    list_map_input.add( "^^^^" );
+
+    calculatePart02( list_map_input, true );
+  }
+
+  private static void calcTestMapMoveDirections()
+  {
+    List< String > list_map_input = new ArrayList< String >();
+
+    list_map_input.add( "##################" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##....[]........##" );
+    list_map_input.add( "##.....[].......##" );
+    list_map_input.add( "##..[][]@[][]...##" );
+    list_map_input.add( "##.....[].......##" );
+    list_map_input.add( "##......[]......##" );
+    list_map_input.add( "##..............##" );
+    list_map_input.add( "##################" );
+
+    list_map_input.add( "" );
+
+    list_map_input.add( "^vv^<>><" );
+
+    calculatePart02( list_map_input, true );
   }
 
   private static void wl( String pString ) // wl = short for "write log"
@@ -1268,4 +997,104 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
     return ergebnis.substring( 0, pAnzahlStellen );
   }
+
+  //
+  //private static String getDebugMap1( Properties pGrid, long grid_height, long grid_width )
+  //{
+  //  String debug_map = "";
+  //
+  //  for ( long cur_x = 0; cur_x < grid_height; cur_x++ )
+  //  {
+  //    String cur_line = "";
+  //
+  //    for ( long cur_y = 0; cur_y < grid_width; cur_y++ )
+  //    {
+  //      char cur_char = pGrid.getProperty( "R" + cur_x + "C" + cur_y, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
+  //
+  //      cur_line += cur_char;
+  //    }
+  //
+  //    debug_map += cur_line + "\n";
+  //  }
+  //
+  //  return debug_map;
+  //}
+  //
+  //private static long calcResult( Properties pGrid, long grid_height, long grid_width )
+  //{
+  //  long goods_position_system_sum_value = 0;
+  //
+  //  for ( long cur_x = 0; cur_x < grid_height; cur_x++ )
+  //  {
+  //    for ( long cur_y = 0; cur_y < grid_width; cur_y++ )
+  //    {
+  //      char cur_char = pGrid.getProperty( "R" + cur_x + "C" + cur_y, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
+  //
+  //      if ( cur_char == CHAR_BOX2_S )
+  //      {
+  //        long goods_position_system_value = ( cur_x * 100 ) + cur_y;
+  //
+  //        goods_position_system_sum_value += goods_position_system_value;
+  //      }
+  //    }
+  //  }
+  //
+  //  return goods_position_system_sum_value;
+  //}
+  //
+  //private static String Mid( String pString, long pAbPosition, int pLaenge )
+  //{
+  //  try
+  //  {
+  //    if ( pString != null )
+  //    {
+  //      if ( pLaenge < 0 )
+  //      {
+  //        return pString.substring( (int) pAbPosition );
+  //      }
+  //
+  //      long ab_pos = pAbPosition < 0 ? 0 : pAbPosition;
+  //
+  //      long bis_pos = ab_pos + pLaenge > pString.length() ? pString.length() : ab_pos + pLaenge;
+  //
+  //      return pString.substring( (int) ab_pos, (int) bis_pos );
+  //    }
+  //  }
+  //  catch ( Exception err_inst )
+  //  {
+  //  }
+  //
+  //  return "";
+  //}
+  //
+  //private static boolean schreibeDatei( String pDateiName, String pInhalt )
+  //{
+  //  try
+  //  {
+  //    FileWriter output_stream = new FileWriter( pDateiName, false );
+  //
+  //    if ( pInhalt != null )
+  //    {
+  //      output_stream.write( pInhalt );
+  //    }
+  //
+  //    /*
+  //     * Aufruf von "stream.flush()"
+  //     */
+  //    output_stream.flush();
+  //
+  //    output_stream.close();
+  //
+  //    output_stream = null;
+  //
+  //    return true;
+  //  }
+  //  catch ( Exception err_inst )
+  //  {
+  //    wl( "Fehler: errSchreibeDatei" + err_inst.getLocalizedMessage() );
+  //  }
+  //
+  //  return false;
+  //}
+  //
 }
