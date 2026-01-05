@@ -19,6 +19,183 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
    * https://www.youtube.com/watch?v=jnAj6cB2NvI
    * 
    * https://www.reddit.com/r/adventofcode/comments/1hele8m/2024_day_15_solutions/
+   * 
+   * 
+   * Robot start at X5C8
+   * 
+   * ##################
+   * ##..............##
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##..[][]@[][]...##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##..............##
+   * ##################
+   * 
+   * GPS 4058
+   * 
+   * --------------------------------------------------------------
+   * cmd ^ nr 0
+   * List Info R00003,R3C6,R2C6,[
+   * List Info R00003,R3C7,R2C7,]
+   * List Info R00004,R4C7,R3C7,[
+   * List Info R00004,R4C8,R3C8,]
+   * 
+   * ##################
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##......@.......##
+   * ##..[][].[][]...##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##..............##
+   * ##################
+   * 
+   * GPS 3858
+   * 
+   * --------------------------------------------------------------
+   * cmd v nr 1
+   * 
+   * ##################
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##..............##
+   * ##..[][]@[][]...##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##..............##
+   * ##################
+   * 
+   * GPS 3858
+   * 
+   * --------------------------------------------------------------
+   * cmd v nr 2
+   * List Info R00007,R7C9,R8C9,]
+   * List Info R00007,R7C8,R8C8,[
+   * List Info R00006,R6C8,R7C8,]
+   * List Info R00006,R6C7,R7C7,[
+   * 
+   * ##################
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##..............##
+   * ##..[][].[][]...##
+   * ##......@.......##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##################
+   * 
+   * GPS 4058
+   * 
+   * --------------------------------------------------------------
+   * cmd ^ nr 3
+   * 
+   * ##################
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##..............##
+   * ##..[][]@[][]...##
+   * ##..............##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##################
+   * 
+   * GPS 4058
+   * 
+   * --------------------------------------------------------------
+   * cmd < nr 4
+   * robot R5C8   free space R5C7  ]
+   * robot R5C8   free space R5C6  [
+   * robot R5C8   free space R5C5  ]
+   * robot R5C8   free space R5C4  [
+   * robot R5C8   free space R5C3  .
+   * robot R5C8   free space R5C3  "["    free space R5C4  "["
+   * robot R5C8   free space R5C4  "]"    free space R5C5  "]"
+   * robot R5C8   free space R5C5  "["    free space R5C6  "["
+   * robot R5C8   free space R5C6  "]"    free space R5C7  "]"
+   * robot R5C8   free space R5C7  "@"    free space R5C8  "@"
+   * 
+   * ##################
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##..............##
+   * ##.[][]@.[][]...##
+   * ##..............##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##################
+   * 
+   * GPS 4056
+   * 
+   * --------------------------------------------------------------
+   * cmd > nr 5
+   * robot R5C7   free space R5C8  .
+   * robot R5C7   free space R5C8  "@"    free space R5C7  "@"
+   * 
+   * ##################
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##..............##
+   * ##.[][].@[][]...##
+   * ##..............##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##################
+   * 
+   * GPS 4056
+   * 
+   * --------------------------------------------------------------
+   * cmd > nr 6
+   * robot R5C8   free space R5C9  [
+   * robot R5C8   free space R5C10  ]
+   * robot R5C8   free space R5C11  [
+   * robot R5C8   free space R5C12  ]
+   * robot R5C8   free space R5C13  .
+   * robot R5C8   free space R5C13  "]"    free space R5C12  "]"
+   * robot R5C8   free space R5C12  "["    free space R5C11  "["
+   * robot R5C8   free space R5C11  "]"    free space R5C10  "]"
+   * robot R5C8   free space R5C10  "["    free space R5C9  "["
+   * robot R5C8   free space R5C9  "@"    free space R5C8  "@"
+   * 
+   * ##################
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##..............##
+   * ##.[][]..@[][]..##
+   * ##..............##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##################
+   * 
+   * GPS 4058
+   * 
+   * --------------------------------------------------------------
+   * cmd < nr 7
+   * robot R5C9   free space R5C8  .
+   * robot R5C9   free space R5C8  "@"    free space R5C9  "@"
+   * 
+   * ##################
+   * ##..............##
+   * ##....[]........##
+   * ##.....[].......##
+   * ##..............##
+   * ##.[][].@.[][]..##
+   * ##..............##
+   * ##.....[].......##
+   * ##......[]......##
+   * ##################
+   * 
+   * GPS 4058
+   * 
    */
 
   private static final int    ROW_UP                    = -1;
@@ -29,15 +206,19 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
   private static final int    COL_RIGHT                 = 1;
 
+  private static final int    MOVE_NOT_POSSIBLE         = 0;
+
+  private static final int    MOVE_POSSIBLE             = 1;
+
   private static final char   CHAR_WALL                 = '#';
 
   private static final char   CHAR_EMPTY_FLOOR          = '.';
 
-  private static final char   CHAR_BOX                  = 'O';
+  private static final char   CHAR_BOX_1                = 'O';
 
-  private static final char   CHAR_BOX2_S               = '[';
+  private static final char   CHAR_BOX_2_START          = '[';
 
-  private static final char   CHAR_BOX2_E               = ']';
+  private static final char   CHAR_BOX_2_END            = ']';
 
   private static final char   CHAR_ROBOT                = '@';
 
@@ -51,7 +232,7 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
 
   private static final String MAP_COORDINATES_NOT_FOUND = "_";
 
-  private static final int    NR_OF_DIGITS_LINE_INFO    = 4;
+  private static final int    NR_OF_DIGITS_LINE_INFO    = 5;
 
   private static Properties   m_prop_grid_map           = null;
 
@@ -128,7 +309,7 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
      * Result: 1472235
      */
 
-    //calcTestMapMoveDirections();
+    calcTestMapMoveDirections();
     //calcTestMapX();
   }
 
@@ -286,42 +467,47 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
      * Show End Map with the Result-Value
      * *******************************************************************************************************
      */
+
     wl( "" );
     wl( getDebugMap( m_prop_grid_map, grid_height, grid_width ) );
   }
 
   private static long moveVertical( long robot_row, long robot_col, long delta_row, boolean pKnzDebug )
   {
-    long do_move = robot_row;
+    long new_robot_row = robot_row;
 
     /*
-     * Get the char above the robot
+     * Get the char direct over or under the robots position
      */
-    char char_col1 = m_prop_grid_map.getProperty( "R" + ( robot_row + delta_row ) + "C" + robot_col, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
+    char char_col_1 = m_prop_grid_map.getProperty( "R" + ( robot_row + delta_row ) + "C" + robot_col, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
 
-    if ( char_col1 == CHAR_WALL )
+    if ( char_col_1 == CHAR_WALL )
     {
       /*
-       * Move not possible, we hit a wall
-       * Robot already against wall.
+       * Move not possible.
+       * 
+       * Robot stands already against wall.
+       * 
        * ########
        * .@....
        * ########
+       * 
+       * The robot row is not changing.
        */
-      do_move = 0;
     }
-    else if ( char_col1 == CHAR_EMPTY_FLOOR )
+    else if ( char_col_1 == CHAR_EMPTY_FLOOR )
     {
       /*
        * Move possible
        * 
-       * Next Robot position is free floor
+       * The positon above or below the current robot position is free floor.
+       * 
        * ########
        * ..[].[].
        * ....@...
+       * ..##.##.
        * 
        */
-      do_move = 1;
 
       /*
        * Set the robot to the now coordinates
@@ -334,46 +520,40 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
       m_prop_grid_map.setProperty( "R" + robot_row + "C" + robot_col, "" + CHAR_EMPTY_FLOOR );
 
       /*
-       * Set the return value to the new robot row
+       * Set the new robot row, according to the delta_row
        */
       robot_row += delta_row;
     }
     else
     {
-      long fake_col1 = robot_col;
-      long fake_col2 = robot_col + 1;
+      long col_box_start = robot_col;
 
-      if ( char_col1 == CHAR_BOX2_E )
+      if ( char_col_1 == CHAR_BOX_2_END )
       {
         /*
-         * Is the char above the robot the box-end char,
-         * then correct the position for the rec-search
-         * by minus one. 
+         * If the char above the robot is the box-end char,
+         * the correct box start position one column to the 
+         * left. The col_box_start variable has to be 
+         * decreased by one.
          * 
-         * The rec-search, should have always find a box start char
-         * at the given position.
-         * 
-         * ........
-         * ...[]...
-         * ..[][]..
+         * ..[]....
          * ...@....
          * 
          * ....@...
          * ...[]...
          * 
          * 
-         * Ensure that the space over the robot is always 
+         * Ensure that the column over the robot is always 
          * the start of the box.
          */
-        fake_col1--;
-        fake_col2--;
+        col_box_start--;
       }
 
       List< String > list_info = new ArrayList< String >();
 
-      do_move = checkVertical( list_info, true, ( robot_row + delta_row ), delta_row, fake_col1, fake_col2 );
+      long move_status = checkMoveVertical( list_info, robot_row + delta_row, delta_row, col_box_start, col_box_start + 1 );
 
-      if ( do_move == 1 )
+      if ( move_status == MOVE_POSSIBLE )
       {
         if ( delta_row < 0 )
         {
@@ -414,171 +594,162 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
     return robot_row;
   }
 
-  private static long checkVertical( List< String > pListC, boolean knz_change_grid, long check_row, long delta_row, long check_col1, long check_col2 )
+  private static long checkMoveVertical( List< String > pListC, long check_row, long delta_row, long check_col_1, long check_col_2 )
   {
     /*
      * Negativ check coordinates - no move - Error
      */
-    if ( ( check_col1 < 0 ) || ( check_col1 < 0 ) || ( check_col2 < 0 ) )
+    if ( ( check_col_1 < 0 ) || ( check_col_1 < 0 ) || ( check_col_2 < 0 ) )
     {
       wl( "error " );
 
-      return 0;
+      return MOVE_NOT_POSSIBLE;
     }
+
+    /*
+     * TODO Prevent a position to be found again 
+     */
 
     /*
      * Get the chars from the check coordinates
      * 
-     * char_col1  char_col2
+     * char_col_1  char_col_2
      *     [          ]       = Box found = check direct above   
      * 
-     *     ]          [       = Closing Box to the left    = Check Left  = check_col1 - 1 to get the Box-Start
-     *                        = Starting Box to the right  = Check Right = check_col1 + 1 to get the Box-Start at position check_col1
+     *     ]          [       = Closing Box to the left    = Check Left  = check_col_1 - 1 to get the Box-Start
+     *                        = Starting Box to the right  = Check Right = check_col_1 + 1 to get the Box-Start at position check_col_1
      *                        
-     *     ]          .       = Closing Box to the left    = Check Left  = check_col1 - 1 to get the Box-Start
+     *     ]          .       = Closing Box to the left    = Check Left  = check_col_1 - 1 to get the Box-Start
      *                        
-     *     .          [       = Starting Box to the right  = Check Right = check_col1 + 1 to get the Box-Start at position check_col1
+     *     .          [       = Starting Box to the right  = Check Right = check_col_1 + 1 to get the Box-Start at position check_col_1
      * 
      * 
-     *     #          [       = char_col1 hit wall         = no move possible = return 0
-     *     #          .       = char_col1 hit wall         = no move possible = return 0
+     *     #          [       = char_col_1 hit wall         = no move possible = return 0
+     *     #          .       = char_col_1 hit wall         = no move possible = return 0
      *     
-     *     ]          #       = char_col2 hit wall         = no move possible = return 0
-     *     .          #       = char_col2 hit wall         = no move possible = return 0
+     *     ]          #       = char_col_2 hit wall         = no move possible = return 0
+     *     .          #       = char_col_2 hit wall         = no move possible = return 0
      *                        
      *     #          #       = both chars hit wall         = no move possible = return 0
      *                        
      *     .          .       = both chars are empty floor  = move possible    = return 1 = recursion end
      *     
      */
-    char char_col1 = m_prop_grid_map.getProperty( "R" + check_row + "C" + check_col1, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
-    char char_col2 = m_prop_grid_map.getProperty( "R" + check_row + "C" + check_col2, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
+    char char_col_1 = m_prop_grid_map.getProperty( "R" + check_row + "C" + check_col_1, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
+    char char_col_2 = m_prop_grid_map.getProperty( "R" + check_row + "C" + check_col_2, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
 
-    if ( ( char_col1 == CHAR_WALL ) || ( char_col2 == CHAR_WALL ) )
+    if ( ( char_col_1 == CHAR_WALL ) || ( char_col_2 == CHAR_WALL ) )
     {
       /*
        * No move possible if one char hit a wall.
        * Even if the other char is "empty floor" or some Box-char.
        */
-      return 0;
+
+      return MOVE_NOT_POSSIBLE;
     }
 
-    if ( ( char_col1 == CHAR_EMPTY_FLOOR ) && ( char_col2 == CHAR_EMPTY_FLOOR ) )
+    if ( ( char_col_1 == CHAR_EMPTY_FLOOR ) && ( char_col_2 == CHAR_EMPTY_FLOOR ) )
     {
       /*
-       * char_col are both empty floor, we can move to this spot.
-       * the position will not be remembered, because we move to this spot.
+       * The char_col are both empty floor, we can move to this spot.
+       * The position will not be remembered, because we move to this spot.
        */
 
-      return 1;
+      return MOVE_POSSIBLE;
     }
 
-    long box_left_col1 = -1;
-    long box_left_col2 = -1;
+    long move_status = MOVE_NOT_POSSIBLE;
 
-    long box_right_col1 = -1;
-    long box_right_col2 = -1;
+    long box_left_col_1 = -1;
+    long box_left_col_2 = -1;
 
-    if ( ( char_col1 == CHAR_BOX2_S ) && ( char_col2 == CHAR_BOX2_E ) )
+    long box_right_col_1 = -1;
+    long box_right_col_2 = -1;
+
+    if ( ( char_col_1 == CHAR_BOX_2_START ) && ( char_col_2 == CHAR_BOX_2_END ) )
     {
-      box_left_col1 = check_col1;
-      box_left_col2 = check_col2;
-    }
-    else
-    {
-      if ( char_col1 == CHAR_BOX2_E )
-      {
-        box_left_col1 = check_col1 - 1;
-        box_left_col2 = check_col2 - 1;
-      }
+      box_left_col_1 = check_col_1;
+      box_left_col_2 = check_col_2;
 
-      if ( char_col2 == CHAR_BOX2_S )
-      {
-        box_right_col1 = check_col1 + 1;
-        box_right_col2 = check_col2 + 1;
-      }
-    }
-
-    long do_move = 0; // dont move
-
-    if ( ( char_col1 == CHAR_BOX2_S ) && ( char_col2 == CHAR_BOX2_E ) )
-    {
-      do_move = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, box_left_col1, box_left_col2 );
+      move_status = checkMoveVertical( pListC, check_row + delta_row, delta_row, box_left_col_1, box_left_col_2 );
     }
     else
     {
       long do_move_left = 1;
-      long do_move_right = 1;
 
-      if ( char_col1 == CHAR_BOX2_E )
+      if ( char_col_1 == CHAR_BOX_2_END )
       {
-        do_move_left = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, box_left_col1, box_left_col2 );
+        box_left_col_1 = check_col_1 - 1;
+        box_left_col_2 = check_col_2 - 1;
 
-        do_move = do_move_left;
+        do_move_left = checkMoveVertical( pListC, check_row + delta_row, delta_row, box_left_col_1, box_left_col_2 );
+
+        move_status = do_move_left;
       }
 
-      if ( ( do_move_left == 1 ) && ( char_col2 == CHAR_BOX2_S ) )
+      if ( ( do_move_left == 1 ) && ( char_col_2 == CHAR_BOX_2_START ) )
       {
-        do_move_right = checkVertical( pListC, knz_change_grid, check_row + delta_row, delta_row, box_right_col1, box_right_col2 );
+        box_right_col_1 = check_col_1 + 1;
+        box_right_col_2 = check_col_2 + 1;
 
-        do_move = do_move_right;
+        move_status = checkMoveVertical( pListC, check_row + delta_row, delta_row, box_right_col_1, box_right_col_2 );
       }
     }
 
-    if ( ( knz_change_grid ) && ( do_move == 1 ) )
+    if ( move_status == MOVE_POSSIBLE )
     {
-      if ( box_left_col1 > 0 )
+      if ( box_left_col_1 > 0 )
       {
-        String prop_key = "";
+        String key_position_info = "";
 
-        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( box_left_col1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
-        prop_key += "," + "R" + ( check_row ) + "C" + box_left_col1; // From
-        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + box_left_col1; // To
-        prop_key += "," + CHAR_BOX2_S; // Char-Info
-        prop_key += "," + char_col1; // Char-Info
-        prop_key += ",START"; // Debug-Info
+        key_position_info += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO );// + "C" + getNumberWithLeadingZeros( box_left_col_1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        key_position_info += "," + "R" + ( check_row ) + "C" + box_left_col_1; // From
+        key_position_info += "," + "R" + ( check_row + delta_row ) + "C" + box_left_col_1; // To
+        key_position_info += "," + CHAR_BOX_2_START; // Char-Info
+        //key_position_info += "," + char_col_1; // Char-Info
+        //key_position_info += ",START"; // Debug-Info
 
-        pListC.add( prop_key );
+        pListC.add( key_position_info );
 
-        prop_key = "";
+        key_position_info = "";
 
-        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( box_left_col2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
-        prop_key += "," + "R" + ( check_row ) + "C" + box_left_col2; // From
-        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + box_left_col2; // To
-        prop_key += "," + CHAR_BOX2_E; // Char-Info
-        prop_key += "," + char_col2; // Char-Info
-        prop_key += ",END"; // Debug-Info
+        key_position_info += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO );// + "C" + getNumberWithLeadingZeros( box_left_col_2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        key_position_info += "," + "R" + ( check_row ) + "C" + box_left_col_2; // From
+        key_position_info += "," + "R" + ( check_row + delta_row ) + "C" + box_left_col_2; // To
+        key_position_info += "," + CHAR_BOX_2_END; // Char-Info
+        //key_position_info += "," + char_col_2; // Char-Info
+        //key_position_info += ",END"; // Debug-Info
 
-        pListC.add( prop_key );
+        pListC.add( key_position_info );
       }
 
-      if ( box_right_col1 > 0 )
+      if ( box_right_col_1 > 0 )
       {
-        String prop_key = "";
+        String key_position_info = "";
 
-        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( box_right_col1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
-        prop_key += "," + "R" + ( check_row ) + "C" + box_right_col1; // From
-        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + box_right_col1; // To
-        prop_key += "," + CHAR_BOX2_S; // Char-Info
-        prop_key += "," + char_col1; // Char-Info
-        prop_key += ",START"; // Debug-Info
+        key_position_info += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO );// + "C" + getNumberWithLeadingZeros( box_right_col_1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        key_position_info += "," + "R" + ( check_row ) + "C" + box_right_col_1; // From
+        key_position_info += "," + "R" + ( check_row + delta_row ) + "C" + box_right_col_1; // To
+        key_position_info += "," + CHAR_BOX_2_START; // Char-Info
+        //key_position_info += "," + char_col_1; // Char-Info
+        //key_position_info += ",START"; // Debug-Info
 
-        pListC.add( prop_key );
+        pListC.add( key_position_info );
 
-        prop_key = "";
+        key_position_info = "";
 
-        prop_key += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO ) + "C" + getNumberWithLeadingZeros( box_right_col2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
-        prop_key += "," + "R" + ( check_row ) + "C" + box_right_col2; // From
-        prop_key += "," + "R" + ( check_row + delta_row ) + "C" + box_right_col2; // To
-        prop_key += "," + CHAR_BOX2_E; // Char-Info
-        prop_key += "," + char_col2; // Char-Info
-        prop_key += ",END"; // Debug-Info
+        key_position_info += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO );// + "C" + getNumberWithLeadingZeros( box_right_col_2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        key_position_info += "," + "R" + ( check_row ) + "C" + box_right_col_2; // From
+        key_position_info += "," + "R" + ( check_row + delta_row ) + "C" + box_right_col_2; // To
+        key_position_info += "," + CHAR_BOX_2_END; // Char-Info
+        //key_position_info += "," + char_col_2; // Char-Info
+        //key_position_info += ",END"; // Debug-Info
 
-        pListC.add( prop_key );
+        pListC.add( key_position_info );
       }
     }
 
-    return do_move;
+    return move_status;
   }
 
   private static long moveHorizontal( long robot_row, long robot_col, long delta_col, boolean pKnzDebug )
@@ -592,7 +763,7 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
      * First check the char from the robots perspektive.
      * Check if in the move direction is a wall.
      */
-    char free_space_char = CHAR_BOX;
+    char free_space_char = CHAR_BOX_1;
 
     /*
      * Search the next free space in the search direction.
@@ -700,7 +871,7 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
       {
         char cur_char = pGrid.getProperty( "R" + cur_x + "C" + cur_y, MAP_COORDINATES_NOT_FOUND ).charAt( 0 );
 
-        if ( cur_char == CHAR_BOX2_S )
+        if ( cur_char == CHAR_BOX_2_START )
         {
           long goods_position_system_value = ( cur_x * 100 ) + cur_y;
 
@@ -755,10 +926,10 @@ public class Day15WarehouseWoesP02 extends Day15WarehouseWoes
             char_1 = CHAR_EMPTY_FLOOR;
             char_2 = CHAR_EMPTY_FLOOR;
           }
-          else if ( current_char == CHAR_BOX )
+          else if ( current_char == CHAR_BOX_1 )
           {
-            char_1 = CHAR_BOX2_S;
-            char_2 = CHAR_BOX2_E;
+            char_1 = CHAR_BOX_2_START;
+            char_2 = CHAR_BOX_2_END;
           }
           else if ( current_char == CHAR_ROBOT )
           {
