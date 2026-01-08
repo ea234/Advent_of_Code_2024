@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-public class Day15WarehouseWoesP02 
+public class Day15WarehouseWoesP02_SAVE 
 {
   /*
    * --- Day 15: Warehouse Woes ---
@@ -309,8 +309,7 @@ public class Day15WarehouseWoesP02
      * Result: 1472235
      */
 
-    //calcTestMapMoveDirections();
-    calcTestMapDiamond(); 
+    calcTestMapMoveDirections();
     //calcTestMapX();
   }
 
@@ -475,6 +474,8 @@ public class Day15WarehouseWoesP02
 
   private static long moveVertical( long robot_row, long robot_col, long delta_row, boolean pKnzDebug )
   {
+    long new_robot_row = robot_row;
+
     /*
      * Get the char direct over or under the robots position
      */
@@ -548,38 +549,29 @@ public class Day15WarehouseWoesP02
         col_box_start--;
       }
 
-      /*
-       * List for storing box-coordinates, that are affected by this move.
-       */
       List< String > list_info = new ArrayList< String >();
 
-      /*
-       * Start the recursive search for all boxes and determine, if 
-       * the move is possible.
-       */
-      long move_status = checkMoveVertical( new Properties(), list_info, robot_row + delta_row, delta_row, col_box_start, col_box_start + 1 );
+      long move_status = checkMoveVertical( list_info, robot_row + delta_row, delta_row, col_box_start, col_box_start + 1 );
 
-      /*
-       * If the move is possible, all the boxes and the robot 
-       * have to change positions.
-       */
       if ( move_status == MOVE_POSSIBLE )
       {
+        if ( delta_row < 0 )
+        {
+          list_info.sort( null );
+        }
+        else
+        {
+          list_info.sort( Comparator.reverseOrder() );
+        }
+
         for ( String info_str : list_info )
         {
           wl( "List Info " + info_str );
 
           String[] parts = info_str.split( "," );
 
-          /*
-           * Place the char from parts[ 2 ] to the coordinates from parts[ 1 ]
-           */
-          m_prop_grid_map.setProperty( parts[ 1 ], parts[ 2 ] );
-
-          /*
-           * Place the char "empty_floor" to the coordinates from parts[ 0 ]
-           */
-          m_prop_grid_map.setProperty( parts[ 0 ], "" + CHAR_EMPTY_FLOOR );
+          m_prop_grid_map.setProperty( parts[ 2 ], parts[ 3 ] );
+          m_prop_grid_map.setProperty( parts[ 1 ], "" + CHAR_EMPTY_FLOOR );
         }
 
         /*
@@ -602,7 +594,7 @@ public class Day15WarehouseWoesP02
     return robot_row;
   }
 
-  private static long checkMoveVertical( Properties pSaveCoordinates, List< String > pListC, long check_row, long delta_row, long check_col_1, long check_col_2 )
+  private static long checkMoveVertical( List< String > pListC, long check_row, long delta_row, long check_col_1, long check_col_2 )
   {
     /*
      * Negativ check coordinates - no move - Error
@@ -612,13 +604,6 @@ public class Day15WarehouseWoesP02
       wl( "error " );
 
       return MOVE_NOT_POSSIBLE;
-    }
-    
-    String value_before = pSaveCoordinates.getProperty( "R" + check_row + "C" + check_col_1 );
-    
-    if (  value_before != null )
-    {
-      return Long.valueOf( value_before );
     }
 
     /*
@@ -680,16 +665,13 @@ public class Day15WarehouseWoesP02
 
     long box_right_col_1 = -1;
     long box_right_col_2 = -1;
-    
 
     if ( ( char_col_1 == CHAR_BOX_2_START ) && ( char_col_2 == CHAR_BOX_2_END ) )
     {
       box_left_col_1 = check_col_1;
       box_left_col_2 = check_col_2;
 
-//      if ( x.getProperty( "R" + check_row + "C" + check_col_1, "-3" );
-
-      move_status = checkMoveVertical(pSaveCoordinates,  pListC, check_row + delta_row, delta_row, box_left_col_1, box_left_col_2 );
+      move_status = checkMoveVertical( pListC, check_row + delta_row, delta_row, box_left_col_1, box_left_col_2 );
     }
     else
     {
@@ -700,7 +682,7 @@ public class Day15WarehouseWoesP02
         box_left_col_1 = check_col_1 - 1;
         box_left_col_2 = check_col_2 - 1;
 
-        do_move_left = checkMoveVertical( pSaveCoordinates,  pListC, check_row + delta_row, delta_row, box_left_col_1, box_left_col_2 );
+        do_move_left = checkMoveVertical( pListC, check_row + delta_row, delta_row, box_left_col_1, box_left_col_2 );
 
         move_status = do_move_left;
       }
@@ -710,7 +692,7 @@ public class Day15WarehouseWoesP02
         box_right_col_1 = check_col_1 + 1;
         box_right_col_2 = check_col_2 + 1;
 
-        move_status = checkMoveVertical( pSaveCoordinates, pListC, check_row + delta_row, delta_row, box_right_col_1, box_right_col_2 );
+        move_status = checkMoveVertical( pListC, check_row + delta_row, delta_row, box_right_col_1, box_right_col_2 );
       }
     }
 
@@ -718,18 +700,54 @@ public class Day15WarehouseWoesP02
     {
       if ( box_left_col_1 > 0 )
       {
-        pListC.add( "R" + ( check_row ) + "C" + box_left_col_1 + "," + "R" + ( check_row + delta_row ) + "C" + box_left_col_1 + "," + CHAR_BOX_2_START );
-        pListC.add( "R" + ( check_row ) + "C" + box_left_col_2 + "," + "R" + ( check_row + delta_row ) + "C" + box_left_col_2 + "," + CHAR_BOX_2_END );
+        String key_position_info = "";
+
+        key_position_info += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO );// + "C" + getNumberWithLeadingZeros( box_left_col_1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        key_position_info += "," + "R" + ( check_row ) + "C" + box_left_col_1; // From
+        key_position_info += "," + "R" + ( check_row + delta_row ) + "C" + box_left_col_1; // To
+        key_position_info += "," + CHAR_BOX_2_START; // Char-Info
+        //key_position_info += "," + char_col_1; // Char-Info
+        //key_position_info += ",START"; // Debug-Info
+
+        pListC.add( key_position_info );
+
+        key_position_info = "";
+
+        key_position_info += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO );// + "C" + getNumberWithLeadingZeros( box_left_col_2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        key_position_info += "," + "R" + ( check_row ) + "C" + box_left_col_2; // From
+        key_position_info += "," + "R" + ( check_row + delta_row ) + "C" + box_left_col_2; // To
+        key_position_info += "," + CHAR_BOX_2_END; // Char-Info
+        //key_position_info += "," + char_col_2; // Char-Info
+        //key_position_info += ",END"; // Debug-Info
+
+        pListC.add( key_position_info );
       }
 
       if ( box_right_col_1 > 0 )
       {
-        pListC.add( "R" + ( check_row ) + "C" + box_right_col_1 + "," + "R" + ( check_row + delta_row ) + "C" + box_right_col_1 + "," + CHAR_BOX_2_START );
-        pListC.add( "R" + ( check_row ) + "C" + box_right_col_2 + "," + "R" + ( check_row + delta_row ) + "C" + box_right_col_2 + "," + CHAR_BOX_2_END );
+        String key_position_info = "";
+
+        key_position_info += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO );// + "C" + getNumberWithLeadingZeros( box_right_col_1, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        key_position_info += "," + "R" + ( check_row ) + "C" + box_right_col_1; // From
+        key_position_info += "," + "R" + ( check_row + delta_row ) + "C" + box_right_col_1; // To
+        key_position_info += "," + CHAR_BOX_2_START; // Char-Info
+        //key_position_info += "," + char_col_1; // Char-Info
+        //key_position_info += ",START"; // Debug-Info
+
+        pListC.add( key_position_info );
+
+        key_position_info = "";
+
+        key_position_info += "R" + getNumberWithLeadingZeros( check_row, NR_OF_DIGITS_LINE_INFO );// + "C" + getNumberWithLeadingZeros( box_right_col_2, NR_OF_DIGITS_LINE_INFO ); // Sorting Info
+        key_position_info += "," + "R" + ( check_row ) + "C" + box_right_col_2; // From
+        key_position_info += "," + "R" + ( check_row + delta_row ) + "C" + box_right_col_2; // To
+        key_position_info += "," + CHAR_BOX_2_END; // Char-Info
+        //key_position_info += "," + char_col_2; // Char-Info
+        //key_position_info += ",END"; // Debug-Info
+
+        pListC.add( key_position_info );
       }
     }
-    
-    pSaveCoordinates.setProperty( "R" + check_row + "C" + check_col_1, "" + move_status );
 
     return move_status;
   }
@@ -1064,375 +1082,91 @@ public class Day15WarehouseWoesP02
     calculatePart02( list_map_input, true );
   }
 
-  private static void calcTestMapDiamond()
-  {
-    List< String > list_map_input = new ArrayList< String >();
-
-    list_map_input.add( "##################" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##........#.....##" );
-    list_map_input.add( "##.........#....##" );
-    list_map_input.add( "##.....[].......##" );
-    list_map_input.add( "##....[][]......##" );
-    list_map_input.add( "##...[][][].....##" );
-    list_map_input.add( "##..[][][][]....##" );
-    list_map_input.add( "##....[][]......##" );
-    list_map_input.add( "##.....[].......##" );
-    list_map_input.add( "##.....@........##" );
-    list_map_input.add( "##..............##" );
-    list_map_input.add( "##################" );
-
-    list_map_input.add( "" );
-
-    list_map_input.add( "^^^^^^^^" );
-
-    calculatePart02( list_map_input, true );
-    
-/*
- * Robot start at X12C7
- * 
- * ##################
- * ##..............##
- * ##..............##
- * ##........#.....##
- * ##.........#....##
- * ##.....[].......##
- * ##....[][]......##
- * ##...[][][].....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##################
- * 
- * GPS 12912
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 0
- * List Info R5C7,R4C7,[
- * List Info R5C8,R4C8,]
- * List Info R6C6,R5C6,[
- * List Info R6C7,R5C7,]
- * List Info R7C5,R6C5,[
- * List Info R7C6,R6C6,]
- * List Info R5C7,R4C7,[
- * List Info R5C8,R4C8,]
- * List Info R6C6,R5C6,[
- * List Info R6C7,R5C7,]
- * List Info R6C8,R5C8,[
- * List Info R6C9,R5C9,]
- * List Info R7C5,R6C5,[
- * List Info R7C6,R6C6,]
- * List Info R7C7,R6C7,[
- * List Info R7C8,R6C8,]
- * List Info R8C4,R7C4,[
- * List Info R8C5,R7C5,]
- * List Info R8C6,R7C6,[
- * List Info R8C7,R7C7,]
- * List Info R6C8,R5C8,[
- * List Info R6C9,R5C9,]
- * List Info R7C7,R6C7,[
- * List Info R7C8,R6C8,]
- * List Info R7C9,R6C9,[
- * List Info R7C10,R6C10,]
- * List Info R8C6,R7C6,[
- * List Info R8C7,R7C7,]
- * List Info R8C8,R7C8,[
- * List Info R8C9,R7C9,]
- * List Info R9C5,R8C5,[
- * List Info R9C6,R8C6,]
- * List Info R9C7,R8C7,[
- * List Info R9C8,R8C8,]
- * List Info R7C9,R6C9,[
- * List Info R7C10,R6C10,]
- * List Info R8C8,R7C8,[
- * List Info R8C9,R7C9,]
- * List Info R8C10,R7C10,[
- * List Info R8C11,R7C11,]
- * List Info R9C7,R8C7,[
- * List Info R9C8,R8C8,]
- * List Info R9C9,R8C9,[
- * List Info R9C10,R8C10,]
- * List Info R10C6,R9C6,[
- * List Info R10C7,R9C7,]
- * List Info R10C8,R9C8,[
- * List Info R10C9,R9C9,]
- * List Info R11C7,R10C7,[
- * List Info R11C8,R10C8,]
- * 
- * ##################
- * ##..............##
- * ##..............##
- * ##........#.....##
- * ##.....[]..#....##
- * ##....[][]......##
- * ##...[][][].....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##..............##
- * ##################
- * 
- * GPS 11312
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 1
- * List Info R4C7,R3C7,[
- * List Info R4C8,R3C8,]
- * List Info R5C6,R4C6,[
- * List Info R5C7,R4C7,]
- * List Info R6C5,R5C5,[
- * List Info R6C6,R5C6,]
- * List Info R4C7,R3C7,[
- * List Info R4C8,R3C8,]
- * List Info R5C6,R4C6,[
- * List Info R5C7,R4C7,]
- * List Info R5C8,R4C8,[
- * List Info R5C9,R4C9,]
- * List Info R6C5,R5C5,[
- * List Info R6C6,R5C6,]
- * List Info R6C7,R5C7,[
- * List Info R6C8,R5C8,]
- * List Info R7C4,R6C4,[
- * List Info R7C5,R6C5,]
- * List Info R7C6,R6C6,[
- * List Info R7C7,R6C7,]
- * List Info R5C8,R4C8,[
- * List Info R5C9,R4C9,]
- * List Info R6C7,R5C7,[
- * List Info R6C8,R5C8,]
- * List Info R6C9,R5C9,[
- * List Info R6C10,R5C10,]
- * List Info R7C6,R6C6,[
- * List Info R7C7,R6C7,]
- * List Info R7C8,R6C8,[
- * List Info R7C9,R6C9,]
- * List Info R8C5,R7C5,[
- * List Info R8C6,R7C6,]
- * List Info R8C7,R7C7,[
- * List Info R8C8,R7C8,]
- * List Info R6C9,R5C9,[
- * List Info R6C10,R5C10,]
- * List Info R7C8,R6C8,[
- * List Info R7C9,R6C9,]
- * List Info R7C10,R6C10,[
- * List Info R7C11,R6C11,]
- * List Info R8C7,R7C7,[
- * List Info R8C8,R7C8,]
- * List Info R8C9,R7C9,[
- * List Info R8C10,R7C10,]
- * List Info R9C6,R8C6,[
- * List Info R9C7,R8C7,]
- * List Info R9C8,R8C8,[
- * List Info R9C9,R8C9,]
- * List Info R10C7,R9C7,[
- * List Info R10C8,R9C8,]
- * 
- * ##################
- * ##..............##
- * ##..............##
- * ##.....[].#.....##
- * ##....[][].#....##
- * ##...[][][].....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##################
- * 
- * GPS 9712
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 2
- * List Info R3C7,R2C7,[
- * List Info R3C8,R2C8,]
- * List Info R4C6,R3C6,[
- * List Info R4C7,R3C7,]
- * List Info R5C5,R4C5,[
- * List Info R5C6,R4C6,]
- * List Info R3C7,R2C7,[
- * List Info R3C8,R2C8,]
- * List Info R4C6,R3C6,[
- * List Info R4C7,R3C7,]
- * List Info R4C8,R3C8,[
- * List Info R4C9,R3C9,]
- * List Info R5C5,R4C5,[
- * List Info R5C6,R4C6,]
- * List Info R5C7,R4C7,[
- * List Info R5C8,R4C8,]
- * List Info R6C4,R5C4,[
- * List Info R6C5,R5C5,]
- * List Info R6C6,R5C6,[
- * List Info R6C7,R5C7,]
- * List Info R4C8,R3C8,[
- * List Info R4C9,R3C9,]
- * List Info R5C7,R4C7,[
- * List Info R5C8,R4C8,]
- * List Info R5C9,R4C9,[
- * List Info R5C10,R4C10,]
- * List Info R6C6,R5C6,[
- * List Info R6C7,R5C7,]
- * List Info R6C8,R5C8,[
- * List Info R6C9,R5C9,]
- * List Info R7C5,R6C5,[
- * List Info R7C6,R6C6,]
- * List Info R7C7,R6C7,[
- * List Info R7C8,R6C8,]
- * List Info R5C9,R4C9,[
- * List Info R5C10,R4C10,]
- * List Info R6C8,R5C8,[
- * List Info R6C9,R5C9,]
- * List Info R6C10,R5C10,[
- * List Info R6C11,R5C11,]
- * List Info R7C7,R6C7,[
- * List Info R7C8,R6C8,]
- * List Info R7C9,R6C9,[
- * List Info R7C10,R6C10,]
- * List Info R8C6,R7C6,[
- * List Info R8C7,R7C7,]
- * List Info R8C8,R7C8,[
- * List Info R8C9,R7C9,]
- * List Info R9C7,R8C7,[
- * List Info R9C8,R8C8,]
- * 
- * ##################
- * ##..............##
- * ##.....[].......##
- * ##....[][]#.....##
- * ##...[][][]#....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##################
- * 
- * GPS 8112
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 3
- * 
- * ##################
- * ##..............##
- * ##.....[].......##
- * ##....[][]#.....##
- * ##...[][][]#....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##################
- * 
- * GPS 8112
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 4
- * 
- * ##################
- * ##..............##
- * ##.....[].......##
- * ##....[][]#.....##
- * ##...[][][]#....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##################
- * 
- * GPS 8112
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 5
- * 
- * ##################
- * ##..............##
- * ##.....[].......##
- * ##....[][]#.....##
- * ##...[][][]#....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##################
- * 
- * GPS 8112
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 6
- * 
- * ##################
- * ##..............##
- * ##.....[].......##
- * ##....[][]#.....##
- * ##...[][][]#....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##################
- * 
- * GPS 8112
- * 
- * --------------------------------------------------------------
- * cmd ^ nr 7
- * 
- * ##################
- * ##..............##
- * ##.....[].......##
- * ##....[][]#.....##
- * ##...[][][]#....##
- * ##..[][][][]....##
- * ##...[][][].....##
- * ##....[][]......##
- * ##.....[].......##
- * ##.....@........##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##..............##
- * ##################
- * 
- * GPS 8112
- */
-  }
-
   private static void wl( String pString ) // wl = short for "write log"
   {
     System.out.println( pString );
+  }
+
+  /**
+   * @param pZahl die Zahl
+   * @param pLaenge die vorgegebene Laenge
+   * @return ein String der vorgegebenen Laenge mit den fuehrenden Nullen.
+   */
+  private static String getNumberWithLeadingZeros( long pZahl, int pLaenge )
+  {
+    return getFeldRechts( "" + pZahl, "0", pLaenge );
+  }
+
+  /**
+   * @param pInhalt der Inhalt des Feldes
+   * @param pAuffuellZeichen das zu benutzende Auffuellzeichen
+   * @param pLaenge die Laenge
+   * @return ein String der vorgegebenen Laenge und dem Inhalt rechts ausgerichtet
+   */
+  private static String getFeldRechts( String pInhalt, String pAuffuellZeichen, int pLaenge )
+  {
+    if ( pInhalt == null )
+    {
+      pInhalt = "";
+    }
+
+    if ( pInhalt.length() >= pLaenge )
+    {
+      return pInhalt.substring( 0, pLaenge );
+    }
+
+    return getNChars( pLaenge - pInhalt.length(), pAuffuellZeichen ) + pInhalt;
+  }
+
+  /**
+   * <pre>
+   * Gibt einen String in der angegebenen Laenge und der angegebenen Zeichenfolge zurueck.
+   *  
+   * Ist die Laenge negativ oder 0, wird ein Leerstring zurueckgegeben
+   * 
+   * Ist der Parameeter "pZeichen" gleich null, wird ein Leerstring zurueckgegeben.
+   * </pre>
+   * 
+   * @param pAnzahlStellen die Laenge
+   * @param pZeichen das zu wiederholende Zeichen
+   * @return einen String der angegebenen Laenge mit dem uebergebenen Zeichen
+   */
+  private static String getNChars( int pAnzahlStellen, String pZeichen )
+  {
+    if ( pZeichen == null )
+    {
+      return "";
+    }
+
+    /*
+     * Ist die Laenge negativ oder 0, wird ein Leerstring zurueckgegeben
+     */
+    if ( pAnzahlStellen <= 0 )
+    {
+      return "";
+    }
+
+    if ( pAnzahlStellen > 15000 )
+    {
+      pAnzahlStellen = 15000;
+    }
+
+    String ergebnis = pZeichen + pZeichen + pZeichen + pZeichen + pZeichen + pZeichen + pZeichen + pZeichen + pZeichen + pZeichen;
+
+    /*
+     * Der String "ergebnis" wird solange verdoppelt bis die Laenge groesser der Anzahl aus dem Parameter ist. 
+     * Anschliessend wird ein Substring der Parameter-Laenge zurueckgegeben.
+     */
+    int zaehler = 1;
+
+    while ( ( zaehler <= 50 ) && ( ergebnis.length() <= pAnzahlStellen ) )
+    {
+      ergebnis += ergebnis;
+
+      zaehler++;
+    }
+
+    return ergebnis.substring( 0, pAnzahlStellen );
   }
 
   //
