@@ -16,7 +16,6 @@ import de.ea234.util.FkStringText;
 
 public class Day09DiskFragmenter
 {
-
   /*
    * --- Day 9: Disk Fragmenter ---
    * https://adventofcode.com/2024/day/9
@@ -37,44 +36,15 @@ public class Day09DiskFragmenter
 
   public static void main( String[] args )
   {
-// skumonti  https://raw.githubusercontent.com/rhighs/aoc2024/refs/heads/main/day09.py
-// python3 xxx.py < aoc2.txt
-    /*
-     * 
-     * Number: 1..333....55555
-     * id    : 0..111....22222 
-     * 
-     */
-
     String test_input_1 = "2333133121414131402";
     String test_input_2 = "12345";
     String test_input_3 = "90909";
 
-    /*
-     * 3480416   3480416
-     * 4312205
-     */
-    String test_input_5 = "";
+    //calcPart01( test_input_1, true );
 
-    /*
-     * 6357306809398
-     * 6357306809398
-     */
-    calcPart01( test_input_1, true );
-    //calcPart01( getListProd1(), false );
-    //calcPart01( getListProd1(), false );
+    calcPart01( getListProd(), false );
 
-    String vvv_l = getListProd1();
-
-    String input = vvv_l;
-    int blockSize = 600;
-
-    for ( int i = 0; i < input.length(); i += blockSize )
-    {
-      int end = Math.min( i + blockSize, input.length() );
-      String chunk = input.substring( i, end );
-      System.out.println( chunk );
-    }
+    //calcPart01( getListProd3(), false );
   }
 
   private static HashMap< Long, Long > m_hash_map = new HashMap< Long, Long >();
@@ -91,6 +61,8 @@ public class Day09DiskFragmenter
 
   private static void calcPart01( String pInput, boolean pKnzDebug )
   {
+    long start_time = System.currentTimeMillis();
+
     m_hash_map = new HashMap< Long, Long >();
 
     /*
@@ -191,32 +163,37 @@ public class Day09DiskFragmenter
       index_from_block = getIndexNextBlock( index_from_block, index_to_free_space );
 
       /*
-       * Increment the counter
+       * Check if the from-index is still greater than the to index.
        */
-      count_switch++;
-
-      /*
-       * get file id from the from position
-       */
-      long file_id_from_pos = getHashMapValue( index_from_block );
-
-      /*
-       * save the file_id to the new position
-       */
-      saveHashMapValue( index_to_free_space, file_id_from_pos );
-
-      /*
-       * set the from position to free space
-       */
-      saveHashMapValue( index_from_block, FREE_SPACE_HASH_MAP_VAL );
-
-      if ( pKnzDebug )
+      if ( index_from_block > index_to_free_space )
       {
-        wl( String.format( "Nr %6d  to %6d  from %6d  value %6d", count_switch, index_to_free_space, index_from_block, file_id_from_pos ) );
+        /*
+         * Increment the counter
+         */
+        count_switch++;
+
+        /*
+         * get file id from the from position
+         */
+        long file_id_from_pos = getHashMapValue( index_from_block );
+
+        /*
+         * save the file_id to the new position
+         */
+        saveHashMapValue( index_to_free_space, file_id_from_pos );
+
+        /*
+         * set the from position to free space
+         */
+        saveHashMapValue( index_from_block, FREE_SPACE_HASH_MAP_VAL );
+
+        if ( pKnzDebug )
+        {
+          wl( String.format( "Nr %6d  to %6d  from %6d  value %6d", count_switch, index_to_free_space, index_from_block, file_id_from_pos ) );
+        }
+
+        //wl( getDebugString2( 0, len_list ) );
       }
-
-      //wl( getDebugString2( 0, len_list ) );
-
       /*
        * increase the index free
        */
@@ -236,8 +213,6 @@ public class Day09DiskFragmenter
 
     long checksum_filesystem_sum = 0;
 
-    BigDecimal cx = BigDecimal.valueOf( 0 );
-
     for ( long index = 0; index < len_list; index++ )
     {
       try
@@ -253,8 +228,6 @@ public class Day09DiskFragmenter
         else
         {
           checksum_filesystem_cur = index * file_id_from_hash_map;
-
-          cx = cx.add( BigDecimal.valueOf( index ).multiply( BigDecimal.valueOf( file_id_from_hash_map ) ) );
         }
 
         checksum_filesystem_sum += checksum_filesystem_cur;
@@ -278,17 +251,11 @@ public class Day09DiskFragmenter
     wl( "count_switch    = " + pInput.length() );
     wl( "" );
     wl( "Result Part 1   = " + checksum_filesystem_sum );
+    wl( "" );
 
-    wl( "cx " + cx.toPlainString() );
+    long end_time = System.currentTimeMillis();
 
-    /*
-     * 6358949505033 to low
-     * 6358949505033
-     *
-     * 6796826444540
-     * 6359213660505 = p1
-     * 6381624803796 = p2
-     */
+    wl( "Time " + ( end_time - start_time ) );
   }
 
   private static long getIndexNextFreeSpace( long pLongFrom, long pLongTo )
@@ -339,13 +306,13 @@ public class Day09DiskFragmenter
 
   private static String getDebugString( long pLongFrom, long pLongTo )
   {
-    String erg = "";
+    String debug_string = "";
 
     for ( long index = pLongFrom; index < pLongTo; index++ )
     {
       try
       {
-        erg += "\nIndex " + index + " " + getHashMapValue( index );
+        debug_string += "\nIndex " + index + " " + getHashMapValue( index );
       }
       catch ( Exception e )
       {
@@ -353,12 +320,12 @@ public class Day09DiskFragmenter
       }
     }
 
-    return erg;
+    return debug_string;
   }
 
   private static String getDebugString2( long pLongFrom, long pLongTo )
   {
-    String erg = "";
+    String debug_string = "";
 
     for ( long index = pLongFrom; index < pLongTo; index++ )
     {
@@ -366,12 +333,12 @@ public class Day09DiskFragmenter
       {
         if ( getHashMapValue( index ) == FREE_SPACE_HASH_MAP_VAL )
         {
-          erg += "" + CHAR_FREE_SPACE;
+          debug_string += "" + CHAR_FREE_SPACE;
 
         }
         else
         {
-          erg += "" + getHashMapValue( index );
+          debug_string += "" + getHashMapValue( index );
         }
       }
       catch ( Exception e )
@@ -380,37 +347,7 @@ public class Day09DiskFragmenter
       }
     }
 
-    return erg;
-  }
-
-  private static String calcDiskLayout( String pInput )
-  {
-    StringBuilder result_disk_layout = new StringBuilder();
-
-    boolean knz_toggle = TOGGLE_BLOCK_ALLOCATED;
-
-    for ( char cur_char : pInput.toCharArray() )
-    {
-      wl( "" + cur_char );
-
-      int nr_repeat = ( ( (int) cur_char ) - 48 );
-
-      char repeat_char = cur_char;
-
-      if ( knz_toggle == TOGGLE_FREE_SPACE )
-      {
-        repeat_char = CHAR_FREE_SPACE;
-      }
-
-      for ( int idx = 0; idx < nr_repeat; idx++ )
-      {
-        result_disk_layout.append( repeat_char );
-      }
-
-      knz_toggle = !knz_toggle;
-    }
-
-    return result_disk_layout.toString();
+    return debug_string;
   }
 
   private static String getListProd()
@@ -428,20 +365,18 @@ public class Day09DiskFragmenter
       e.printStackTrace();
     }
 
-    String erg = "";
+    String result_string = "";
 
     for ( String v : string_array )
     {
-      erg += v;
+      result_string += v;
     }
 
-    return erg;
+    return result_string;
   }
-
 
   private static void wl( String pString ) // wl = short for "write log"
   {
     System.out.println( pString );
   }
-
 }
