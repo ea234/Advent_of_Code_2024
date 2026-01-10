@@ -2,18 +2,13 @@ package de.ea234.aoc2024.day09;
 
 public class Day09AllocationBlock
 {
-  private long   debug_index  = 0;
-
   private String debug_string = "";
+
+  private long   debug_index  = 0;
 
   private long   file_id      = 0;
 
   private long   capacity     = 0;
-
-  public void setDebugString( String pDebugString )
-  {
-    debug_string = pDebugString;
-  }
 
   public Day09AllocationBlock( long pDebugIndex, long pFileID, long pCapacity )
   {
@@ -52,6 +47,11 @@ public class Day09AllocationBlock
   public long getDebugIndex()
   {
     return debug_index;
+  }
+
+  public void setDebugString( String pDebugString )
+  {
+    debug_string = pDebugString;
   }
 
   public boolean isFreeBlockCapacity0()
