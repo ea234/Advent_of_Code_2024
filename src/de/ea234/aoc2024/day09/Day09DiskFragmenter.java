@@ -1,18 +1,10 @@
 package de.ea234.aoc2024.day09;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
-
-import de.ea234.util.FkStringText;
 
 public class Day09DiskFragmenter
 {
@@ -24,6 +16,36 @@ public class Day09DiskFragmenter
    * 
    * https://www.reddit.com/r/adventofcode/comments/1ha27bo/2024_day_9_solutions/
    * 
+   * 
+   * pInput.length() = 19999
+   * len_list        = 94702
+   * max file_id     = 9999
+   * 
+   * count_switch    = 19999
+   * 
+   * Result Part 1   = 6359213660505
+   * 
+   * Time 40
+   * 
+   *   -----------------------------------------
+   *   
+   *   pInput       2333133121414131402
+   *   disk_l       22...333...1...333.22.4444.4444.333.444422
+   *   
+   *   free_space   333111110
+   *   block_alloc  2313244342
+   *   block_allocr 2434423132
+   * 
+   *   free_space   333111110
+   *   block_alloc  2434423132
+   *   
+   *   
+   *   free_space   3 3 3 1 1 1 1 1 0
+   *   block_alloc  2 4 3 4 4 2 3 1 32
+   *   
+   * ea234@MsiZ370:/mnt/hd4tbb/daten/ang$ python3 xxx < aoc.txt
+   * 6359213660505
+   * 6381624803796
    */
 
   private static long    FREE_SPACE_HASH_MAP_VAL = -1;
@@ -40,11 +62,9 @@ public class Day09DiskFragmenter
     String test_input_2 = "12345";
     String test_input_3 = "90909";
 
-    //calcPart01( test_input_1, true );
+    calcPart01( test_input_1, true );
 
-    calcPart01( getListProd(), false );
-
-    //calcPart01( getListProd3(), false );
+    //calcPart01( getListProd(), false );
   }
 
   private static HashMap< Long, Long > m_hash_map = new HashMap< Long, Long >();
@@ -316,7 +336,6 @@ public class Day09DiskFragmenter
       }
       catch ( Exception e )
       {
-        // TODO: handle exception
       }
     }
 
@@ -343,11 +362,41 @@ public class Day09DiskFragmenter
       }
       catch ( Exception e )
       {
-        // TODO: handle exception
+        //
       }
     }
 
     return debug_string;
+  }
+
+  private static String calcDiskLayout( String pInput )
+  {
+    StringBuilder result_disk_layout = new StringBuilder();
+
+    boolean knz_toggle = TOGGLE_BLOCK_ALLOCATED;
+
+    for ( char cur_char : pInput.toCharArray() )
+    {
+      wl( "" + cur_char );
+
+      int nr_repeat = ( ( (int) cur_char ) - 48 );
+
+      char repeat_char = cur_char;
+
+      if ( knz_toggle == TOGGLE_FREE_SPACE )
+      {
+        repeat_char = CHAR_FREE_SPACE;
+      }
+
+      for ( int idx = 0; idx < nr_repeat; idx++ )
+      {
+        result_disk_layout.append( repeat_char );
+      }
+
+      knz_toggle = !knz_toggle;
+    }
+
+    return result_disk_layout.toString();
   }
 
   private static String getListProd()
