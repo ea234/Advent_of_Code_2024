@@ -42,8 +42,6 @@ public class Day09DiskFragmenterP02
    *     17     17  ID     -1  Capacity      0  
    *     18     18  ID      9  Capacity      2  
    * 
-   * 
-   * 
    * ----------------------------------------------------------------------
    * 
    * File ID 9  index_fat_alloc_block_from 19  index_fat_free_block 1
@@ -70,8 +68,7 @@ public class Day09DiskFragmenterP02
    *     16     15  ID     -1  Capacity      1  
    *     17     16  ID      8  Capacity      4  
    *     18     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     19     18  ID     -1  Capacity      2  Alt 9
-   * 
+   *     19     18  ID     -1  Capacity      2  OLD 9
    * 
    * ----------------------------------------------------------------------
    * 
@@ -99,8 +96,7 @@ public class Day09DiskFragmenterP02
    *     16     15  ID     -1  Capacity      1  
    *     17     16  ID      8  Capacity      4  
    *     18     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     19     18  ID     -1  Capacity      2  Alt 9
-   * 
+   *     19     18  ID     -1  Capacity      2  OLD 9
    * 
    * ----------------------------------------------------------------------
    * 
@@ -124,13 +120,12 @@ public class Day09DiskFragmenterP02
    *     12     10  ID      5  Capacity      4  
    *     13     11  ID     -1  Capacity      1  
    *     14     12  ID      6  Capacity      4  
-   *     15     13  ID     -1  Capacity      0  Block + 1 from 16
-   *     16     14  ID     -1  Capacity      5  Alt 7
-   *     17     15  ID     -1  Capacity      0  
+   *     15     13  ID     -1  Capacity      0  Block - 1 from 16
+   *     16     14  ID     -1  Capacity      5  OLD 7
+   *     17     15  ID     -1  Capacity      0  Block + 1 from 16
    *     18     16  ID      8  Capacity      4  
    *     19     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     20     18  ID     -1  Capacity      2  Alt 9
-   * 
+   *     20     18  ID     -1  Capacity      2  OLD 9
    * 
    * ----------------------------------------------------------------------
    * 
@@ -154,13 +149,12 @@ public class Day09DiskFragmenterP02
    *     12     10  ID      5  Capacity      4  
    *     13     11  ID     -1  Capacity      1  
    *     14     12  ID      6  Capacity      4  
-   *     15     13  ID     -1  Capacity      0  Block + 1 from 16
-   *     16     14  ID     -1  Capacity      5  Alt 7
-   *     17     15  ID     -1  Capacity      0  
+   *     15     13  ID     -1  Capacity      0  Block - 1 from 16
+   *     16     14  ID     -1  Capacity      5  OLD 7
+   *     17     15  ID     -1  Capacity      0  Block + 1 from 16
    *     18     16  ID      8  Capacity      4  
    *     19     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     20     18  ID     -1  Capacity      2  Alt 9
-   * 
+   *     20     18  ID     -1  Capacity      2  OLD 9
    * 
    * ----------------------------------------------------------------------
    * 
@@ -184,12 +178,12 @@ public class Day09DiskFragmenterP02
    *     12     10  ID      5  Capacity      4  
    *     13     11  ID     -1  Capacity      1  
    *     14     12  ID      6  Capacity      4  
-   *     15     13  ID     -1  Capacity      0  Block + 1 from 16
-   *     16     14  ID     -1  Capacity      5  Alt 7
-   *     17     15  ID     -1  Capacity      0  
+   *     15     13  ID     -1  Capacity      0  Block - 1 from 16
+   *     16     14  ID     -1  Capacity      5  OLD 7
+   *     17     15  ID     -1  Capacity      0  Block + 1 from 16
    *     18     16  ID      8  Capacity      4  
    *     19     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     20     18  ID     -1  Capacity      2  Alt 9
+   *     20     18  ID     -1  Capacity      2  OLD 9
    * 
    * 
    * ----------------------------------------------------------------------
@@ -209,19 +203,18 @@ public class Day09DiskFragmenterP02
    *      7 100008  ID      4  Capacity      2  
    *      8      5  ID     -1  Capacity      1  
    *      9      6  ID      3  Capacity      3  
-   *     10      7  ID     -1  Capacity      0  Block + 1 from 11
-   *     11      8  ID     -1  Capacity      4  Alt 4
-   *     12      9  ID     -1  Capacity      0  
+   *     10      7  ID     -1  Capacity      0  Block - 1 from 11
+   *     11      8  ID     -1  Capacity      4  OLD 4
+   *     12      9  ID     -1  Capacity      0  Block + 1 from 11
    *     13     10  ID      5  Capacity      4  
    *     14     11  ID     -1  Capacity      1  
    *     15     12  ID      6  Capacity      4  
-   *     16     13  ID     -1  Capacity      0  Block + 1 from 16
-   *     17     14  ID     -1  Capacity      5  Alt 7
-   *     18     15  ID     -1  Capacity      0  
+   *     16     13  ID     -1  Capacity      0  Block - 1 from 16
+   *     17     14  ID     -1  Capacity      5  OLD 7
+   *     18     15  ID     -1  Capacity      0  Block + 1 from 16
    *     19     16  ID      8  Capacity      4  
    *     20     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     21     18  ID     -1  Capacity      2  Alt 9
-   * 
+   *     21     18  ID     -1  Capacity      2  OLD 9
    * 
    * ----------------------------------------------------------------------
    * 
@@ -240,18 +233,18 @@ public class Day09DiskFragmenterP02
    *      7 100008  ID      4  Capacity      2  
    *      8      5  ID     -1  Capacity      1  
    *      9      6  ID      3  Capacity      3  
-   *     10      7  ID     -1  Capacity      0  Block + 1 from 11
-   *     11      8  ID     -1  Capacity      4  Alt 4
-   *     12      9  ID     -1  Capacity      0  
+   *     10      7  ID     -1  Capacity      0  Block - 1 from 11
+   *     11      8  ID     -1  Capacity      4  OLD 4
+   *     12      9  ID     -1  Capacity      0  Block + 1 from 11
    *     13     10  ID      5  Capacity      4  
    *     14     11  ID     -1  Capacity      1  
    *     15     12  ID      6  Capacity      4  
-   *     16     13  ID     -1  Capacity      0  Block + 1 from 16
-   *     17     14  ID     -1  Capacity      5  Alt 7
-   *     18     15  ID     -1  Capacity      0  
+   *     16     13  ID     -1  Capacity      0  Block - 1 from 16
+   *     17     14  ID     -1  Capacity      5  OLD 7
+   *     18     15  ID     -1  Capacity      0  Block + 1 from 16
    *     19     16  ID      8  Capacity      4  
    *     20     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     21     18  ID     -1  Capacity      2  Alt 9
+   *     21     18  ID     -1  Capacity      2  OLD 9
    * 
    * 
    * ----------------------------------------------------------------------
@@ -268,23 +261,22 @@ public class Day09DiskFragmenterP02
    *      4      2  ID      1  Capacity      3  
    *      5 100014  ID      7  Capacity      3  
    *      6      3  ID     -1  Capacity      0  Block - 1 from 7
-   *      7      4  ID     -1  Capacity      1  Alt 2
+   *      7      4  ID     -1  Capacity      1  OLD 2
    *      8 100008  ID      4  Capacity      2  
    *      9      5  ID     -1  Capacity      1  
    *     10      6  ID      3  Capacity      3  
-   *     11      7  ID     -1  Capacity      0  Block + 1 from 11
-   *     12      8  ID     -1  Capacity      4  Alt 4
-   *     13      9  ID     -1  Capacity      0  
+   *     11      7  ID     -1  Capacity      0  Block - 1 from 11
+   *     12      8  ID     -1  Capacity      4  OLD 4
+   *     13      9  ID     -1  Capacity      0  Block + 1 from 11
    *     14     10  ID      5  Capacity      4  
    *     15     11  ID     -1  Capacity      1  
    *     16     12  ID      6  Capacity      4  
-   *     17     13  ID     -1  Capacity      0  Block + 1 from 16
-   *     18     14  ID     -1  Capacity      5  Alt 7
-   *     19     15  ID     -1  Capacity      0  
+   *     17     13  ID     -1  Capacity      0  Block - 1 from 16
+   *     18     14  ID     -1  Capacity      5  OLD 7
+   *     19     15  ID     -1  Capacity      0  Block + 1 from 16
    *     20     16  ID      8  Capacity      4  
    *     21     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     22     18  ID     -1  Capacity      2  Alt 9
-   * 
+   *     22     18  ID     -1  Capacity      2  OLD 9
    * 
    * ----------------------------------------------------------------------
    * 
@@ -300,27 +292,26 @@ public class Day09DiskFragmenterP02
    *      4      2  ID      1  Capacity      3  
    *      5 100014  ID      7  Capacity      3  
    *      6      3  ID     -1  Capacity      0  Block - 1 from 7
-   *      7      4  ID     -1  Capacity      1  Alt 2
+   *      7      4  ID     -1  Capacity      1  OLD 2
    *      8 100008  ID      4  Capacity      2  
    *      9      5  ID     -1  Capacity      1  
    *     10      6  ID      3  Capacity      3  
-   *     11      7  ID     -1  Capacity      0  Block + 1 from 11
-   *     12      8  ID     -1  Capacity      4  Alt 4
-   *     13      9  ID     -1  Capacity      0  
+   *     11      7  ID     -1  Capacity      0  Block - 1 from 11
+   *     12      8  ID     -1  Capacity      4  OLD 4
+   *     13      9  ID     -1  Capacity      0  Block + 1 from 11
    *     14     10  ID      5  Capacity      4  
    *     15     11  ID     -1  Capacity      1  
    *     16     12  ID      6  Capacity      4  
-   *     17     13  ID     -1  Capacity      0  Block + 1 from 16
-   *     18     14  ID     -1  Capacity      5  Alt 7
-   *     19     15  ID     -1  Capacity      0  
+   *     17     13  ID     -1  Capacity      0  Block - 1 from 16
+   *     18     14  ID     -1  Capacity      5  OLD 7
+   *     19     15  ID     -1  Capacity      0  Block + 1 from 16
    *     20     16  ID      8  Capacity      4  
    *     21     17  ID     -1  Capacity      0  Block - 1 from 19
-   *     22     18  ID     -1  Capacity      2  Alt 9
-   * 
+   *     22     18  ID     -1  Capacity      2  OLD 9
    * 
    * ----------------------------------------------------------------------
    * 
-   * Cleared all 0 capacity blocks
+   * Removed all 0 capacity blocks
    * 
    * 00992111777.44.333....5555.6666.....8888..    2858
    * 
@@ -330,17 +321,17 @@ public class Day09DiskFragmenterP02
    *      2 100004  ID      2  Capacity      1  
    *      3      2  ID      1  Capacity      3  
    *      4 100014  ID      7  Capacity      3  
-   *      5      4  ID     -1  Capacity      1  Alt 2
+   *      5      4  ID     -1  Capacity      1  OLD 2
    *      6 100008  ID      4  Capacity      2  
    *      7      5  ID     -1  Capacity      1  
    *      8      6  ID      3  Capacity      3  
-   *      9      8  ID     -1  Capacity      4  Alt 4
+   *      9      8  ID     -1  Capacity      4  OLD 4
    *     10     10  ID      5  Capacity      4  
    *     11     11  ID     -1  Capacity      1  
    *     12     12  ID      6  Capacity      4  
-   *     13     14  ID     -1  Capacity      5  Alt 7
+   *     13     14  ID     -1  Capacity      5  OLD 7
    *     14     16  ID      8  Capacity      4  
-   *     15     18  ID     -1  Capacity      2  Alt 9
+   *     15     18  ID     -1  Capacity      2  OLD 9
    * 
    * 
    * pInput.length() = 19
@@ -358,13 +349,15 @@ public class Day09DiskFragmenterP02
    * 0099.111777244.333....5555.6666.....8888..    2872
    * 00992111777.44.333....5555.6666.....8888..    2858
    * 00992111777.44.333....5555.6666.....8888..    2858
-   * Time 74
+   * Time 81
+   * 
+   * 
    * 
    * pInput.length() = 19999
    * max file_id     = 9999
    * 
    * Result Part 2   = 6381624803796
-   * 
+   *
    * Time 276 MS
    * 
    *
@@ -592,7 +585,6 @@ public class Day09DiskFragmenterP02
            */
 
           Day09AllocationBlock block_right = null;
-
           Day09AllocationBlock block_left = null;
 
           if ( index_fat_alloc_block_from > 0 )
@@ -623,7 +615,7 @@ public class Day09DiskFragmenterP02
 
               block_right.setCapacity( 0 );
 
-              block_left.setDebugString( "Block + 1 from " + index_fat_alloc_block_from );
+              block_right.setDebugString( "Block + 1 from " + index_fat_alloc_block_from );
             }
           }
 
@@ -666,14 +658,18 @@ public class Day09DiskFragmenterP02
       file_id_for_alloc_block--;
     }
 
-    clearFreeBlock0Capacity( fat );
+    /*
+     * Removing Blocks with 0 capacity.
+     * ... not realy neccessary
+     */
+    clearFreeBlockCapacity0( fat );
 
     if ( pKnzDebug )
     {
       wl( "" );
       wl( "----------------------------------------------------------------------" );
       wl( "" );
-      wl( "Cleared all 0 capacity blocks" );
+      wl( "Removed all 0 capacity blocks" );
       wl( "" );
       wl( getDebugString( fat, true ) );
       wl( "" );
@@ -722,7 +718,7 @@ public class Day09DiskFragmenterP02
     wl( "" );
   }
 
-  private static int clearFreeBlock0Capacity( List< Day09AllocationBlock > pFileAllocationTable )
+  private static int clearFreeBlockCapacity0( List< Day09AllocationBlock > pFileAllocationTable )
   {
     int index_cur = 0;
 
@@ -948,7 +944,7 @@ public class Day09DiskFragmenterP02
     return pString;
   }
 
-  private static String calcPart2DiskLayoutTest( String pInput )
+  private static String calcPart02DiskLayoutTest( String pInput )
   {
     String free_space = "";
     String block_alloc = "";

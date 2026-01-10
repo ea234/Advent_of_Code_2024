@@ -1,6 +1,6 @@
 package de.ea234.aoc2024.day09;
 
-public class Day09AllocationBlock
+class Day09AllocationBlock
 {
   private String debug_string = "";
 
