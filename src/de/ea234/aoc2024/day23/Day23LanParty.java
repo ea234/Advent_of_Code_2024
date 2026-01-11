@@ -99,7 +99,36 @@ public class Day23LanParty
     * tc,td,wh
     * td,wh,yn
     *
-    
+
+
+ Finde direkte Verbindungen.
+ Finde eine Verbindung derart: <computer a> nach <computer b>, <computer b> nach <computer c>, <computer c> nach <computer a>
+
+ Also, finde nicht alle Verbindungen zu einem Computer, sondern 
+ finde in der Eingabe einen Verbindungsring, bei welchem 3 Computer enthalten sind und der letzte 
+ Computer gleich wieder der Anfangscomputer ist.
+
+ 
+
+    * aq,cg,yn
+    *
+    * aq-cg
+    * 
+    * yn-aq
+    * yn-cg
+    *
+    * cg-tb
+    * 
+    * Finde direkte ring pare
+    * ag - cg   cg - yn   yn - ag 
+    * 
+    * 
+    * * aq,vc,wq
+    * vc-aq
+    * 
+    *  aq - vc  wq-aq   
+
+
     Result Lan Party 
     
      0  Computer    aq - ,cg,vc,wq,yn
