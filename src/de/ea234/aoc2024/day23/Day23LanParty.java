@@ -108,7 +108,42 @@ public class Day23LanParty
  finde in der Eingabe einen Verbindungsring, bei welchem 3 Computer enthalten sind und der letzte 
  Computer gleich wieder der Anfangscomputer ist.
 
- 
+ cq = cg-aq,cg-de,cg-tb,cg-yn
+
+
+1. Hashmap
+     Key Computer-Name 1 
+     Key CSV-Liste der Verbindungen <computer name 1> nach <computer name 2> 
+
+2. Rekursion
+     Endbedinung = 3 Computer
+     Endbedingung = liste erschöpft
+     
+     Eingabe Liste der Verbindungen die es zu testen gilt
+     
+     
+
+aq-cg
+    cg-aq - fällt weg, shon enthalten
+
+    cg-de
+        de-cg
+        de-co
+        de-ka
+        de-ta
+    
+    cg-tb
+        tb-cg
+        tb-ka
+        tb-vc
+        tb-wq
+    
+    cg-yn
+        yn-aq -------- Start Computer name
+        yn-cg
+        yn-td
+        yn-wh
+
 
     * aq,cg,yn
     *
