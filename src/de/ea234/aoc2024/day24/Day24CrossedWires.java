@@ -23,6 +23,62 @@ public class Day24CrossedWires
    * 
    * 
    * 
+   *  A ----+\
+   *        | XOR ----> Sum
+   *  B ----+/
+   *             \
+   *              XOR ----> Sum
+   *                    ^
+   *   Cin  -----------|
+   *                    \
+   *                     AND ----> Cout
+   *  A ---------------+         /
+   *                    \       /
+   *  B --------------+  \     /
+   *                    OR ----/ 
+   *  Cin -------------+ 
+   * 
+   * 
+   * A ----+---+--- XOR ---+ 
+   *       |   |           \
+   * B ----+---+--- XOR ----> Sum
+   *           |           /
+   * Cin ------+----------+
+   *           |         AND
+   *           +---------+----> Cout
+   *           
+   *           
+   *           
+   * Bits A=1, B=1. Ein Full Adder hat ein Cin (Carry-in). 
+  
+  Ein einfacher Full Adder:
+  
+    Sum = A XOR B XOR Cin
+    Cout = majority(A, B, Cin) = (A AND B) OR (A AND Cin)   OR (B AND Cin)
+                                  A_AND_B      A_AND_CARRY     B_AND_CARRY
+                                  
+                                  
+  Bei A=1, B=1, Cin=0:
+  
+    Sum = 1 XOR 1 XOR 0 = 0
+    Cout = (1 AND 1) OR (1 AND 0) OR (1 AND 0) = 1
+  
+  Ergebnis:
+  
+    Sum = 0
+    Cout = 1
+  
+  a00 XOR b00     -> A_XOR_B
+  c00 XOR A_XOR_B -> Z00
+  
+  a00 AND b00 -> A_AND_B
+  a00 AND c00 -> A_AND_CARRY
+  y00 AND c00 -> B_AND_CARRY
+  
+  A_AND_B OR A_AND_CARRY = C_OR1
+  C_OR1   OR B_AND_CARRY = C_OR2
+
+   * 
    * --------------------------------------------------------------------------------------------- 
    * Resultvalues Z-Wires 
    * 
