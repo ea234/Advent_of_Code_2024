@@ -27,8 +27,9 @@ public class Day23LanParty
   {
     String test_1 = "kh-tc,qp-kh,de-cg,ka-co,yn-aq,qp-ub,cg-tb,vc-aq,tb-ka,wh-tc,yn-cg,kh-ub,ta-co,de-co,tc-td,tb-wq,wh-td,ta-ka,td-qp,aq-cg,wq-ub,ub-vc,de-ta,wq-aq,wq-vc,wh-yn,ka-de,kh-ta,co-tc,wh-qp,tb-vc,td-yn";
 
-    calculatePart01( test_1, true );
+    //calculatePart01( test_1, true );
 
+    calculatePart01( getListProd(), false );
   }
 
   private static void calculatePart01( String pString, boolean pKnzDebug )
@@ -63,24 +64,27 @@ public class Day23LanParty
       addConnectedComputers( connected_computers[ 1 ], connected_computers[ 0 ] );
     }
 
-    wl( "" );
-    wl( "Result Lan Party " );
-    wl( "" );
-    wl( getHashMapDebugString() );
-    wl( "" );
-    wl( getConnectedToComputer( "t" ) );
-    wl( "" );
-    wl( getConnectedToComputer( "ta" ) );
-    wl( getConnectedToComputer( "tb" ) );
-    wl( getConnectedToComputer( "tc" ) );
-    wl( getConnectedToComputer( "td" ) );
-    wl( "" );
-
     List< String > list_all_connections = getListAllConnections();
 
-    for ( String cur_connection : list_all_connections )
+    if ( pKnzDebug )
     {
-      wl( cur_connection );
+      wl( "" );
+      wl( "Result Lan Party " );
+      wl( "" );
+      wl( getHashMapDebugString() );
+      wl( "" );
+      wl( getConnectedToComputer( "t" ) );
+      wl( "" );
+      wl( getConnectedToComputer( "ta" ) );
+      wl( getConnectedToComputer( "tb" ) );
+      wl( getConnectedToComputer( "tc" ) );
+      wl( getConnectedToComputer( "td" ) );
+      wl( "" );
+
+      for ( String cur_connection : list_all_connections )
+      {
+        wl( cur_connection );
+      }
     }
 
     /*
@@ -192,7 +196,6 @@ public class Day23LanParty
      * 
      *   B - D
      *   D - B 
-     *   
      *
      * -------------------------------------------------
      * 
@@ -265,86 +268,141 @@ public class Day23LanParty
      * Loop aq - cg - yn  
      */
 
-    List< String > list_all_connections_c1 = getListAllConnectionsC( "aq" );
+    /*
+     * *******************************************************************************************************
+     * Searching for connected computers
+     * *******************************************************************************************************
+     */
 
-    int count_con = list_all_connections_c1.size();
+    /*
+     * Get the list of all computernames
+     */
+    List< String > keys_all_computer_names = getListAllComputerNames();
 
-    boolean con_exists = false;
-
-    int break_1 = count_con - 1;
-    int break_2 = count_con;
-
-    int con_1_index = 0;
-    int con_2_index = 0;
-
-    while ( ( con_exists == false ) && ( con_1_index < break_1 ) )
+    for ( String cur_computer_name : keys_all_computer_names )
     {
-      String con_1_connection_string = list_all_connections.get( con_1_index );
+      wl( "Check Computername \"" + cur_computer_name + "\"" );
 
-      String[] con_1_array_computer_names = con_1_connection_string.split( "-" );
+      /*
+       * Get all connections for the current computer
+       */
+      List< String > list_all_connections_computer_1 = getListAllConnectionsForComputerName( cur_computer_name );
 
-      for ( con_2_index = con_1_index + 1; con_2_index < break_2; con_2_index++ )
+      int count_con = list_all_connections_computer_1.size();
+
+      int break_1 = count_con - 1;
+      int break_2 = count_con;
+
+      int con_1_index = 0;
+
+      while ( con_1_index < break_1 )
       {
-        /*
-         * Get the connections from the list of connections 
-         */
-        String con_2_connection_string = list_all_connections.get( con_2_index );
+        String con_1_connection_string = list_all_connections_computer_1.get( con_1_index );
 
-        /*
-         * Split the connection-string to obtain the target computer names
-         */
-        String[] con_2_array_computer_names = con_2_connection_string.split( "-" );
+        String[] con_1_array_computer_names = con_1_connection_string.split( "-" );
 
-        /*
-         * Create the connections to be checked.
-         */
-        String con_1_connection_string_new = con_1_array_computer_names[ 1 ] + "-" + con_2_array_computer_names[ 1 ];
-        String con_2_connection_string_new = con_2_array_computer_names[ 1 ] + "-" + con_1_array_computer_names[ 1 ];
-
-        con_exists = list_all_connections.contains( con_1_connection_string_new );
-
-        if ( con_exists == false )
+        for ( int con_2_index = con_1_index + 1; con_2_index < break_2; con_2_index++ )
         {
-          con_exists = list_all_connections.contains( con_2_connection_string_new );
+          /*
+           * Get the connections from the list of connections 
+           */
+          String con_2_connection_string = list_all_connections_computer_1.get( con_2_index );
+
+          /*
+           * Split the connection-string to obtain the target computer names
+           */
+          String[] con_2_array_computer_names = con_2_connection_string.split( "-" );
+
+          /*
+           * Create the connections to be checked.
+           */
+          String con_1_connection_string_new = con_1_array_computer_names[ 1 ] + "-" + con_2_array_computer_names[ 1 ];
+
+          //String con_2_connection_string_new = con_2_array_computer_names[ 1 ] + "-" + con_1_array_computer_names[ 1 ];
+
+          boolean con_exists = list_all_connections.contains( con_1_connection_string_new );
+
+          //if ( con_exists == false )
+          //{
+          //  con_exists = list_all_connections.contains( con_2_connection_string_new );
+          //}
+
+          /*
+           * If the connection exists, then store the connection
+           */
+          if ( con_exists )
+          {
+            saveGroup( con_1_array_computer_names[ 0 ], con_1_array_computer_names[ 1 ], con_2_array_computer_names[ 1 ], pKnzDebug );
+          }
+
+          //wl( "" );
+          //wl( "------------------------------------" );
+          //wl( "" );
+          //wl( String.format( " index 1 %4d = %s = %s   ", con_1_index, con_1_connection_string, con_1_array_computer_names[ 1 ] ) );
+          //wl( String.format( " index 2 %4d = %s = %s   ", con_2_index, con_2_connection_string, con_2_array_computer_names[ 1 ] ) );
+          //wl( "" );
+          //wl( " connection 1 " + con_1_connection_string_new + "  connection exists  " + list_all_connections.contains( con_1_connection_string_new ) );
+          //wl( " connection 2 " + con_2_connection_string_new + "  connection exists  " + list_all_connections.contains( con_2_connection_string_new ) );
         }
 
-        wl( "" );
-        wl( "------------------------------------" );
-        wl( "" );
-        wl( String.format( " index 1 %4d = %s = %s   ", con_1_index, con_1_connection_string, con_1_array_computer_names[ 1 ] ) );
-        wl( String.format( " index 2 %4d = %s = %s   ", con_2_index, con_2_connection_string, con_2_array_computer_names[ 1 ] ) );
-        wl( "" );
-        wl( " connection 1 " + con_1_connection_string_new + "  connection exists  " + list_all_connections.contains( con_1_connection_string_new ) );
-        wl( " connection 2 " + con_2_connection_string_new + "  connection exists  " + list_all_connections.contains( con_2_connection_string_new ) );
-
-        if ( con_exists )
-        {
-          break;
-        }
-      }
-
-      if ( con_exists == false )
-      {
         con_1_index++;
       }
     }
 
     wl( "" );
     wl( "" );
-    wl( "con_exists     " + con_exists );
-    wl( "" );
-    wl( "index_1 " + con_1_index );
-    wl( "index_2 " + con_2_index );
-    wl( "" );
-    wl( "" );
 
-    String con_1 = list_all_connections.get( con_1_index );
-    String con_2 = list_all_connections.get( con_2_index );
+    int con_nr = 1;
 
-    String[] con_1_computer = con_1.split( "-" );
-    String[] con_2_computer = con_2.split( "-" );
+    for ( String xg : computer_groups )
+    {
+      wl( " " + con_nr + " " + xg );
 
-    wl( "Loop " + con_1_computer[ 0 ] + " - " + con_1_computer[ 1 ] + " - " + con_2_computer[ 1 ] + "  " );
+      con_nr++;
+    }
+  }
+
+  private static List< String > computer_groups = new ArrayList< String >();
+
+  private static void saveGroup( String pComputerNameA, String pComputerNameB, String pComputerNameC, boolean pKnzDebug )
+  {
+    //pKnzDebug = true;
+
+    List< String > names = new ArrayList<>();
+
+    names.add( pComputerNameA );
+
+    names.add( pComputerNameB );
+
+    names.add( pComputerNameC );
+
+    names.sort( null );
+
+    String group = "," + names.get( 0 ) + "," + names.get( 1 ) + "," + names.get( 2 );
+
+    if ( group.indexOf( ",t" ) == -1 )
+    {
+      if ( pKnzDebug )
+      {
+        wl( "saveGroup  " + group + "  has no t computername " );
+      }
+    }
+    else if ( computer_groups.contains( group ) )
+    {
+      if ( pKnzDebug )
+      {
+        wl( "saveGroup  " + group + "  already exist" );
+      }
+    }
+    else
+    {
+      computer_groups.add( group );
+
+      if ( pKnzDebug )
+      {
+        wl( "saveGroup  " + group + "  count " + group.length() );
+      }
+    }
   }
 
   private static HashMap< String, String > m_hash_map = null;
@@ -469,7 +527,16 @@ public class Day23LanParty
     return list_all_connections;
   }
 
-  private static List< String > getListAllConnectionsC( String pKeyComputerNameFrom )
+  private static List< String > getListAllComputerNames()
+  {
+    List< String > keys_all_computer_names = new ArrayList< String >( m_hash_map.keySet() );
+
+    Collections.sort( keys_all_computer_names );
+
+    return keys_all_computer_names;
+  }
+
+  private static List< String > getListAllConnectionsForComputerName( String pKeyComputerNameFrom )
   {
     List< String > list_all_connections = new ArrayList< String >();
 
