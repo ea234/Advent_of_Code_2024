@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import de.ea234.util.FkStringText;
 
@@ -284,31 +286,18 @@ public class Day03MullItOver
 
   private static List< String > getListProd()
   {
-    int row_count = 0;
-
-    List< String > string_array = new ArrayList< String >();
+    List< String > string_array = null;
 
     String datei_input = "/mnt/hd4tbb/daten/zdownload/advent_of_code_2024__day03_input.txt";
 
-    try (BufferedReader buffered_reader = new BufferedReader( new FileReader( datei_input ) ))
+    try
     {
-      String zeile;
-
-      while ( ( zeile = buffered_reader.readLine() ) != null )
-      {
-        zeile = zeile.trim();
-
-        string_array.add( zeile );
-
-        row_count++;
-      }
+      string_array = Files.readAllLines( Path.of( datei_input ) );
     }
-    catch ( IOException err_inst )
+    catch ( IOException e )
     {
-      err_inst.printStackTrace();
+      e.printStackTrace();
     }
-
-    wl( "File Row Count " + row_count + " " + string_array.size() );
 
     return string_array;
   }

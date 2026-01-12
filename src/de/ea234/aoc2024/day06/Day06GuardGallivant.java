@@ -1,9 +1,8 @@
 package de.ea234.aoc2024.day06;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -252,31 +251,18 @@ public class Day06GuardGallivant
 
   private static List< String > getListProd()
   {
-    int row_count = 0;
-
-    List< String > string_array = new ArrayList< String >();
+    List< String > string_array = null;
 
     String datei_input = "/mnt/hd4tbb/daten/zdownload/advent_of_code_2024__day06_input.txt";
 
-    try (BufferedReader buffered_reader = new BufferedReader( new FileReader( datei_input ) ))
+    try
     {
-      String zeile;
-
-      while ( ( zeile = buffered_reader.readLine() ) != null )
-      {
-        zeile = zeile.trim();
-
-        string_array.add( zeile );
-
-        row_count++;
-      }
+      string_array = Files.readAllLines( Path.of( datei_input ) );
     }
-    catch ( IOException err_inst )
+    catch ( IOException e )
     {
-      err_inst.printStackTrace();
+      e.printStackTrace();
     }
-
-    wl( "File Row Count " + row_count + " " + string_array.size() );
 
     return string_array;
   }
