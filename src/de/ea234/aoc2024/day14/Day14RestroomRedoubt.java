@@ -14,29 +14,35 @@ public class Day14RestroomRedoubt
   /*
    * --- Day 14: Restroom Redoubt ---
    * https://adventofcode.com/2024/day/14
+   *
+   * https://www.youtube.com/watch?v=Km6kcOnjSXM
+   * 
+   * https://www.reddit.com/r/adventofcode/comments/1hdvhvu/2024_day_14_solutions/
    */
 
   public static void main( String[] args )
   {
-    String test_1 = "p=0,4 v=3,-3;p=6,3 v=-1,-3;p=10,3 v=-1,2;p=2,0 v=2,-1;p=0,0 v=1,3;p=3,0 v=-2,-2;p=7,6 v=-1,-3;p=3,0 v=-1,-2;p=9,3 v=2,3;p=7,3 v=-1,2;p=2,4 v=2,-3;p=9,5 v=-3,-3";
+    //String test_1 = "p=2,4 v=2,-3";
 
-    //test_1 = "p=2,4 v=2,-3";
+    //calculatePart01( test_2, true, 7, 10, 5 );
 
-    //test_1 = "p=10,6 v=0,1;p=10,6 v=1,0";
+    //String test_2 = "p=0,4 v=3,-3;p=6,3 v=-1,-3;p=10,3 v=-1,2;p=2,0 v=2,-1;p=0,0 v=1,3;p=3,0 v=-2,-2;p=7,6 v=-1,-3;p=3,0 v=-1,-2;p=9,3 v=2,3;p=7,3 v=-1,2;p=2,4 v=2,-3;p=9,5 v=-3,-3";
 
-    //calculatePart01( test_1, true, 7, 10 );
+    //calculatePart01( test_2, true, 7, 10, 100 );
 
-    calculatePart01( getListProd(), false, 103, 101 );
+    calculatePart01( getListProd(), false, 103, 101, 100 );
+
+    System.exit( 0 );
   }
 
-  private static void calculatePart01( String pString, boolean pKnzDebug, int pNumberOfRows, int pNumberOfCols )
+  private static void calculatePart01( String pString, boolean pKnzDebug, int pNumberOfRows, int pNumberOfCols, int pNumberOfMoves )
   {
     List< String > converted_string_list = Arrays.stream( pString.split( ";" ) ).map( String::trim ).collect( Collectors.toList() );
 
-    calculatePart01( converted_string_list, pKnzDebug, pNumberOfRows, pNumberOfCols );
+    calculatePart01( converted_string_list, pKnzDebug, pNumberOfRows, pNumberOfCols, pNumberOfMoves );
   }
 
-  private static void calculatePart01( List< String > pListInput, boolean pKnzDebug, int pNumberOfRows, int pNumberOfCols )
+  private static void calculatePart01( List< String > pListInput, boolean pKnzDebug, int pNumberOfRows, int pNumberOfCols, int pNumberOfMoves )
   {
     /*
      * *******************************************************************************************************
@@ -46,9 +52,11 @@ public class Day14RestroomRedoubt
 
     List< Day14Robot > robot_list = new ArrayList< Day14Robot >();
 
+    properties_floor_plan = new Properties();
+
     /*
      * *******************************************************************************************************
-     * Loading the start values into the hashmap
+     * Loading the start-positions of the robots
      * *******************************************************************************************************
      */
 
@@ -76,7 +84,13 @@ public class Day14RestroomRedoubt
 
     wl( getDebugMap( map_rows, map_cols ) );
 
-    for ( int move_nr = 1; move_nr <= 120_000_000; move_nr++ )
+    /*
+     * *******************************************************************************************************
+     * Moving the robots
+     * *******************************************************************************************************
+     */
+
+    for ( int move_nr = 1; move_nr <= pNumberOfMoves; move_nr++ )
     {
       for ( Day14Robot robot : robot_list )
       {
@@ -103,6 +117,12 @@ public class Day14RestroomRedoubt
         wl( "\n" + move_nr + "\n" + getDebugMap( map_rows, map_cols ) );
       }
     }
+
+    /*
+     * *******************************************************************************************************
+     * Zeoring out the middle positions and count the number of robots in each quadrant
+     * *******************************************************************************************************
+     */
 
     zeroOutMiddleFloorPlan( robot_list, map_rows, map_cols );
 
@@ -165,9 +185,15 @@ public class Day14RestroomRedoubt
     wl( "" );
     wl( "" );
 
-    int result_val = quadrant_1_robot_count * quadrant_2_robot_count * quadrant_3_robot_count * quadrant_4_robot_count;
+    /*
+     * *******************************************************************************************************
+     * Calculating the result for part 1
+     * *******************************************************************************************************
+     */
 
-    wl( "\nsum " + result_val );
+    int result_value_part_1 = quadrant_1_robot_count * quadrant_2_robot_count * quadrant_3_robot_count * quadrant_4_robot_count;
+
+    wl( "result part 1 " + result_value_part_1 );
   }
 
   private static Properties properties_floor_plan = new Properties();
@@ -280,9 +306,9 @@ public class Day14RestroomRedoubt
     {
       string_array = Files.readAllLines( Path.of( datei_input ) );
     }
-    catch ( IOException e )
+    catch ( IOException err_inst )
     {
-      e.printStackTrace();
+      err_inst.printStackTrace();
     }
 
     return string_array;
