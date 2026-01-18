@@ -34,7 +34,7 @@ public class Day22Buyer
 
     price_prev = price_cur;
 
-    price_diff = price_cur - price_prev;
+    price_diff = 0;
 
     String[] parts = pSequenze.split( "," );
 
@@ -106,16 +106,21 @@ public class Day22Buyer
 
       if ( seqToString().equals( "[-2,1,-1,3]" ) )
       {
-        System.out.println( "Moin"  );
+        System.out.println( "Moin" );
       }
     }
   }
 
   private boolean checkSequenze()
   {
+    /*
+     * Check in reverse
+     * The last difference, is the last value in the search sequenze 
+     */
+
     int index_check_array = arr_sequenze_index;
 
-    for ( int index_search_array = 0; index_search_array < arr_sequenze_check.length; index_search_array++ )
+    for ( int index_search_array = ( arr_sequenze_check.length - 1 ); index_search_array >= 0; index_search_array-- )
     {
       /*
        * Get the current price-diff from the check-array at index index_check_array.
@@ -133,11 +138,11 @@ public class Day22Buyer
       /*
        * Increment the check index.
        */
-      index_check_array++;
+      index_check_array--;
 
-      if ( index_check_array >= arr_sequenze_check.length )
+      if ( index_check_array < 0 )
       {
-        index_check_array = 0;
+        index_check_array = arr_sequenze_check.length - 1;
       }
     }
 
@@ -150,7 +155,7 @@ public class Day22Buyer
 
     int index_check_array = arr_sequenze_index;
 
-    for ( int index_for = 0; index_for < arr_sequenze_check.length; index_for++ )
+    for ( int index_for = ( arr_sequenze_check.length - 1 ); index_for >= 0; index_for-- )
     {
       if ( index_for > 0 )
       {
@@ -159,11 +164,11 @@ public class Day22Buyer
 
       x_string += arr_sequenze_check[ index_check_array ];
 
-      index_check_array++;
+      index_check_array--;
 
-      if ( index_check_array >= arr_sequenze_check.length )
+      if ( index_check_array < 0 )
       {
-        index_check_array = 0;
+        index_check_array = arr_sequenze_check.length - 1;
       }
     }
 
@@ -218,4 +223,5 @@ public class Day22Buyer
   {
     return String.format( "%6d %15d - price old %d  new %d  diff %3d - seq idx %5d price %3d  %s ", count_loop, secret_number_cur, price_prev, price_cur, price_diff, seq_count_loop, seq_price, seqToString() );
   }
+
 }
