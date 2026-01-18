@@ -17,6 +17,15 @@ public class Day25CodeChronicle
    * https://www.youtube.com/watch?v=EtKZSHuiYT0
    * 
    * https://www.reddit.com/r/adventofcode/comments/1hlu4ht/2024_day_25_solutions/
+    * 
+   * Number of locks          250
+   * Number of keys           250
+   * 
+   * count_lock_key_match     2824
+   * count_lock_key_no_match  59676
+   * sum                      62500
+   * 
+   * Result Part 1            2824
    */
 
   private static final String STR_COMBINE_SPACER = "      ";
@@ -27,9 +36,9 @@ public class Day25CodeChronicle
 
     calculatePart01( test_input, true );
 
-    calculatePart01( getListProd(), true );
+    //calculatePart01( getListProd(), true );
 
-    testFktDevice();
+    //testFktDevice();
 
     System.exit( 0 );
   }
@@ -106,7 +115,6 @@ public class Day25CodeChronicle
      * 
      * Lock 1,2,0,5,3 and 
      *  key 3,0,2,0,1: all columns fit!
-     * 
      */
 
     String test_device_input_lock_1 = "#####,.####,.####,.####,.#.#.,.#...,.....";
@@ -169,7 +177,7 @@ public class Day25CodeChronicle
 
     /*
      * *******************************************************************************************************
-     * Initializing the grid
+     * Generating Lock's and Key's
      * *******************************************************************************************************
      */
 
@@ -178,14 +186,18 @@ public class Day25CodeChronicle
     for ( String input_str : pListInput )
     {
       /*
-       * Blank line seperates the map from the commands
+       * Blank line seperates the Devices
        */
       if ( input_str.trim().isBlank() )
       {
-        wl( input_csv_device );
-
+        /*
+         * Create a new Device with the csv input string.
+         */
         Day25Device device_cur = new Day25Device( input_csv_device );
 
+        /*
+         * Check for lock or key
+         */
         if ( device_cur.isLock() )
         {
           list_locks.add( device_cur );
@@ -194,6 +206,15 @@ public class Day25CodeChronicle
         {
           list_keys.add( device_cur );
         }
+        //else
+        //{
+        //  /*
+        //   * Device is undefined = no use
+        //   */
+        //  wl( "Ignoring undefined device " );
+        //  wl( "" );
+        //  wl( device_cur.getDebugStr() );
+        //}
 
         input_csv_device = null;
       }
@@ -210,10 +231,11 @@ public class Day25CodeChronicle
       }
     }
 
+    /*
+     * Save the last device
+     */
     if ( input_csv_device != null )
     {
-      wl( input_csv_device );
-
       Day25Device device_cur = new Day25Device( input_csv_device );
 
       if ( device_cur.isLock() )
@@ -224,10 +246,11 @@ public class Day25CodeChronicle
       {
         list_keys.add( device_cur );
       }
-
-      input_csv_device = null;
     }
 
+    /*
+     * Do Debug stuff
+     */
     if ( pKnzDebug )
     {
       wl( "" );
@@ -269,7 +292,14 @@ public class Day25CodeChronicle
     //  }
     //}
 
+    /*
+     * *******************************************************************************************************
+     * Testing every Key on every Lock and counting the matches
+     * *******************************************************************************************************
+     */
+
     int count_lock_key_match = 0;
+    int count_lock_key_no_match = 0;
 
     for ( Day25Device device_lock : list_locks )
     {
@@ -281,14 +311,27 @@ public class Day25CodeChronicle
         {
           count_lock_key_match++;
         }
+        else
+        {
+          count_lock_key_no_match++;
+        }
 
-        wl( "lock key " + device_lock.getDebugMatch( device_key ) );
+        if ( pKnzDebug )
+        {
+          wl( "lock key " + device_lock.getDebugMatch( device_key ) );
+        }
       }
     }
 
     wl( "" );
+    wl( "Number of locks          " + list_locks.size() );
+    wl( "Number of keys           " + list_keys.size() );
     wl( "" );
-    wl( "Result Part 1 " + count_lock_key_match );
+    wl( "count_lock_key_match     " + count_lock_key_match );
+    wl( "count_lock_key_no_match  " + count_lock_key_no_match );
+    wl( "sum                      " + ( count_lock_key_match + count_lock_key_no_match ) );
+    wl( "" );
+    wl( "Result Part 1            " + count_lock_key_match );
     wl( "" );
     wl( "" );
   }
@@ -342,4 +385,5 @@ public class Day25CodeChronicle
 
     return string_builder.toString();
   }
+
 }
