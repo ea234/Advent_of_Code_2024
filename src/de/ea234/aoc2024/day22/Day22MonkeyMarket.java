@@ -19,7 +19,6 @@ public class Day22MonkeyMarket
    * 
    * https://www.reddit.com/r/adventofcode/comments/1hjroap/2024_day_22_solutions
    * 
-   * 
    *      1        15887950 - price old 3  new 0  diff  -3  ,-3 
    *      2        16495136 - price old 0  new 6  diff   6  ,-3,6 
    *      3          527345 - price old 6  new 5  diff  -1  ,-3,6,-1 
@@ -63,13 +62,17 @@ public class Day22MonkeyMarket
    * 
    */
 
+  private static final String SEQUENZE_TO_SEARCH = "-2,1,-1,3";
+  //private static final String SEQUENZE_TO_SEARCH = "4,4,-9,5";;
+
   public static void main( String[] d )
   {
-
     String test_input = "1,10,100,2024";
-    test_input = "123";
 
-    calculatePart01( test_input, true, 40 );
+    test_input = "1,2,3,2024";
+    test_input = "1";
+
+    calculatePart01( test_input, true, 2000 );
 //
 //    calculatePart01( getListProd(), false , 2000 );
 //
@@ -89,7 +92,7 @@ public class Day22MonkeyMarket
      * Initializing Variables
      * *******************************************************************************************************
      */
-    List< Day22Byer > list_buyer = new ArrayList< Day22Byer >();
+    List< Day22Buyer > list_buyer = new ArrayList< Day22Buyer >();
 
     /*
      * *******************************************************************************************************
@@ -99,7 +102,7 @@ public class Day22MonkeyMarket
 
     for ( String input_str : pListInput )
     {
-      list_buyer.add( new Day22Byer( input_str ) );
+      list_buyer.add( new Day22Buyer( input_str, SEQUENZE_TO_SEARCH ) );
     }
 
     /*
@@ -111,13 +114,16 @@ public class Day22MonkeyMarket
 
     for ( int loop_count = 0; loop_count < max_loop; loop_count++ )
     {
-      for ( Day22Byer buyer : list_buyer )
+      for ( Day22Buyer buyer : list_buyer )
       {
         buyer.generateNextSecretNumber();
 
         if ( pKnzDebug )
         {
+          if ( buyer.getPrice() == 7 ) 
+          {
           wl( buyer.toString() );
+          }
         }
       }
     }
@@ -128,20 +134,31 @@ public class Day22MonkeyMarket
      * *******************************************************************************************************
      */
 
+    wl( "" );
+    wl( "----------------------------------------------------------------------" );
+    wl( "" );
+
     long sum_secret_nr = 0;
 
-    for ( Day22Byer buyer : list_buyer )
+    long sum_seq_price = 0;
+
+    for ( Day22Buyer buyer : list_buyer )
     {
       sum_secret_nr += buyer.getSecretNumberCur();
 
+      sum_seq_price += buyer.getSeqPrice();
+
       if ( pKnzDebug )
       {
-        wl( buyer.getSecretNumberStart() + "  " + buyer.getSecretNumberCur() );
+        wl( buyer.toString() );
       }
     }
 
     wl( "" );
-    wl( "sum_secret_nr " + sum_secret_nr + " <- Result Part 1" );
+    wl( String.format( "sum_secret_nr %11d  <- Result Part 1", sum_secret_nr ) );
+    wl( "" );
+    wl( String.format( "sum_seq_price %11d  <- Result Part 1", sum_seq_price ) );
+    wl( "" );
     wl( "" );
   }
 
@@ -150,17 +167,17 @@ public class Day22MonkeyMarket
     long secret_number_cur = 123;
 
     wl( "15887950 =>" + generateNextSecretNumber1( 0, secret_number_cur ) + "<" );
-    wl( "16495136 =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
-    wl( "527345   =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
-    wl( "704524   =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
-    wl( "1553684  =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
-    wl( "12683156 =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
-    wl( "11100544 =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
-    wl( "12249484 =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
-    wl( "7753432  =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
-    wl( "5908254  =>" + generateNextSecretNumber1( 0, last_sn ) + "<" );
+    wl( "16495136 =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
+    wl( "527345   =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
+    wl( "704524   =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
+    wl( "1553684  =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
+    wl( "12683156 =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
+    wl( "11100544 =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
+    wl( "12249484 =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
+    wl( "7753432  =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
+    wl( "5908254  =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
 
-    Day22Byer buyer = new Day22Byer( "123" );
+    Day22Buyer buyer = new Day22Buyer( "123", SEQUENZE_TO_SEARCH );
 
     wl( "" );
     wl( "" );
@@ -191,7 +208,7 @@ public class Day22MonkeyMarket
     //
   }
 
-  private static long last_sn = 0;
+  private static long last_test_secret_number = 0;
 
   public static long generateNextSecretNumber1( int seq_nr, long secret_number_cur )
   {
@@ -201,7 +218,7 @@ public class Day22MonkeyMarket
 
     long sn_n = s3; // generateNextSecretNumber( seq_nr, secret_number_cur );
 
-    last_sn = s3;
+    last_test_secret_number = s3;
 
     //wl( String.format( "%6d %15d   %15d ", seq_nr, secret_number_cur, sn_n ) );
 
