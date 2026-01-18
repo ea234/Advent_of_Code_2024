@@ -1,28 +1,32 @@
 package de.ea234.aoc2024.day22;
 
+import java.util.HashMap;
+
 public class Day22Buyer
 {
-  private long   secret_number_start = 0;
+  private long                    secret_number_start = 0;
 
-  private long   secret_number_cur   = 0;
+  private long                    secret_number_cur   = 0;
 
-  private long   price_prev          = 0;
+  private long                    price_prev          = 0;
 
-  private long   price_cur           = 0;
+  private long                    price_cur           = 0;
 
-  private long   price_diff          = 0;
+  private long                    price_diff          = 0;
 
-  private long   count_loop          = 0;
+  private long                    count_loop          = 0;
 
-  private long   seq_price           = 0;
+  private long                    seq_price           = 0;
 
-  private long   seq_count_loop      = 0;
+  private long                    seq_count_loop      = 0;
 
-  private long[] arr_sequenze_search;
+  private long[]                  arr_sequenze_search;
 
-  private long[] arr_sequenze_check;
+  private long[]                  arr_sequenze_check;
 
-  private int    arr_sequenze_index  = 0;
+  private int                     arr_sequenze_index  = 0;
+
+  private HashMap< String, Long > hash_map_key        = new HashMap< String, Long >();
 
   public Day22Buyer( String pSecretNumber, String pSequenze )
   {
@@ -46,7 +50,7 @@ public class Day22Buyer
     {
       arr_sequenze_search[ idx ] = Long.parseLong( parts[ idx ].trim() );
 
-      arr_sequenze_check[ idx ] = 0;
+      arr_sequenze_check[ idx ] = -88;
     }
   }
 
@@ -72,27 +76,39 @@ public class Day22Buyer
 
     price_diff = price_cur - price_prev;
 
+    /*
+     * Increase the insert index for the new price-diff value
+     */
+    arr_sequenze_index++;
+
+    /*
+     * If the insert index exceeds the lenth of the array, then 
+     * place the index back to front.
+     */
+    if ( arr_sequenze_index >= arr_sequenze_check.length )
+    {
+      arr_sequenze_index = 0;
+    }
+
+    /*
+     * Save the current price diff to the insert index.
+     */
+    arr_sequenze_check[ arr_sequenze_index ] = price_diff;
+
+    if ( count_loop > 3 )
+    {
+      String key_diff_sequenze = seqToString();
+
+      Long value_diff_sequenze = hash_map_key.get( key_diff_sequenze );
+
+      if ( value_diff_sequenze == null )
+      {
+        hash_map_key.put( key_diff_sequenze, Long.valueOf( price_cur ) );
+      }
+    }
+
     if ( seq_count_loop == 0 )
     {
-      /*
-       * Increase the insert index for the new price-diff value
-       */
-      arr_sequenze_index++;
-
-      /*
-       * If the insert index exceeds the lenth of the array, then 
-       * place the index back to front.
-       */
-      if ( arr_sequenze_index >= arr_sequenze_check.length )
-      {
-        arr_sequenze_index = 0;
-      }
-
-      /*
-       * Save the current price diff to the insert index.
-       */
-      arr_sequenze_check[ arr_sequenze_index ] = price_diff;
-
       /*
        * Do a check for the sequenze.
        * The check starts with the current insert index.
@@ -102,11 +118,6 @@ public class Day22Buyer
         seq_price = price_cur;
 
         seq_count_loop = count_loop;
-      }
-
-      if ( seqToString().equals( "[-2,1,-1,3]" ) )
-      {
-        System.out.println( "Moin" );
       }
     }
   }
@@ -175,24 +186,24 @@ public class Day22Buyer
     return x_string + "]";
   }
 
-  public long generateNextSecretNumber( int seq_nr, long secret_number_cur )
+  public long generateNextSecretNumber( int seq_nr, long parameter_secret_number_cur )
   {
     long secret_nr_new = 0;
 
     if ( seq_nr == 1 )
     {
-      secret_nr_new = secret_number_cur * 64;
+      secret_nr_new = parameter_secret_number_cur * 64;
     }
     else if ( seq_nr == 2 )
     {
-      secret_nr_new = secret_number_cur / 32;
+      secret_nr_new = parameter_secret_number_cur / 32;
     }
     else
     {
-      secret_nr_new = secret_number_cur * 2048;
+      secret_nr_new = parameter_secret_number_cur * 2048;
     }
 
-    long secret_nr_after_mixing = secret_number_cur ^ secret_nr_new;
+    long secret_nr_after_mixing = parameter_secret_number_cur ^ secret_nr_new;
 
     long secret_nr_after_pruning = secret_nr_after_mixing % 16777216;
 
@@ -219,9 +230,27 @@ public class Day22Buyer
     return seq_price;
   }
 
+  public void addToHashMap( HashMap< String, Long > pHashMap )
+  {
+    for ( java.util.Map.Entry< String, Long > entry : hash_map_key.entrySet() )
+    {
+      Long cur_long = pHashMap.get( entry.getKey() );
+
+      if ( cur_long == null )
+      {
+        cur_long = entry.getValue();
+      }
+      else
+      {
+        cur_long = Long.valueOf( cur_long.longValue() + entry.getValue() );
+      }
+
+      pHashMap.put( entry.getKey(), cur_long );
+    }
+  }
+
   public String toString()
   {
     return String.format( "%6d %15d - price old %d  new %d  diff %3d - seq idx %5d price %3d  %s ", count_loop, secret_number_cur, price_prev, price_cur, price_diff, seq_count_loop, seq_price, seqToString() );
   }
-
 }

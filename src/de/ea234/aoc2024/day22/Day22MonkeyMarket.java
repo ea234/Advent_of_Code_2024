@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Day22MonkeyMarket
@@ -19,63 +21,20 @@ public class Day22MonkeyMarket
    * 
    * https://www.reddit.com/r/adventofcode/comments/1hjroap/2024_day_22_solutions
    * 
-   *      1        15887950 - price old 3  new 0  diff  -3  ,-3 
-   *      2        16495136 - price old 0  new 6  diff   6  ,-3,6 
-   *      3          527345 - price old 6  new 5  diff  -1  ,-3,6,-1 
-   *      4          704524 - price old 5  new 4  diff  -1  ,-3,6,-1,-1 
-   *      5         1553684 - price old 4  new 4  diff   0  ,-3,6,-1,-1,0 
-   *      6        12683156 - price old 4  new 6  diff   2  ,-3,6,-1,-1,0,2 
-   *      7        11100544 - price old 6  new 4  diff  -2  ,-3,6,-1,-1,0,2,-2 
-   *      8        12249484 - price old 4  new 4  diff   0  ,-3,6,-1,-1,0,2,-2,0 
-   *      9         7753432 - price old 4  new 2  diff  -2  ,-3,6,-1,-1,0,2,-2,0,-2 
-   *     10         5908254 - price old 2  new 4  diff   2  ,-3,6,-1,-1,0,2,-2,0,-2,2 
-   *     11         2731930 - price old 4  new 0  diff  -4  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4 
-   *     12        10144594 - price old 0  new 4  diff   4  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4 
-   *     13        13647660 - price old 4  new 0  diff  -4  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4 
-   *     14         8741773 - price old 0  new 3  diff   3  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3 
-   *     15        12399819 - price old 3  new 9  diff   6  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6 
-   *     16        13000251 - price old 9  new 1  diff  -8  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8 
-   *     17        10534524 - price old 1  new 4  diff   3  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3 
-   *     18         4776055 - price old 4  new 5  diff   1  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1 
-   *     19        10594906 - price old 5  new 6  diff   1  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1 
-   *     20        14976316 - price old 6  new 6  diff   0  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0 
-   *     21        14716013 - price old 6  new 3  diff  -3  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3 
-   *     22        10038164 - price old 3  new 4  diff   1  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1 
-   *     23         5394656 - price old 4  new 6  diff   2  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2 
-   *     24         1926055 - price old 6  new 5  diff  -1  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1 
-   *     25         7734836 - price old 5  new 6  diff   1  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1 
-   *     26         4939629 - price old 6  new 9  diff   3  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3 
-   *     27         9961484 - price old 9  new 4  diff  -5  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5 
-   *     28         8676116 - price old 4  new 6  diff   2  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2 
-   *     29         8479524 - price old 6  new 4  diff  -2  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2 
-   *     30        14995317 - price old 4  new 7  diff   3  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3 
-   *     31         8686244 - price old 7  new 4  diff  -3  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3 
-   *     32         3594937 - price old 4  new 7  diff   3  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3 
-   *     33         4097886 - price old 7  new 6  diff  -1  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3,-1 
-   *     34        13199960 - price old 6  new 0  diff  -6  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3,-1,-6 
-   *     35         9089978 - price old 0  new 8  diff   8  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3,-1,-6,8 
-   *     36         5896147 - price old 8  new 7  diff  -1  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3,-1,-6,8,-1 
-   *     37         4029195 - price old 7  new 5  diff  -2  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3,-1,-6,8,-1,-2 
-   *     38         4230149 - price old 5  new 9  diff   4  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3,-1,-6,8,-1,-2,4 
-   *     39        15329583 - price old 9  new 3  diff  -6  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3,-1,-6,8,-1,-2,4,-6 
-   *     40         6881272 - price old 3  new 2  diff  -1  ,-3,6,-1,-1,0,2,-2,0,-2,2,-4,4,-4,3,6,-8,3,1,1,0,-3,1,2,-1,1,3,-5,2,-2,3,-3,3,-1,-6,8,-1,-2,4,-6,-1 
-   * 
    */
 
   private static final String SEQUENZE_TO_SEARCH = "-2,1,-1,3";
-  //private static final String SEQUENZE_TO_SEARCH = "4,4,-9,5";;
 
   public static void main( String[] d )
   {
     String test_input = "1,10,100,2024";
+    test_input = "123";
 
     test_input = "1,2,3,2024";
-    test_input = "1";
 
     calculatePart01( test_input, true, 2000 );
-//
-//    calculatePart01( getListProd(), false , 2000 );
-//
+
+    calculatePart01( getListProd(), false, 2000 );
   }
 
   private static void calculatePart01( String pString, boolean pKnzDebug, int pMaxLoop )
@@ -120,10 +79,7 @@ public class Day22MonkeyMarket
 
         if ( pKnzDebug )
         {
-          if ( buyer.getPrice() == 7 ) 
-          {
-          wl( buyer.toString() );
-          }
+            wl( buyer.toString() );
         }
       }
     }
@@ -142,11 +98,15 @@ public class Day22MonkeyMarket
 
     long sum_seq_price = 0;
 
+    HashMap< String, Long > key_seq = new HashMap< String, Long >();
+
     for ( Day22Buyer buyer : list_buyer )
     {
       sum_secret_nr += buyer.getSecretNumberCur();
 
       sum_seq_price += buyer.getSeqPrice();
+
+      buyer.addToHashMap( key_seq );
 
       if ( pKnzDebug )
       {
@@ -154,12 +114,34 @@ public class Day22MonkeyMarket
       }
     }
 
+    for ( java.util.Map.Entry< String, Long > entry : key_seq.entrySet() )
+    {
+      wl( "Key " + entry.getKey() + " Value " + entry.getValue() );
+    }
+
+    List< Map.Entry< String, Long > > entries = new ArrayList<>( key_seq.entrySet() );
+
+    entries.sort( ( e1, e2 ) -> Long.compare( e2.getValue(), e1.getValue() ) );
+
+    wl( "" );
+
+    int index = 0;
+    
+    for ( Map.Entry< String, Long > e : entries )
+    {
+      wl( e.getKey() + " -> " + e.getValue() );
+      
+      index++;
+      
+      if ( index == 10 ) { break; }
+    }
+
     wl( "" );
     wl( String.format( "sum_secret_nr %11d  <- Result Part 1", sum_secret_nr ) );
     wl( "" );
-    wl( String.format( "sum_seq_price %11d  <- Result Part 1", sum_seq_price ) );
+    wl( String.format( "sum_seq_price %11d  <- Result Part 2", sum_seq_price ) );
     wl( "" );
-    wl( "" );
+    wl( "SEQUENZE_TO_SEARCH " + SEQUENZE_TO_SEARCH );
   }
 
   private static void doTestAlgorithm()
