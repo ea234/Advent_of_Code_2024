@@ -1,6 +1,7 @@
 package de.ea234.aoc2024.day22;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class Day22Buyer
 {
@@ -72,8 +73,14 @@ public class Day22Buyer
      * Part 2
      */
 
+    /*
+     * Calculate the price
+     */
     price_cur = secret_number_cur % 10;
 
+    /*
+     * Calculate the difference to the previous price
+     */
     price_diff = price_cur - price_prev;
 
     /*
@@ -95,25 +102,39 @@ public class Day22Buyer
      */
     arr_sequenze_check[ arr_sequenze_index ] = price_diff;
 
+    /*
+     * Save Key-Sequenze and price to the hashmap
+     */
     if ( count_loop > 3 )
     {
-      String key_diff_sequenze = seqToString();
+      /*
+       * The hashmap key is the diff sequenze
+       */
+      String key_diff_sequenze = diffSequenzeToString();
 
-      Long value_diff_sequenze = hash_map_key.get( key_diff_sequenze );
-
-      if ( value_diff_sequenze == null )
+      /*
+       * Check if the key is already in the hashmap.
+       * 
+       * The first occurance of the diff sequenze counts.
+       * If the key is not in the hashmap, then the key 
+       * and the price is saved to hashmap. 
+       */
+      if ( hash_map_key.containsKey( key_diff_sequenze ) == false )
       {
         hash_map_key.put( key_diff_sequenze, Long.valueOf( price_cur ) );
       }
     }
 
+    /*
+     * Search for a specific sequenze is not realy needed anymore.
+     */
     if ( seq_count_loop == 0 )
     {
       /*
        * Do a check for the sequenze.
        * The check starts with the current insert index.
        */
-      if ( checkSequenze() )
+      if ( diffSequenzeCheck() )
       {
         seq_price = price_cur;
 
@@ -122,7 +143,31 @@ public class Day22Buyer
     }
   }
 
-  private boolean checkSequenze()
+  public long generateNextSecretNumber( int pSequenzeNr, long pSecretNumber )
+  {
+    long secret_nr_new = 0;
+
+    if ( pSequenzeNr == 1 )
+    {
+      secret_nr_new = pSecretNumber * 64;
+    }
+    else if ( pSequenzeNr == 2 )
+    {
+      secret_nr_new = pSecretNumber / 32;
+    }
+    else
+    {
+      secret_nr_new = pSecretNumber * 2048;
+    }
+
+    long secret_nr_after_mixing = pSecretNumber ^ secret_nr_new;
+
+    long secret_nr_after_pruning = secret_nr_after_mixing % 16777216;
+
+    return secret_nr_after_pruning;
+  }
+
+  private boolean diffSequenzeCheck()
   {
     /*
      * Check in reverse
@@ -147,7 +192,7 @@ public class Day22Buyer
       }
 
       /*
-       * Increment the check index.
+       * Decrement the check index.
        */
       index_check_array--;
 
@@ -160,20 +205,19 @@ public class Day22Buyer
     return true;
   }
 
-  private String seqToString()
+  private String diffSequenzeToString()
   {
-    String x_string = "[";
+    String str_diff_sequenze = "[";
+
+    String str_comma = "";
 
     int index_check_array = arr_sequenze_index;
 
     for ( int index_for = ( arr_sequenze_check.length - 1 ); index_for >= 0; index_for-- )
     {
-      if ( index_for > 0 )
-      {
-        x_string += ",";
-      }
+      str_diff_sequenze += str_comma + arr_sequenze_check[ index_check_array ];
 
-      x_string += arr_sequenze_check[ index_check_array ];
+      str_comma = ",";
 
       index_check_array--;
 
@@ -183,31 +227,42 @@ public class Day22Buyer
       }
     }
 
-    return x_string + "]";
+    return str_diff_sequenze + "]";
   }
 
-  public long generateNextSecretNumber( int seq_nr, long parameter_secret_number_cur )
+  public void addToHashMap( HashMap< String, Long > pHashMap )
   {
-    long secret_nr_new = 0;
-
-    if ( seq_nr == 1 )
+    for ( Entry< String, Long > entry : hash_map_key.entrySet() )
     {
-      secret_nr_new = parameter_secret_number_cur * 64;
-    }
-    else if ( seq_nr == 2 )
-    {
-      secret_nr_new = parameter_secret_number_cur / 32;
-    }
-    else
-    {
-      secret_nr_new = parameter_secret_number_cur * 2048;
-    }
+      /*
+       * Get the current stored value for the key from the parameter hash map.
+       */
+      Long entry_value_current = pHashMap.get( entry.getKey() );
 
-    long secret_nr_after_mixing = parameter_secret_number_cur ^ secret_nr_new;
+      /*
+       * Check if a value was found. 
+       */
+      if ( entry_value_current == null )
+      {
+        /*
+         * If there is no value, then the value is the current value
+         */
+        entry_value_current = entry.getValue();
+      }
+      else
+      {
+        /*
+         * If there is a value in the hashmap, then add the value 
+         * from this instance to the existing one.
+         */
+        entry_value_current = Long.valueOf( entry_value_current.longValue() + entry.getValue() );
+      }
 
-    long secret_nr_after_pruning = secret_nr_after_mixing % 16777216;
-
-    return secret_nr_after_pruning;
+      /*
+       * Store the value in the parameter hashmap.
+       */
+      pHashMap.put( entry.getKey(), entry_value_current );
+    }
   }
 
   public long getSecretNumberCur()
@@ -230,27 +285,8 @@ public class Day22Buyer
     return seq_price;
   }
 
-  public void addToHashMap( HashMap< String, Long > pHashMap )
-  {
-    for ( java.util.Map.Entry< String, Long > entry : hash_map_key.entrySet() )
-    {
-      Long cur_long = pHashMap.get( entry.getKey() );
-
-      if ( cur_long == null )
-      {
-        cur_long = entry.getValue();
-      }
-      else
-      {
-        cur_long = Long.valueOf( cur_long.longValue() + entry.getValue() );
-      }
-
-      pHashMap.put( entry.getKey(), cur_long );
-    }
-  }
-
   public String toString()
   {
-    return String.format( "%6d %15d - price old %d  new %d  diff %3d - seq idx %5d price %3d  %s ", count_loop, secret_number_cur, price_prev, price_cur, price_diff, seq_count_loop, seq_price, seqToString() );
+    return String.format( "%6d %15d - price old %d  new %d  diff %3d - seq idx %5d price %3d  %s ", count_loop, secret_number_cur, price_prev, price_cur, price_diff, seq_count_loop, seq_price, diffSequenzeToString() );
   }
 }

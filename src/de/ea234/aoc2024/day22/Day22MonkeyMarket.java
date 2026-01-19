@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 public class Day22MonkeyMarket
 {
-
   /*
    * --- Day 22: Monkey Market ---
    * https://adventofcode.com/2024/day/22
@@ -21,6 +20,78 @@ public class Day22MonkeyMarket
    * 
    * https://www.reddit.com/r/adventofcode/comments/1hjroap/2024_day_22_solutions
    * 
+   * ----------------------------------------------------------------------
+   * 
+   *   2000         8685429 - price old 2  new 9  diff   7 - seq idx  1964 price   7  [7,-1,3,-6] 
+   *   2000         5976613 - price old 6  new 3  diff  -3 - seq idx   291 price   7  [-3,0,1,5] 
+   *   2000        14660944 - price old 8  new 4  diff  -4 - seq idx     0 price   0  [-4,5,2,1] 
+   *   2000         8667524 - price old 8  new 4  diff  -4 - seq idx   455 price   9  [-4,7,-6,7] 
+   * 
+   * sum_secret_nr    37990510  <- Result Part 1
+   * 
+   * 
+   * First 15 Key Sequenzes (from 7014)
+   * 
+   *    0  [3,-1,1,-2]        23  <- Result Part 2
+   *    1  [0,1,3,-1]         22 
+   *    2  [1,5,-3,1]         21 
+   *    3  [-1,0,6,-5]        20 
+   *    4  [-1,5,-1,-4]       20 
+   *    5  [0,0,5,0]          20 
+   *    6  [0,2,3,-1]         19 
+   *    7  [3,0,2,-1]         19 
+   *    8  [-1,0,5,0]         19 
+   *    9  [0,8,1,-6]         18 
+   *   10  [5,4,-8,0]         18 
+   *   11  [3,5,1,-4]         18 
+   *   12  [2,1,1,-4]         18 
+   *   13  [4,3,-3,-2]        18 
+   *   14  [0,3,-1,5]         18 
+   * 
+   * ----------------------------------------------------------------------
+   * 
+   * sum_secret_nr 15613157363  <- Result Part 1
+   * 
+   * 
+   * First 15 Key Sequenzes (from 40951)
+   * 
+   *    0  [1,1,-1,0]       1784  <- Result Part 2
+   *    1  [1,3,-3,1]       1693 
+   *    2  [3,-3,1,1]       1665 
+   *    3  [3,-3,1,-1]      1662 
+   *    4  [0,1,0,2]        1659 
+   *    5  [0,0,2,0]        1641 
+   *    6  [1,-1,0,0]       1639 
+   *    7  [2,1,0,-3]       1638 
+   *    8  [2,-2,1,1]       1637 
+   *    9  [2,-2,2,-2]      1637 
+   *   10  [3,0,0,0]        1636 
+   *   11  [0,1,2,-3]       1629 
+   *   12  [2,0,0,-2]       1629 
+   *   13  [0,3,-3,3]       1625 
+   *   14  [0,2,-1,-1]      1617 
+   * 
+   * ----------------------------------------------------------------------
+   * 
+   * Test with 5 diff sequenze
+   * 
+   * First 15 Key Sequenzes (from 462936)
+   * 
+   *    0  [0,1,0,-1,0]    296  <- Result Part 2
+   *    1  [0,4,-4,4,-3]   273
+   *    2  [4,-4,3,-3,3]   271
+   *    3  [3,0,0,0,-2]    268
+   *    4  [3,-1,-2,1,0]   265
+   *    5  [3,0,-1,-2,1]   263
+   *    6  [4,-3,1,0,2]    263
+   *    7  [2,1,-1,-1,0]   261
+   *    8  [0,3,-3,3,-3]   258
+   *    9  [1,3,-3,1,1]    257
+   *   10  [5,-3,2,-3,2]   256
+   *   11  [0,3,1,-3,1]    255
+   *   12  [1,1,0,2,0]     254
+   *   13  [4,-1,-3,4,-2]  252
+   *   14  [1,0,-1,0,5]    252
    */
 
   private static final String SEQUENZE_TO_SEARCH = "-2,1,-1,3";
@@ -28,13 +99,12 @@ public class Day22MonkeyMarket
   public static void main( String[] d )
   {
     String test_input = "1,10,100,2024";
-    test_input = "123";
 
     test_input = "1,2,3,2024";
 
     calculatePart01( test_input, true, 2000 );
 
-    calculatePart01( getListProd(), false, 2000 );
+    //calculatePart01( getListProd(), false, 2000 );
   }
 
   private static void calculatePart01( String pString, boolean pKnzDebug, int pMaxLoop )
@@ -79,14 +149,14 @@ public class Day22MonkeyMarket
 
         if ( pKnzDebug )
         {
-            wl( buyer.toString() );
+          wl( buyer.toString() );
         }
       }
     }
 
     /*
      * *******************************************************************************************************
-     * Calculate the sum of the secret numbers
+     * Calculate the sum of the secret numbers 
      * *******************************************************************************************************
      */
 
@@ -96,16 +166,18 @@ public class Day22MonkeyMarket
 
     long sum_secret_nr = 0;
 
-    long sum_seq_price = 0;
-
     HashMap< String, Long > key_seq = new HashMap< String, Long >();
 
     for ( Day22Buyer buyer : list_buyer )
     {
+      /*
+       * Add up the secret numbers from all buyers
+       */
       sum_secret_nr += buyer.getSecretNumberCur();
 
-      sum_seq_price += buyer.getSeqPrice();
-
+      /*
+       * Add all difference sequenzes to the hashmap
+       */
       buyer.addToHashMap( key_seq );
 
       if ( pKnzDebug )
@@ -114,123 +186,41 @@ public class Day22MonkeyMarket
       }
     }
 
-    for ( java.util.Map.Entry< String, Long > entry : key_seq.entrySet() )
-    {
-      wl( "Key " + entry.getKey() + " Value " + entry.getValue() );
-    }
-
-    List< Map.Entry< String, Long > > entries = new ArrayList<>( key_seq.entrySet() );
-
-    entries.sort( ( e1, e2 ) -> Long.compare( e2.getValue(), e1.getValue() ) );
-
-    wl( "" );
-
-    int index = 0;
-    
-    for ( Map.Entry< String, Long > e : entries )
-    {
-      wl( e.getKey() + " -> " + e.getValue() );
-      
-      index++;
-      
-      if ( index == 10 ) { break; }
-    }
-
     wl( "" );
     wl( String.format( "sum_secret_nr %11d  <- Result Part 1", sum_secret_nr ) );
     wl( "" );
-    wl( String.format( "sum_seq_price %11d  <- Result Part 2", sum_seq_price ) );
-    wl( "" );
-    wl( "SEQUENZE_TO_SEARCH " + SEQUENZE_TO_SEARCH );
-  }
-
-  private static void doTestAlgorithm()
-  {
-    long secret_number_cur = 123;
-
-    wl( "15887950 =>" + generateNextSecretNumber1( 0, secret_number_cur ) + "<" );
-    wl( "16495136 =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-    wl( "527345   =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-    wl( "704524   =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-    wl( "1553684  =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-    wl( "12683156 =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-    wl( "11100544 =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-    wl( "12249484 =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-    wl( "7753432  =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-    wl( "5908254  =>" + generateNextSecretNumber1( 0, last_test_secret_number ) + "<" );
-
-    Day22Buyer buyer = new Day22Buyer( "123", SEQUENZE_TO_SEARCH );
-
-    wl( "" );
-    wl( "" );
     wl( "" );
 
-    int max_loop = 10;
+    /*
+     * *******************************************************************************************************
+     * Sorting the hashmap with the difference sequenzes decending by value (Part 2)
+     * *******************************************************************************************************
+     */
 
-    for ( int loop_count = 0; loop_count < max_loop; loop_count++ )
+    List< Map.Entry< String, Long > > entries = new ArrayList<>( key_seq.entrySet() );
+
+    entries.sort( ( entry_1, entry_2 ) -> Long.compare( entry_2.getValue(), entry_1.getValue() ) );
+
+    int max_key_seq = entries.size() > 15 ? 15 : entries.size();
+
+    wl( "First " + max_key_seq + " Key Sequenzes " + ( entries.size() > 15 ? "(from " + entries.size() + ")" : "" ) );
+    wl( "" );
+
+    int index = 0;
+
+    for ( Map.Entry< String, Long > e : entries )
     {
-      buyer.generateNextSecretNumber();
+      wl( String.format( "%4d  %-15s  %4d " + ( index == 0 ? " <- Result Part 2" : "" ), index, e.getKey(), e.getValue() ) );
 
-      wl( buyer.toString() );
+      index++;
+
+      if ( index == max_key_seq )
+      {
+        break;
+      }
     }
 
-    //long a = 42;
-    //long b = 15;
-    //
-    //long c = a ^ b;
-    //
-    //System.out.println( c );
-    //
-    //long a1 = 100000000;
-    //long b1 = 16777216;
-    //
-    //long c1 = a1 % b1;
-    //
-    //System.out.println( c1 );
-    //
-  }
-
-  private static long last_test_secret_number = 0;
-
-  public static long generateNextSecretNumber1( int seq_nr, long secret_number_cur )
-  {
-    long s1 = generateNextSecretNumber( 1, secret_number_cur );
-    long s2 = generateNextSecretNumber( 2, s1 );
-    long s3 = generateNextSecretNumber( 3, s2 );
-
-    long sn_n = s3; // generateNextSecretNumber( seq_nr, secret_number_cur );
-
-    last_test_secret_number = s3;
-
-    //wl( String.format( "%6d %15d   %15d ", seq_nr, secret_number_cur, sn_n ) );
-
-    return sn_n;
-  }
-
-  public static long generateNextSecretNumber( int seq_nr, long secret_number_cur )
-  {
-    long secret_nr_new = 0;
-
-    if ( seq_nr == 1 )
-    {
-      secret_nr_new = secret_number_cur * 64;
-    }
-    else if ( seq_nr == 2 )
-    {
-      secret_nr_new = secret_number_cur / 32;
-    }
-    else
-    {
-      secret_nr_new = secret_number_cur * 2048;
-
-      seq_nr = 0;
-    }
-
-    long secret_nr_after_mixing = secret_number_cur ^ secret_nr_new;
-
-    long secret_nr_after_pruning = secret_nr_after_mixing % 16777216;
-
-    return secret_nr_after_pruning;
+    wl( "" );
   }
 
   private static List< String > getListProd()
