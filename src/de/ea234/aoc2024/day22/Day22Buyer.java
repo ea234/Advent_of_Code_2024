@@ -3,7 +3,7 @@ package de.ea234.aoc2024.day22;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public class Day22Buyer
+class Day22Buyer
 {
   private long                    secret_number_start = 0;
 
@@ -143,7 +143,7 @@ public class Day22Buyer
     }
   }
 
-  public long generateNextSecretNumber( int pSequenzeNr, long pSecretNumber )
+  private long generateNextSecretNumber( int pSequenzeNr, long pSecretNumber )
   {
     long secret_nr_new = 0;
 
