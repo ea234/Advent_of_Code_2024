@@ -569,6 +569,57 @@ public class Day19LinenLayout
     return checkReplaceItAlgorithmRec( new_string, pPattern, pIndexList + 1, 0 );
   }
 
+  private static int checkDesign( String pDesign, HashMap< String, List< String > > pParserPattern, boolean pKnzDebug, int pStart )
+  {
+    if ( pDesign.isBlank() )
+    {
+      return 0;
+    }
+    
+    if ( pStart >= pDesign.length() ) 
+    {
+      return 1;
+    }
+
+    String cur_hash_map_key = "" + pDesign.charAt( pStart );
+
+    List< String > list_key_start_pattern = pParserPattern.get( cur_hash_map_key );
+
+    if ( list_key_start_pattern == null )
+    {
+      return 1; // start char without patterns
+    }
+
+    int index_pattern_in_design = 0;
+
+    for ( String cur_pattern : list_key_start_pattern )
+    {
+      if ( checkPattern( pDesign, cur_pattern, pStart ) ) 
+      {
+        String new_string = pDesign.substring( cur_pattern.length() );
+
+        if ( pKnzDebug )
+        {
+          wl( String.format( "%-70s  %5d %-10s  %5d %6s %-20s", pDesign, pStart, cur_pattern, index_pattern_in_design, ( index_pattern_in_design >= 0 ? " OK " : " -- " ), new_string ) );
+        }
+        
+        if ( pStart + cur_pattern.length() >= pDesign.length() ) 
+        {
+          return 0;
+        }
+        
+        if ( checkDesign( pDesign, pParserPattern, pKnzDebug, pStart + cur_pattern.length() ) == 0 )
+        {
+          return 0;
+        }
+      }
+
+      index_pattern_in_design++;
+    }
+
+    return 1;
+  }
+
   private static boolean testCheckPattern( String pInput, String pCurPattern, int pIndexStart )
   {
     boolean result_check = checkPattern( pInput, pCurPattern, pIndexStart );
